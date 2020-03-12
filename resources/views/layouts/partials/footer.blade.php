@@ -1,3 +1,5 @@
-<div class="footer bg-dark">
-    <small class="">Copyright &copy; Duy Phan's System</small>
-</div>
+<footer>
+    <div class="footer-area">
+        <p>©  Duy Phan & Thuan Vu's System</p>
+    </div>
+</footer>

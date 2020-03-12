@@ -13,16 +13,32 @@ use Illuminate\Support\Facades\Route;
 |
 */
 /*Authen Routes*/
+
+/**/
 Route::group(['middleware' => 'checklogin'], function (){
     Route::get('login', 'Auth\LoginController@index')->name('login');
     Route::post('login', 'Auth\LoginController@create');
 
 });
 
-
+/*Routes Dashboard*/
 Route::group(['middleware' => 'checkloggedin'], function (){
     Route::get('logout', 'Auth\LoginController@logout');
-    Route::get('/', function () {
-        return view('homepage');
-    });
+    Route::get('/', 'HomeController@index');
+
+    /*Manage Users*/
+    Route::get('users', 'ManageUsersController@index');
+});
+
+
+/* Route API for Web Call */
+Route::group(['middleware' => 'checkloggedin', 'prefix' => 'axios'], function (){
+    /*Manage Users*/
+    Route::get('getAllUsers', 'ManageUsersController@getAllUsers');
+    Route::get('users', 'ManageUsersController@show');
+    Route::delete('user/delete', 'ManageUsersController@delete');
+    Route::delete('user/forceDelete', 'ManageUsersController@forceDelete');
+    Route::get('user', 'ManageUsersController@getUser');
+    Route::patch('user/update','ManageUsersController@update');
+    Route::post('user/new','ManageUsersController@create');
 });

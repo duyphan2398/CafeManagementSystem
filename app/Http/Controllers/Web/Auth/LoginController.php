@@ -25,7 +25,7 @@ class LoginController extends Controller
     public function logout(){
         if (Auth::check())
         {
-            Auth::guard()->logout();
+            Auth::logout();
             session()->flash("success", "Logout Successfully");
         }
 
