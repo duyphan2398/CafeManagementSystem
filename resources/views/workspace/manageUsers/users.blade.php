@@ -22,7 +22,7 @@
                         <span></span>
                     </div>
                     <div class="search-box pull-left">
-                        <form action="GET">
+                        <form id="searchForm" method="GET" >
                             <input id="searchUser" type="text" name="search" placeholder="Search by name or username..." required>
                             <i class="ti-search"></i>
                         </form>
@@ -115,7 +115,7 @@
                             <th>Action</th>
                         </tr>
                         </thead>
-                        <tbody id="listUser">
+                        <tbody  id="listUser">
 
                         </tbody>
                     </table>

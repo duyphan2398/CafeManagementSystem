@@ -27,6 +27,11 @@ body{
     color: white !important;
 }
 
+.toast-warning{
+    background-color: #fdd52c !important;
+    color: black !important;
+}
+
 a{
     text-decoration: none !important;
 }

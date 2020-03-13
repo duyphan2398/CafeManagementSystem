@@ -3,7 +3,7 @@ let lastPage = 1;
 let output = ``;
 let user_id_modal = null;
 let array_username = [];
-
+let output_current = ``;
 axios.get(location.origin + '/axios/getAllUsers')
     .then(function (response) {
         response.data.users.forEach(function (user) {
@@ -310,8 +310,71 @@ $(document).ready(function () {
         $('#newUserModal').modal('show');
     });
 
-    $('#searchUser').keyup( function() {
-        console.log($(this).val());
+    $('#searchForm').submit(function (event) {
+        event.preventDefault();
+        if ($('#searchUser').val() != '') {
+            $('#listUser').removeAttr("style").hide();
+            $('#seeMore').removeAttr("style").hide(),
+            $('#loading').show();
+            search = $('#searchUser').val();
+            axios.get(location.origin + '/axios/user/search', {
+                params: {
+                    search
+                }
+            }).then(function (response) {
+                output =``;
+                response.data.users.forEach(function (user) {
+                    output+=addText(user);
+                })
+                $('#loading').removeAttr("style").hide();
+                $('#listUser').empty().append(output).show();
+
+            }).catch(function (error) {
+                console.log(error);
+                $('#loading').removeAttr("style").hide();
+                $('#listUser').show();
+                toastr.warning('Could not found');
+                if (lastPage > currentPage){
+                    $('#seeMore').show();
+                }
+            })
+        }
+    })
+
+
+    $('#searchUser').keyup(function () {
+        if ($(this).val() == ''){
+            $('#listUser').empty();
+            $('#seeMore').removeAttr("style").hide();
+            $('#loading').show();
+            let count;
+            const async = async () => {
+                for (count = 1; count <= currentPage; count++) {
+                    $('#loading').show();
+                    $('#seeMore').removeAttr("style").hide();
+                    try {
+                        let asyncRequest = await axios.get(location.origin + '/axios/users?page=' + count
+                        )
+                        let data = asyncRequest.data;
+                        lastPage = data.users.last_page;
+                        output = ``;
+                        data.users.data.forEach(function (user) {
+                            output += addText(user);
+
+                        });
+                        $('#listUser').append(output);
+                        $('#loading').removeAttr("style").hide();
+                        if (lastPage > currentPage) {
+                            $('#seeMore').show();
+                        }
+                    }
+                    catch (e) {
+                        console.error(error);
+                    }
+                }
+            }
+            async();
+        };
     })
 });
 

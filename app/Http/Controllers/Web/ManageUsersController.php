@@ -132,5 +132,19 @@ class ManageUsersController extends Controller{
 
     }
 
+
+    public function search(Request $request){
+        $users = User::query()->withTrashed()->whereLike(['name','username'],$request->search)->get();
+        if (count($users) > 0){
+            return response()->json([
+                'status' => 'success',
+                'users' => $users
+            ],200);
+        }
+        return response()->json([
+            'status' => 'fails'
+        ],404);
+    }
+
 }
 

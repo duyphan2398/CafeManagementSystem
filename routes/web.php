@@ -28,6 +28,7 @@ Route::group(['middleware' => 'checkloggedin'], function (){
 
     /*Manage Users*/
     Route::get('users', 'ManageUsersController@index');
+
 });
 
 
@@ -41,4 +42,6 @@ Route::group(['middleware' => 'checkloggedin', 'prefix' => 'axios'], function ()
     Route::get('user', 'ManageUsersController@getUser');
     Route::patch('user/update','ManageUsersController@update');
     Route::post('user/new','ManageUsersController@create');
+    Route::get('user/search', 'ManageUsersController@search');
+
 });
