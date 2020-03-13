@@ -27,14 +27,17 @@ Route::group(['middleware' => 'checkloggedin'], function (){
     Route::get('/', 'HomeController@index');
 
     /*Manage Users*/
+    /*--------------users----------------*/
     Route::get('users', 'ManageUsersController@index');
-
+    /*------------schedule------------*/
+    Route::get('schedule', 'ManageUsersController@schedule');
 });
 
 
 /* Route API for Web Call */
 Route::group(['middleware' => 'checkloggedin', 'prefix' => 'axios'], function (){
     /*Manage Users*/
+    /*----------users---------*/
     Route::get('getAllUsers', 'ManageUsersController@getAllUsers');
     Route::get('users', 'ManageUsersController@show');
     Route::delete('user/delete', 'ManageUsersController@delete');
@@ -43,5 +46,6 @@ Route::group(['middleware' => 'checkloggedin', 'prefix' => 'axios'], function ()
     Route::patch('user/update','ManageUsersController@update');
     Route::post('user/new','ManageUsersController@create');
     Route::get('user/search', 'ManageUsersController@search');
+
 
 });

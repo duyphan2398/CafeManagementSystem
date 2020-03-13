@@ -85,6 +85,24 @@
                                 <li>
                                     <a href="{{url('users')}}">List Of Users</a>
                                 </li>
+                                <li>
+                                    <a href="{{url('schedule')}}">Schedule</a>
+                                </li>
+                                {{--<li>
+                                    <a href="index3-horizontalmenu.html">Horizontal Sidebar</a>
+                                </li>--}}
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="" aria-expanded="true">
+                                <i class="ti-cup"></i>
+                                <span>Manage Drinks
+                                </span>
+                            </a>
+                            <ul class="collapse">
+                                <li>
+                                    <a href="{{url('users')}}">List Of Drinks</a>
+                                </li>
                                 {{--<li>
                                     <a href="index3-horizontalmenu.html">Horizontal Sidebar</a>
                                 </li>--}}
@@ -163,5 +181,7 @@
         });
         let token = document.head.querySelector('meta[name="csrf-token"]');
     </script>
+
+
 </body>
 </html>

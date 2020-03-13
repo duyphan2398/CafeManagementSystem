@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class ManageUsersController extends Controller{
+
+    /*-----------users-------------*/
     public function index(){
         return view('workspace.manageUsers.users');
     }
@@ -146,5 +148,11 @@ class ManageUsersController extends Controller{
         ],404);
     }
 
+
+    /*---------------schedule-----------------*/
+
+    public function schedule(){
+        return view('workspace.manageUsers.schedule');
+    }
 }
 
