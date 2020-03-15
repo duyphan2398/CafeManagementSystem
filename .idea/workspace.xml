@@ -1,16 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d399f2e7-6fca-44ac-955a-4cc4cef38dbb" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/CafeManagementSystem.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/CafeManagementSystem.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/User.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/auth.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/auth.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
-    </list>
+    <list default="true" id="d399f2e7-6fca-44ac-955a-4cc4cef38dbb" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -149,17 +140,17 @@
     <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\laragon\www\CafeManagementSystem\public\js" />
-      <recent name="C:\laragon\www\CafeManagementSystem\public\js\manageUsers" />
-      <recent name="C:\laragon\www\CafeManagementSystem\app\Models" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\laragon\www\CafeManagementSystem" />
       <recent name="C:\laragon\www\CafeManagementSystem\public\css" />
       <recent name="C:\laragon\www\CafeManagementSystem\public\js" />
       <recent name="C:\laragon\www\CafeManagementSystem\public" />
       <recent name="C:\laragon\www\CafeManagementSystem\app\Traits" />
-      <recent name="C:\laragon\www\CafeManagementSystem\public\images" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\laragon\www\CafeManagementSystem\public\js" />
+      <recent name="C:\laragon\www\CafeManagementSystem\public\js\manageUsers" />
+      <recent name="C:\laragon\www\CafeManagementSystem\app\Models" />
     </key>
   </component>
   <component name="RunManager" selected="PHPUnit.phpunit.xml">
@@ -198,7 +189,7 @@
       <workItem from="1584021692664" duration="9452000" />
       <workItem from="1584060969186" duration="20488000" />
       <workItem from="1584111793917" duration="1065000" />
-      <workItem from="1584240957443" duration="7641000" />
+      <workItem from="1584240957443" duration="8429000" />
     </task>
     <servers />
   </component>
