@@ -6,11 +6,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
-use App\Traits\ParseCreatedAt;
+use App\Traits\ParseTimeStamp;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 class User extends Authenticatable implements JWTSubject
 {
-    use ParseCreatedAt;
+    use ParseTimeStamp;
     use Notifiable;
     use SoftDeletes;
     /**
@@ -19,7 +19,7 @@ class User extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $fillable = [
-        'name', 'username', 'password', 'role'
+        'name', 'username', 'password', 'role', 'created_time', 'updated_time'
     ];
 
     /**

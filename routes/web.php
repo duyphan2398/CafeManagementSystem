@@ -46,6 +46,9 @@ Route::group(['middleware' => 'checkloggedin', 'prefix' => 'axios'], function ()
     Route::patch('user/update','ManageUsersController@update');
     Route::post('user/new','ManageUsersController@create');
     Route::get('user/search', 'ManageUsersController@search');
-
+    /*----------schedule---------*/
+    Route::post('schedule/new','ManageUsersController@createSchedule');
+    Route::get('getAllUsersWithoutTrashed', 'ManageUsersController@getAllUsersWithoutTrashed');
+    Route::get('getScheduleToday', 'ManageUsersController@getScheduleToday');
 
 });

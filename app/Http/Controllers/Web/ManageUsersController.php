@@ -1,9 +1,12 @@
 <?php
 namespace App\Http\Controllers\Web;
+use App\Http\Requests\NewScheduleRequest;
 use App\Http\Requests\NewUserRequest;
 use App\Http\Requests\UpdateUserRequest;
+use App\Models\Schedule;
 use App\Models\User;
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -17,7 +20,7 @@ class ManageUsersController extends Controller{
 
 
     public function show(){
-        $users = User::withTrashed()->where('id', '<>', Auth::id())->orderBy('created_at','desc')->paginate(5);
+        $users = User::withTrashed()->where('id', '<>', Auth::id())->orderBy('created_at','desc')->paginate(10);
         return response()->json(['users' => $users],200);
     }
 
@@ -87,7 +90,7 @@ class ManageUsersController extends Controller{
             }
             return response()->json([
                 'status' => 'fail',
-            ],404);
+            ],500);
 
         }
         else{
@@ -153,6 +156,53 @@ class ManageUsersController extends Controller{
 
     public function schedule(){
         return view('workspace.manageUsers.schedule');
+    }
+
+    public function createSchedule(NewScheduleRequest $request){
+
+        if ( $request->validated()) {
+            $user = User::where('username', '=', $request->username)->first();
+            $schedule = new Schedule();
+            $schedule->fill($request->all());
+            $schedule->start_time = Carbon::make($request->start_time)->format('H:i');
+            $schedule->end_time = Carbon::make($request->end_time)->format('H:i');
+            $schedule->setUserIdAttribute($user->id);
+            if ( $user && $schedule->save()){
+                return response()->json([
+                    'status' => 'success',
+                    'schedule' => $schedule
+                ],201);
+            }
+            return response()->json([
+                'status' => 'fails',
+            ],500);
+
+        }
+        else{
+            return response()->json([
+                "status" =>"fails",
+                "validated" =>$request->validated()
+            ],422);
+        }
+    }
+
+    public function getAllUsersWithoutTrashed(){
+        $users = User::all();
+        return response()->json([
+            'users' => $users
+        ],200);
+    }
+
+    public function getScheduleToday(){
+        $schedules = Schedule::whereDate('date', '=', Carbon::today()->toDateString())->orderBy('start_time')->get();
+        $user = [];
+        foreach ($schedules as $schedule){
+            $user[$schedule->id] = $schedule->user;
+        }
+        return response()->json([
+            'status' =>'success',
+            'schedules'=> $schedules
+        ],200);
     }
 }
 
