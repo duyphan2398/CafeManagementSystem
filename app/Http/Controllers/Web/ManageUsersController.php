@@ -199,10 +199,45 @@ class ManageUsersController extends Controller{
         foreach ($schedules as $schedule){
             $user[$schedule->id] = $schedule->user;
         }
+        if ($schedules->count()) {
+            return response()->json([
+                'status' =>'success',
+                'schedules'=> $schedules
+            ],200);
+        }
         return response()->json([
-            'status' =>'success',
-            'schedules'=> $schedules
+            'status' => 'Could Not Found'
+        ],404);
+    }
+
+    public function deleteSchedule(Request $request){
+        $schedule = Schedule::find($request->schedule_id);
+        $date = $schedule->date;
+        if ($schedule->delete()){
+            return response()->json([
+                'status' => 'success',
+                'date' => $date
+            ],200);
+        }
+
+    }
+
+    /*Edit*/
+    public function getSchedule(Request $request){
+        $schedule = Schedule::find($request->schedule_id_modal);
+    }
+
+
+    public function  getListScheduleFillter(Request $request){
+        return response()->json([
+            'request'=> $request
         ],200);
+    }
+
+
+
+    public function exportSchedule(){
+
     }
 }
 

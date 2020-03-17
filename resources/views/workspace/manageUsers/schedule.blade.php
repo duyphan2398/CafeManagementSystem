@@ -61,7 +61,7 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class=" col-12">
-                        <main role="main" class="mt-1"><div class="chartjs-size-monitor" style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;"><div class="chartjs-size-monitor-expand" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:1000000px;height:1000000px;left:0;top:0"></div></div><div class="chartjs-size-monitor-shrink" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:200%;height:200%;left:0; top:0"></div></div></div>
+                        <main role="main" class="mt-1">
                             <div class=" mt-2 d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
                                 <h1 class="h2">Today</h1>
                                 <button  id="newScheduleButton"  class="btn btn-outline-primary">
@@ -118,7 +118,7 @@
                                                         theme: "dark",
                                                         onShow: function(ct){
                                                             this.setOptions({
-                                                                maxTime: $('#endNew').val() ?  $('#endNew').val() : false
+                                                                maxTime: $('#endNew').val() ?  $('#endNew').val()-15 : '23:00'
                                                         })
                                                         }
                                                     }).on("change", function() {
@@ -126,7 +126,7 @@
                                                             var time =moment($('#endNew').val(),"HH:mm").diff(moment( $('#startNew').val(),"HH:mm"),'hours', true );
                                                             $('#totaltimeNew').val(time);
                                                         }
-                                                    });;
+                                                    });
 
                                                     $('#endNew').attr('autocomplete','off');
                                                     $("#endNew").datetimepicker({
@@ -135,9 +135,10 @@
                                                         step: 15,
                                                         format: 'H:i',
                                                         theme: "dark",
+                                                        maxTime: '23:00',
                                                         onShow: function(ct){
                                                            this.setOptions({
-                                                                minTime: $('#startNew').val() ? $('#startNew').val() : '05:00'
+                                                                minTime: $('#startNew').val() ? $('#startNew').val()+15 : '05:00'
                                                             })
                                                         }
                                                     }).on("change", function() {
@@ -192,8 +193,87 @@
                         </main>
                     </div>
                 </div>
-                <div class="row">
+                <hr>
+                <div class="row mt-5">
+                    <div class="col-12">
+                        <main role="main" class="mt-1">
+                            <div class=" mt-2 d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+                                <h1 class="h2">Schedule Fillter</h1>
+                                <button  id="exportScheduleFillter"  class="btn btn-outline-primary float-right">
+                                    Export
+                                    <i class="ti-notepad"></i>
+                                </button>
+                            </div>
+                            <div class="mb-2">
+                                <form class="form-inline d-inline-block">
+                                    <label class="sr-only" for="fromFillter">From</label>
+                                    <input value="" type="text" class="form-control mb-2 mr-sm-2" id="fromFillter" placeholder="From">
 
+                                    <label class="sr-only" for="toFillter">To</label>
+                                    <input value="" type="text" class="form-control mb-2 mr-sm-2" id="toFillter" placeholder="To">
+                                </form>
+                                <script>
+                                    $('#fromFillter').attr('autocomplete','off');
+                                    $("#fromFillter").datetimepicker({
+                                        yearStart: 2020,
+                                        yearEnd: 2100,
+                                        timepicker : false,
+                                        datepicker : true,
+                                        format: 'd-m-Y',
+                                        theme : 'dark',
+                                        onShow: function(ct){
+                                            this.setOptions({
+                                                maxDate: $('#toFillter').val() ? $('#toFillter').val() : false
+                                            })
+                                        }
+                                    }).on("change", function() {
+                                        if ($('#toFillter').val()) {
+                                            loadListScheduleFillter();
+                                        }
+                                    });
+
+                                   $('#toFillter').attr('autocomplete','off');
+                                   $("#toFillter").datetimepicker({
+                                       yearStart: 2020,
+                                       yearEnd: 2100,
+                                       timepicker : false,
+                                       datepicker : true,
+                                       format: 'd-m-Y',
+                                       theme : 'dark',
+                                       onShow: function(ct){
+                                           this.setOptions({
+                                               minDate: $('#fromFillter').val() ? $('#fromFillter').val() : false
+                                           })
+                                       }
+                                   }).on("change", function() {
+                                       if ($('#fromFillter').val()) {
+                                           loadListScheduleFillter();
+                                       }
+                                   });
+
+
+                                </script>
+                            </div>
+
+
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th>Username</th>
+                                    <th>Start</th>
+                                    <th>End</th>
+                                    <th>Date</th>
+                                    <th>Total time</th>
+                                    <th>Action</th>
+                                </tr>
+                                </thead>
+                                <tbody  id="listScheduleFillter">
+
+                                </tbody>
+                            </table>
+
+                        </main>
+                    </div>
                 </div>
             </div>
         </div>

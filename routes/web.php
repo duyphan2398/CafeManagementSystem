@@ -50,5 +50,11 @@ Route::group(['middleware' => 'checkloggedin', 'prefix' => 'axios'], function ()
     Route::post('schedule/new','ManageUsersController@createSchedule');
     Route::get('getAllUsersWithoutTrashed', 'ManageUsersController@getAllUsersWithoutTrashed');
     Route::get('getScheduleToday', 'ManageUsersController@getScheduleToday');
+    Route::delete('schedule/delete','ManageUsersController@deleteSchedule');
+    Route::delete('schedule','ManageUsersController@getSchedule');
+    Route::get('getListScheduleFillter', 'ManageUsersController@getListScheduleFillter');
 
 });
+
+
+Route::get('exportSchedule', 'ManageUsersController@exportSchedule');
