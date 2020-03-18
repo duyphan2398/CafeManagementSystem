@@ -12,9 +12,10 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
-
+use  Illuminate\Filesystem\FilesystemManager;
 class ManageUsersController extends Controller{
 
     /*-----------users-------------*/
@@ -232,9 +233,6 @@ class ManageUsersController extends Controller{
     }
 
     public function  getListScheduleFillter(Request $request){
-        return response()->json([
-            'sds' => $request
-        ],200);
         if ($request->fromFillter || $request->toFillter){
            if ($request->fromFillter && $request->toFillter){
                $from =Carbon::make($request->fromFillter)->format('Y-m-d');
@@ -267,16 +265,15 @@ class ManageUsersController extends Controller{
     }
 
     public function exportScheduleCsv(Request $request){
-        $from = $request->fromFillter;
+   /*     $from = $request->fromFillter;
         $to = $request->toFillter;
         if (!$from) {
             $from = $to;
         }
         if (!$to){
             $to = $from;
-        }
-        return (new ScheduleExport($from,$to))->download('Schedule('.$from.' to '.$to.').csv');;
-
+        }*/
+    return (new ScheduleExport)->download('schedule.csv');
 
     }
 }

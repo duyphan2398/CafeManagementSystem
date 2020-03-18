@@ -211,12 +211,16 @@
                                     <label class="sr-only" for="toFillter">To</label>
                                     <input name="toFillter" value="" type="text" class="form-control mb-2 mr-sm-2" id="toFillter" placeholder="To">
                                     <div class="d-inline-block float-right">
-                                        <button  type="submit" class="btn btn-outline-primary float-right">
-                                            Export
-                                            <i class="ti-notepad"></i>
-                                        </button>
+
                                     </div>
                                 </form>
+
+                                <button  id="export" class="btn btn-outline-primary float-right">
+                                    Export
+                                    <i class="ti-notepad"></i>
+                                </button>
+
+
                                 <script>
                                     $('#fromFillter').attr('autocomplete','off');
                                     $("#fromFillter").datetimepicker({
@@ -232,20 +236,7 @@
                                             })
                                         }
                                     }).on("change", function() {
-                                           /* loadListScheduleFillter();*/
-                                        let fromFillter = $("#fromFillter").val();
-                                        let toFillter = $("#toFillter").val();
-                                        axios.get(location.origin + '/axios/getListScheduleFillter', {
-                                            fromFillter,
-                                            toFillter
-                                        }).then(function (response) {
-                                            console.log(response);
-                                            /* output = ``;
-                                             response.data.users.forEach(function (user) {
-                                                 output+= `<option value="`+user.username+`">`+user.username+`</option>`;
-                                             });
-                                             $("#usernameNew").empty().append(output);*/
-                                        });
+
                                     });
 
                                    $('#toFillter').attr('autocomplete','off');
@@ -262,20 +253,7 @@
                                            })
                                        }
                                    }).on("change", function() {
-                                          /* loadListScheduleFillter();*/
-                                       let fromFillter = $("#fromFillter").val();
-                                       let toFillter = $("#toFillter").val();
-                                       axios.get(location.origin + '/axios/getListScheduleFillter', {
-                                           fromFillter,
-                                           toFillter
-                                       }).then(function (response) {
-                                           console.log(response);
-                                           /* output = ``;
-                                            response.data.users.forEach(function (user) {
-                                                output+= `<option value="`+user.username+`">`+user.username+`</option>`;
-                                            });
-                                            $("#usernameNew").empty().append(output);*/
-                                       });
+
 
                                    });
 

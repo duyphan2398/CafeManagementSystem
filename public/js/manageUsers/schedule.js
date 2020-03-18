@@ -1,6 +1,10 @@
 let output = ``;
 
+
+
+
 function addText(item){
+
     let result= ``;
     result =  `<tr id="`+item.id+`">
                     <td>`+item.user.username+`</td>
@@ -201,5 +205,13 @@ $(document).ready(function () {
             $('#loading_modal').removeAttr("style").hide();
             new_modal(response.data.user);
         })
+    });
+
+
+
+    $("#export").click(function () {
+ /*       toFillter = $('#toFillter').val();
+        fromFillter = $("#fromFillter").val();*/
+         axios.post(location.origin + '/axios/schedules/export');
     });
 })

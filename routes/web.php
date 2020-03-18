@@ -56,4 +56,3 @@ Route::group(['middleware' => 'checkloggedin', 'prefix' => 'axios'], function ()
     Route::post('schedules/export', 'ManageUsersController@exportScheduleCsv');
 });
 
-

@@ -20,23 +20,22 @@ use Maatwebsite\Excel\Concerns\WithTitle;
 
 class ScheduleExport  implements FromQuery, WithHeadings, ShouldAutoSize {
     use Exportable;
-
-    private $from = null;
+  /*  private $from = null;
     private $to = null;
     public function __construct($from, $to)
     {
-        if ($from || $to){
+        if ($from || $to) {
             $this->from = Carbon::make($from)->format('Y-m-d');
             $this->to = Carbon::make($to)->format('Y-m-d');
         }
 
-    }
+    }*/
 
     public function query()
     {
-       if ($this->from || $this->to){
+       /*if ($this->from || $this->to){
            return Schedule::query()->whereBetween('date', [$this->from, $this->to]);
-       }
+       }*/
         return Schedule::query();
 
     }
