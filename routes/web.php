@@ -53,8 +53,7 @@ Route::group(['middleware' => 'checkloggedin', 'prefix' => 'axios'], function ()
     Route::delete('schedule/delete','ManageUsersController@deleteSchedule');
     Route::delete('schedule','ManageUsersController@getSchedule');
     Route::get('getListScheduleFillter', 'ManageUsersController@getListScheduleFillter');
-
+    Route::post('schedules/export', 'ManageUsersController@exportScheduleCsv');
 });
 
 
-Route::get('exportSchedule', 'ManageUsersController@exportSchedule');

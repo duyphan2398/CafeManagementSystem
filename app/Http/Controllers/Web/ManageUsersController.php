@@ -1,5 +1,7 @@
 <?php
 namespace App\Http\Controllers\Web;
+use App\Exports\ScheduleExport;
+use App\Http\Requests\ExportScheduleRequest;
 use App\Http\Requests\NewScheduleRequest;
 use App\Http\Requests\NewUserRequest;
 use App\Http\Requests\UpdateUserRequest;
@@ -8,8 +10,10 @@ use App\Models\User;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ManageUsersController extends Controller{
 
@@ -227,16 +231,52 @@ class ManageUsersController extends Controller{
         $schedule = Schedule::find($request->schedule_id_modal);
     }
 
-
     public function  getListScheduleFillter(Request $request){
         return response()->json([
-            'request'=> $request
+            'sds' => $request
         ],200);
+        if ($request->fromFillter || $request->toFillter){
+           if ($request->fromFillter && $request->toFillter){
+               $from =Carbon::make($request->fromFillter)->format('Y-m-d');
+               $to = Carbon::make($request->toFillter)->format('Y-m-d');
+               return response()->json([
+                   'status'=> ' success',
+                   'schedules' => Schedule::whereBetween('date', [$from, $to])->get()
+               ],200);
+           }
+           if ($request->fromFillter){
+               $from = $request->fromFillter;
+               $to =$request->fromFillter;
+           }
+           if ($request->toFillter){
+               $to = $request->toFillter;
+               $from =$request->toFillter;
+           }
+            $from =Carbon::make($request->fromFillter)->format('Y-m-d');
+            $to = Carbon::make($request->toFillter)->format('Y-m-d');
+            return response()->json([
+                'status'=> ' success',
+                'schedules' => Schedule::whereBetween('date', [$from, $to])->get()
+            ],200);
+
+        }
+        return response()->json([
+            'status'=> 'Please enter the from and to'
+        ],404);
+
     }
 
+    public function exportScheduleCsv(Request $request){
+        $from = $request->fromFillter;
+        $to = $request->toFillter;
+        if (!$from) {
+            $from = $to;
+        }
+        if (!$to){
+            $to = $from;
+        }
+        return (new ScheduleExport($from,$to))->download('Schedule('.$from.' to '.$to.').csv');;
 
-
-    public function exportSchedule(){
 
     }
 }

@@ -30,7 +30,7 @@ axios.get(location.origin + '/axios/getAllUsersWithoutTrashed')
         $("#usernameNew").empty().append(output);
     });
 
-function loadListScheduleFillter() {
+/*function loadListScheduleFillter() {
     let fromFillter = $("#fromFillter").val();
     let toFillter = $("#toFillter").val();
     axios.get(location.origin + '/axios/getListScheduleFillter', {
@@ -38,14 +38,14 @@ function loadListScheduleFillter() {
         toFillter
     }).then(function (response) {
         console.log(response);
-           /* output = ``;
+           /!* output = ``;
             response.data.users.forEach(function (user) {
                 output+= `<option value="`+user.username+`">`+user.username+`</option>`;
             });
-            $("#usernameNew").empty().append(output);*/
+            $("#usernameNew").empty().append(output);*!/
         });
 
-}
+}*/
 function loadListScheduleToday(){
 axios.get(location.origin + '/axios/getScheduleToday')
     .then(function (response) {
@@ -71,9 +71,37 @@ axios.get(location.origin + '/axios/getScheduleToday')
             `);
     });
 }
+
+
+function loadListScheduleFillterFirst(){
+    axios.get(location.origin + '/axios/getScheduleToday')
+        .then(function (response) {
+            let listSchedules = ``;
+            response.data.schedules.forEach(function (schedule) {
+                listSchedules+= addText(schedule);
+            });
+            $('#loadingFillter').removeAttr("style").hide();
+            $("#listScheduleFillter").empty().append(listSchedules);
+        }).catch(function (error) {
+        $('#loadingFillter').removeAttr("style").hide();
+        $("#listScheduleFillter").empty().append(`<tr id="---">
+                    <td>---</td>
+                    <td>---</td>
+                    <td>---</td>
+                    <td>---</td>
+                    <td>---</td>
+                    <td>
+                      ---
+                    </td>
+                </tr>
+            `);
+    });
+}
 $(document).ready(function () {
     $('#loading').show();
+    $('#loadingFillter').show();
     loadListScheduleToday();
+    loadListScheduleFillterFirst();
     $('#newScheduleButton').click(function () {
         $('#newScheduleModal').modal('show');
     });
@@ -174,5 +202,4 @@ $(document).ready(function () {
             new_modal(response.data.user);
         })
     });
-
 })

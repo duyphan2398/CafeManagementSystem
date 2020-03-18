@@ -6,11 +6,17 @@ use App\Traits\AddUser;
 use App\Traits\ParseTimeStamp;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Maatwebsite\Excel\Concerns\Exportable;
+use Maatwebsite\Excel\Concerns\FromCollection;
 
 class Schedule extends Model
 {
+    use Exportable;
     use AddUser;
     use ParseTimeStamp;
+
+
+
 
     protected $fillable = [
         'user_id',

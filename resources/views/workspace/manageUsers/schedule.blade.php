@@ -199,18 +199,23 @@
                         <main role="main" class="mt-1">
                             <div class=" mt-2 d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
                                 <h1 class="h2">Schedule Fillter</h1>
-                                <button  id="exportScheduleFillter"  class="btn btn-outline-primary float-right">
-                                    Export
-                                    <i class="ti-notepad"></i>
-                                </button>
+
+
                             </div>
                             <div class="mb-2">
-                                <form class="form-inline d-inline-block">
+                                <form id="exportScheduleFillter"  method='Post' action='{{url('axios/schedules/export')}}' class="form-inline d-inline">
+                                    {{csrf_field()}}
                                     <label class="sr-only" for="fromFillter">From</label>
-                                    <input value="" type="text" class="form-control mb-2 mr-sm-2" id="fromFillter" placeholder="From">
+                                    <input name="fromFillter" value="" type="text" class="form-control mb-2 mr-sm-2" id="fromFillter" placeholder="From">
 
                                     <label class="sr-only" for="toFillter">To</label>
-                                    <input value="" type="text" class="form-control mb-2 mr-sm-2" id="toFillter" placeholder="To">
+                                    <input name="toFillter" value="" type="text" class="form-control mb-2 mr-sm-2" id="toFillter" placeholder="To">
+                                    <div class="d-inline-block float-right">
+                                        <button  type="submit" class="btn btn-outline-primary float-right">
+                                            Export
+                                            <i class="ti-notepad"></i>
+                                        </button>
+                                    </div>
                                 </form>
                                 <script>
                                     $('#fromFillter').attr('autocomplete','off');
@@ -227,9 +232,20 @@
                                             })
                                         }
                                     }).on("change", function() {
-                                        if ($('#toFillter').val()) {
-                                            loadListScheduleFillter();
-                                        }
+                                           /* loadListScheduleFillter();*/
+                                        let fromFillter = $("#fromFillter").val();
+                                        let toFillter = $("#toFillter").val();
+                                        axios.get(location.origin + '/axios/getListScheduleFillter', {
+                                            fromFillter,
+                                            toFillter
+                                        }).then(function (response) {
+                                            console.log(response);
+                                            /* output = ``;
+                                             response.data.users.forEach(function (user) {
+                                                 output+= `<option value="`+user.username+`">`+user.username+`</option>`;
+                                             });
+                                             $("#usernameNew").empty().append(output);*/
+                                        });
                                     });
 
                                    $('#toFillter').attr('autocomplete','off');
@@ -246,9 +262,21 @@
                                            })
                                        }
                                    }).on("change", function() {
-                                       if ($('#fromFillter').val()) {
-                                           loadListScheduleFillter();
-                                       }
+                                          /* loadListScheduleFillter();*/
+                                       let fromFillter = $("#fromFillter").val();
+                                       let toFillter = $("#toFillter").val();
+                                       axios.get(location.origin + '/axios/getListScheduleFillter', {
+                                           fromFillter,
+                                           toFillter
+                                       }).then(function (response) {
+                                           console.log(response);
+                                           /* output = ``;
+                                            response.data.users.forEach(function (user) {
+                                                output+= `<option value="`+user.username+`">`+user.username+`</option>`;
+                                            });
+                                            $("#usernameNew").empty().append(output);*/
+                                       });
+
                                    });
 
 
@@ -271,7 +299,15 @@
 
                                 </tbody>
                             </table>
-
+                            <div class="text-center mb-2"  id="loadingFillter" style="display: none;">
+                                <img src="{{asset("images/loading.gif")}}" alt="loading..." style="margin-bottom: 70px">
+                            </div>
+                            <div id="seeMoreFillter" class="text-center" style="display: none; ">
+                                <button id= "moreNewPosts"class="btn btn-primary w-50" style="margin-bottom: 70px">
+                                    See more
+                                    <i class="ti-arrow-circle-down"></i>
+                                </button>
+                            </div>
                         </main>
                     </div>
                 </div>
