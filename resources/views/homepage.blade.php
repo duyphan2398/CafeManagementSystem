@@ -1,71 +1,53 @@
 @extends('layouts.layout')
 
 @section('title')
-    Homepage
+    Dashboard
 @endsection
 
 @section('content')
-    <div class="wrapper">
-        <!-- Sidebar -->
-        <div class="sidebar-wrapper">
-            <ul class="sidebar-nav">
-                <li class="sidebar-brand">
-                    <a href="#">
-                       <b>{{\Illuminate\Support\Facades\Auth::user()->name}}</b>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">Dashboard</a>
-                </li>
-                <li>
-                    <a href="#">Shortcuts</a>
-                </li>
-                <li>
-                    <a href="#">Overview</a>
-                </li>
-                <li>
-                    <a href="#">Events</a>
-                </li>
-                <li>
-                    <a href="#">About</a>
-                </li>
-                <li>
-                    <a href="#">Services</a>
-                </li>
-                <li>
-                    <a href="#">Contact</a>
-                </li>
-            </ul>
-        </div>
-        <!-- /#sidebar-wrapper -->
-
-        <!-- Page Content -->
-        <div class="page-content-wrapper">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-lg-1">
-                        <div>
-                            {{--Button show sidebar--}}
-                            <button class="btn btn-default menu-toggle">
-                                <img src="{{asset('images/side_show.png')}}" style="width: 60px; height: 60px" alt="" >
-                            </button>
-                        </div>
+    <div class="main-content">
+        <!-- header area start -->
+        <div class="header-area">
+            <div class="row align-items-center">
+                <!-- nav and search button -->
+                <div class="col-md-6 col-sm-8 clearfix">
+                    <div class="nav-btn pull-left">
+                        <span></span>
+                        <span></span>
+                        <span></span>
                     </div>
-                    <div class="col-lg-11">
-
-                        <h1>
-                            Hello
-                        </h1>
-
+                    <div class="search-box pull-left">
+                        <form action="#">
+                            <input type="text" name="search" placeholder="Search..." required>
+                            <i class="ti-search"></i>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-4 clearfix">
+                    <ul class="notification-area pull-right">
+                        <li id="full-view"><i class="ti-fullscreen"></i></li>
+                        <li id="full-view-exit"><i class="ti-zoom-out"></i></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="page-title-area">
+            <div class="row align-items-center">
+                <div class="col-sm-6">
+                    <div class="breadcrumbs-area clearfix m-3">
+                        <h4 class="page-title pull-left">Dashboard</h4>
+                        <ul class="breadcrumbs pull-left">
+                            <li><a href="index.html">Home</a></li>
+                            <li><span>Dashboard</span></li>
+                        </ul>
                     </div>
                 </div>
             </div>
         </div>
+
+        <div class="main-content-inner">
+            {{--Content--}}
+        </div>
     </div>
-    <script>
-        $(".menu-toggle").click(function(e) {
-            e.preventDefault();
-            $(".wrapper").toggleClass("toggled");
-        });
-    </script>
+
 @endsection
