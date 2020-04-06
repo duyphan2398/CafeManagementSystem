@@ -20,24 +20,37 @@ use Maatwebsite\Excel\Concerns\WithTitle;
 
 class ScheduleExport  implements FromQuery, WithHeadings, ShouldAutoSize {
     use Exportable;
-  /*  private $from = null;
+    private $from = null;
     private $to = null;
     public function __construct($from, $to)
     {
-        if ($from || $to) {
-            $this->from = Carbon::make($from)->format('Y-m-d');
-            $this->to = Carbon::make($to)->format('Y-m-d');
-        }
+        $this->from = $from;
+        $this->to = $to;
 
-    }*/
-
+    }
     public function query()
     {
-       /*if ($this->from || $this->to){
-           return Schedule::query()->whereBetween('date', [$this->from, $this->to]);
-       }*/
-        return Schedule::query();
+        $schedules = Schedule::query()
+            ->join('users', 'schedules.user_id', '=', 'users.id')
+            ->select(['users.username','schedules.*' ])
+            ->orderBy('date','ASC' )
+            ->orderBy('start_time', 'ASC');
 
+        $schedules->when($this->from, function ($q) use (&$request){
+            $q->where('date', '>=', Carbon::parse($this->from)->format('Y-m-d'));
+        });
+        $schedules->when($this->to, function ($q) use (&$request){
+            $q->where('date', '<=', Carbon::parse($this->to)->format('Y-m-d'));
+        });
+        return $schedules->select( [
+            'username',
+            'user_id',
+            'start_time',
+            'end_time',
+            'total_time',
+            'date',
+            'note',
+        ]);
     }
 
     /**
@@ -46,14 +59,13 @@ class ScheduleExport  implements FromQuery, WithHeadings, ShouldAutoSize {
     public function headings(): array
     {
         return [
-            'id',
-            'user_id',
-            'start_time',
-            'end_time',
-            'date',
-            'total_time',
-            'created_at',
-            'updated_at'
+            'USERNAME',
+            'USER_ID',
+            'START_TIME',
+            'END_TIME',
+            'TOTAL_TIME',
+            'DATE',
+            'NOTE',
         ];
     }
 }

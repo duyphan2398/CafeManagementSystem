@@ -53,7 +53,7 @@
     <div class="sidebar-menu">
         <div class="sidebar-header">
             <div class="logo">
-                <a href="index.html">
+                <a href="">
                     <img src="{{asset('images/logo.png')}}" alt="logo">
                 </a>
             </div>

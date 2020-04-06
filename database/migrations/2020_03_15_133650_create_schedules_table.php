@@ -20,6 +20,7 @@ class CreateSchedulesTable extends Migration
             $table->time('end_time');
             $table->date('date');
             $table->float('total_time');
+            $table->string('note')->nullable();
             $table->timestamps();
         });
     }

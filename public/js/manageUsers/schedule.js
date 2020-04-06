@@ -1,21 +1,23 @@
 let output = ``;
 
-
-
-
 function addText(item){
-
     let result= ``;
     result =  `<tr id="`+item.id+`">
-                    <td>`+item.user.username+`</td>
+                    <td>`+item.username+`</td>
                     <td>`+item.start_time+`</td>
                     <td>`+item.end_time+`</td>
                     <td>`+item.date+`</td>
                     <td>`+item.total_time+`</td>
+                    <td>`;
+    if(item.note){
+        result += `<textarea readonly class="form-control" rows="3">`+item.note+`</textarea>`;
+    }
+    else{
+        result += `<textarea readonly class="form-control" rows="3"></textarea>`;
+    };
+
+    result +=       `</td>
                     <td>
-                        <button name="`+item.id+`"  class="edit btn btn-primary mb-1" style="width: 75px">
-                                Edit
-                         </button>
                         <button name="`+item.id+`"  class="delete btn btn-danger mb-1" style="width: 75px">
                             Delete
                         </button>
@@ -29,83 +31,70 @@ axios.get(location.origin + '/axios/getAllUsersWithoutTrashed')
     .then(function (response) {
         output = ``;
         response.data.users.forEach(function (user) {
+
             output+= `<option value="`+user.username+`">`+user.username+`</option>`;
         });
         $("#usernameNew").empty().append(output);
     });
 
-/*function loadListScheduleFillter() {
-    let fromFillter = $("#fromFillter").val();
-    let toFillter = $("#toFillter").val();
-    axios.get(location.origin + '/axios/getListScheduleFillter', {
-        fromFillter,
-        toFillter
-    }).then(function (response) {
-        console.log(response);
-           /!* output = ``;
-            response.data.users.forEach(function (user) {
-                output+= `<option value="`+user.username+`">`+user.username+`</option>`;
+function loadListScheduleFillter(from = $('#fromFillter').val(), to= $('#toFillter').val()) {
+    if (from && to ){
+        $("#listScheduleFillter").empty();
+        $('#export').attr("disabled", true);
+        $('#loadingFillter').show();
+        window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content;
+        axios.post(location.origin + '/axios/getListScheduleFillter', {
+           from,
+            to
+        })
+            .then(function (response) {
+            let resultFillter = ``;
+
+            response.data.schedules.forEach(function (schedule) {
+                resultFillter += addText(schedule);
+
             });
-            $("#usernameNew").empty().append(output);*!/
+            $("#listScheduleFillter").append(resultFillter);
+            $('#loadingFillter').removeAttr("style").hide();
+            $('#export').removeAttr('disabled');
+        })
+           .catch(function (error) {
+            toastr.warning("Could Not Found");
+            $('#loadingFillter').removeAttr("style").hide();
+            $('#export').attr("disabled", true);
         });
-
-}*/
-function loadListScheduleToday(){
-axios.get(location.origin + '/axios/getScheduleToday')
-    .then(function (response) {
-        let listSchedules = ``;
-        response.data.schedules.forEach(function (schedule) {
-            listSchedules+= addText(schedule);
-        });
-        $('#loading').removeAttr("style").hide();
-        $("#listSchedule").empty().append(listSchedules);
-    }).catch(function (error) {
-        toastr.warning("Today's Schedule Is Empty");
-        $('#loading').removeAttr("style").hide();
-        $("#listSchedule").empty().append(`<tr id="---">
-                    <td>---</td>
-                    <td>---</td>
-                    <td>---</td>
-                    <td>---</td>
-                    <td>---</td>
-                    <td>
-                      ---
-                    </td>
-                </tr>
-            `);
-    });
+    }
 }
-
-
-function loadListScheduleFillterFirst(){
+function loadListScheduleToday(){
     axios.get(location.origin + '/axios/getScheduleToday')
         .then(function (response) {
             let listSchedules = ``;
             response.data.schedules.forEach(function (schedule) {
                 listSchedules+= addText(schedule);
             });
-            $('#loadingFillter').removeAttr("style").hide();
-            $("#listScheduleFillter").empty().append(listSchedules);
+            $("#listSchedule").empty().append(listSchedules);
+            $('#loading').removeAttr("style").hide();
         }).catch(function (error) {
-        $('#loadingFillter').removeAttr("style").hide();
-        $("#listScheduleFillter").empty().append(`<tr id="---">
-                    <td>---</td>
-                    <td>---</td>
-                    <td>---</td>
-                    <td>---</td>
-                    <td>---</td>
-                    <td>
-                      ---
-                    </td>
-                </tr>
-            `);
-    });
+            toastr.warning("Today's Schedule Is Empty");
+            $("#listSchedule").empty().append(`<tr id="---">
+                        <td>---</td>
+                        <td>---</td>
+                        <td>---</td>
+                        <td>---</td>
+                        <td>---</td>
+                        <td>---</td>
+                        <td>
+                          ---
+                        </td>
+                    </tr>
+                `);
+            $('#loading').removeAttr("style").hide();
+        });
 }
+
 $(document).ready(function () {
     $('#loading').show();
-    $('#loadingFillter').show();
     loadListScheduleToday();
-    loadListScheduleFillterFirst();
     $('#newScheduleButton').click(function () {
         $('#newScheduleModal').modal('show');
     });
@@ -129,6 +118,7 @@ $(document).ready(function () {
             let start_time = $("#startNew").val();
             let end_time = $("#endNew").val();
             let date = $("#dateNew").val();
+            let note = $("#noteNew").val();
             let total_time = $("#totaltimeNew").val();
             window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content;
             axios.post(location.origin + '/axios/schedule/new', {
@@ -136,11 +126,12 @@ $(document).ready(function () {
                 start_time,
                 end_time,
                 date,
-                total_time
+                total_time,
+                note
             }).then(function (response) {
                 $('#newScheduleForm').trigger("reset");
                 if (response.data.schedule.date == moment().format('DD-MM-YYYY')){
-                    $("#listSchedule").empty()
+                    $("#listSchedule").empty();
                     $('#loading').show();
                     loadListScheduleToday();
                 }
@@ -172,9 +163,10 @@ $(document).ready(function () {
                         }).then(function (response) {
                             if (response.data.date == moment().format('DD-MM-YYYY')){
                                 loadListScheduleToday();
+                                loadListScheduleFillter();
                             }
                             else {
-                                //Code Here **
+                                loadListScheduleFillter();
                             }
                             toastr.success("Deleted Successfully");
                         }).catch(function (error) {
@@ -191,27 +183,25 @@ $(document).ready(function () {
         });
     });
 
-    jQuery(document).on('click',".edit",function () {
-        schedule_id_modal = this.name;
-        $('#loading_modal').show();
-        $('#form_modal').empty();
-        $('#modal').modal('show');
-        axios.get(location.origin + '/axios/schedule', {
-            params: {
-                schedule_id_modal
-            }
-        }).then(function (response) {
-            console.log(response);
-            $('#loading_modal').removeAttr("style").hide();
-            new_modal(response.data.user);
-        })
-    });
-
-
+    $("#exportScheduleFillter").submit(function (e) {
+        e.preventDefault();
+    })
 
     $("#export").click(function () {
- /*       toFillter = $('#toFillter').val();
-        fromFillter = $("#fromFillter").val();*/
-         axios.post(location.origin + '/axios/schedules/export');
+        toFillter = $('#toFillter').val();
+        fromFillter = $("#fromFillter").val();
+        window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content;
+         axios.post(location.origin + '/axios/schedules/export',{
+             toFillter,
+             fromFillter
+         }).then(function (response) {
+             let blob = new Blob(["\ufeff", response.data], { type: 'application/csv' });
+             let link = document.createElement('a');
+             link.href = window.URL.createObjectURL(blob);
+             link.download = 'EmployeeSchedule('+fromFillter+'-To-'+toFillter+').csv';
+             link.click();
+             link.remove();
+
+         });
     });
 })

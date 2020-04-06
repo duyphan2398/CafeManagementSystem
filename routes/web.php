@@ -24,7 +24,7 @@ Route::group(['middleware' => 'checklogin'], function (){
 /*Routes Dashboard*/
 Route::group(['middleware' => 'checkloggedin'], function (){
     Route::get('logout', 'Auth\LoginController@logout');
-    Route::get('/', 'HomeController@index');
+    Route::get('', 'HomeController@index')->name('dashboard');
 
     /*Manage Users*/
     /*--------------users----------------*/
@@ -52,7 +52,7 @@ Route::group(['middleware' => 'checkloggedin', 'prefix' => 'axios'], function ()
     Route::get('getScheduleToday', 'ManageUsersController@getScheduleToday');
     Route::delete('schedule/delete','ManageUsersController@deleteSchedule');
     Route::delete('schedule','ManageUsersController@getSchedule');
-    Route::get('getListScheduleFillter', 'ManageUsersController@getListScheduleFillter');
+    Route::post('getListScheduleFillter', 'ManageUsersController@getListScheduleFillter');
     Route::post('schedules/export', 'ManageUsersController@exportScheduleCsv');
 });
 

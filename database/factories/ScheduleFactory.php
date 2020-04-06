@@ -13,7 +13,7 @@ $factory->define(Schedule::class, function (Faker $faker) {
         'user_id' =>  User::all()->random(1)->first()->id,
         'start_time' => $start_time,
         'end_time' => $end_time,
-        'date' => $faker->dateTimeBetween(now(), '2020-12-30'),
+        'date' => $faker->dateTimeBetween(Carbon::now()->subDays(30), Carbon::now()->addDays(30)),
         'total_time' =>  $total_time
     ];
 });

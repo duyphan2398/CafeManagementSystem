@@ -142,7 +142,6 @@ class ManageUsersController extends Controller{
 
     }
 
-
     public function search(Request $request){
         $users = User::query()->withTrashed()->whereLike(['name','username'],$request->search)->get();
         if (count($users) > 0){
@@ -164,7 +163,6 @@ class ManageUsersController extends Controller{
     }
 
     public function createSchedule(NewScheduleRequest $request){
-
         if ( $request->validated()) {
             $user = User::where('username', '=', $request->username)->first();
             $schedule = new Schedule();
@@ -199,11 +197,12 @@ class ManageUsersController extends Controller{
     }
 
     public function getScheduleToday(){
-        $schedules = Schedule::whereDate('date', '=', Carbon::today()->toDateString())->orderBy('start_time')->get();
-        $user = [];
-        foreach ($schedules as $schedule){
-            $user[$schedule->id] = $schedule->user;
-        }
+        $schedules = Schedule::join('users', 'schedules.user_id', '=', 'users.id')
+            ->select(['users.username','schedules.*' ])
+            ->whereDate('date', '=', Carbon::today()->toDateString())
+            ->orderBy('start_time')
+            ->get();
+
         if ($schedules->count()) {
             return response()->json([
                 'status' =>'success',
@@ -227,54 +226,38 @@ class ManageUsersController extends Controller{
 
     }
 
-    /*Edit*/
-    public function getSchedule(Request $request){
-        $schedule = Schedule::find($request->schedule_id_modal);
-    }
 
     public function  getListScheduleFillter(Request $request){
-        if ($request->fromFillter || $request->toFillter){
-           if ($request->fromFillter && $request->toFillter){
-               $from =Carbon::make($request->fromFillter)->format('Y-m-d');
-               $to = Carbon::make($request->toFillter)->format('Y-m-d');
-               return response()->json([
-                   'status'=> ' success',
-                   'schedules' => Schedule::whereBetween('date', [$from, $to])->get()
-               ],200);
-           }
-           if ($request->fromFillter){
-               $from = $request->fromFillter;
-               $to =$request->fromFillter;
-           }
-           if ($request->toFillter){
-               $to = $request->toFillter;
-               $from =$request->toFillter;
-           }
-            $from =Carbon::make($request->fromFillter)->format('Y-m-d');
-            $to = Carbon::make($request->toFillter)->format('Y-m-d');
+        $schedules = Schedule::query()
+                ->join('users', 'schedules.user_id', '=', 'users.id')
+                ->select(['users.username','schedules.*' ])
+                ->orderBy('date','ASC' )
+                ->orderBy('start_time', 'ASC');
+
+        $schedules->when($request->from, function ($q) use (&$request){
+            $q->where('date', '>=', Carbon::parse($request->from)->format('Y-m-d'));
+        });
+        $schedules->when($request->to, function ($q) use (&$request){
+            $q->where('date', '<=', Carbon::parse($request->to)->format('Y-m-d'));
+        });
+
+        if ((count($schedules->get()))){
+
             return response()->json([
                 'status'=> ' success',
-                'schedules' => Schedule::whereBetween('date', [$from, $to])->get()
+                'schedules' => $schedules->get()
             ],200);
-
         }
         return response()->json([
-            'status'=> 'Please enter the from and to'
+            'status'=> 'Not found',
         ],404);
 
     }
 
     public function exportScheduleCsv(Request $request){
-   /*     $from = $request->fromFillter;
+        $from = $request->fromFillter;
         $to = $request->toFillter;
-        if (!$from) {
-            $from = $to;
-        }
-        if (!$to){
-            $to = $from;
-        }*/
-    return (new ScheduleExport)->download('schedule.csv');
-
+        return (new ScheduleExport($from, $to))->download('EmployeeSchedule('.$from.'-To-'.$to.').csv', \Maatwebsite\Excel\Excel::CSV,  ['Content-Type' => 'text/csv']);
     }
 }
 

@@ -103,6 +103,10 @@
                                                         <label for="date">Date</label>
                                                         <input value="" name="dateNew" type="text" class="form-control" id="dateNew" placeholder="Date">
                                                     </div>
+                                                    <div class="form-group mt-2">
+                                                        <label for="note">Note</label>
+                                                        <textarea class="form-control" name="noteNew" id="noteNew"  rows="3"></textarea>
+                                                    </div>
                                                     <div class="modal-footer mt-4" data-provide="datepicker">
                                                         <button type="submit" class="btn btn-primary">Create</button>
                                                     </div>
@@ -149,7 +153,6 @@
                                                     $('#dateNew').attr('autocomplete','off');
                                                     $("#dateNew").datetimepicker({
                                                         yearStart: 2020,
-                                                        yearEnd: 2100,
                                                         timepicker : false,
                                                         datepicker : true,
                                                         format: 'd-m-Y',
@@ -173,6 +176,7 @@
                                         <th>End</th>
                                         <th>Date</th>
                                         <th>Total time</th>
+                                        <th>Note</th>
                                         <th>Action</th>
                                     </tr>
                                     </thead>
@@ -182,12 +186,6 @@
                                 </table>
                                 <div class="text-center mb-2"  id="loading" style="display: none;">
                                     <img src="{{asset("images/loading.gif")}}" alt="loading..." style="margin-bottom: 70px">
-                                </div>
-                                <div id="seeMore" class="text-center" style="display: none; ">
-                                    <button id= "moreNewPosts"class="btn btn-primary w-50" style="margin-bottom: 70px">
-                                        See more
-                                        <i class="ti-arrow-circle-down"></i>
-                                    </button>
                                 </div>
                             </div>
                         </main>
@@ -203,65 +201,45 @@
 
                             </div>
                             <div class="mb-2">
-                                <form id="exportScheduleFillter"  method='Post' action='{{url('axios/schedules/export')}}' class="form-inline d-inline">
-                                    {{csrf_field()}}
+                                <form id="exportScheduleFillter" class="form-inline d-inline">
                                     <label class="sr-only" for="fromFillter">From</label>
                                     <input name="fromFillter" value="" type="text" class="form-control mb-2 mr-sm-2" id="fromFillter" placeholder="From">
 
                                     <label class="sr-only" for="toFillter">To</label>
                                     <input name="toFillter" value="" type="text" class="form-control mb-2 mr-sm-2" id="toFillter" placeholder="To">
                                     <div class="d-inline-block float-right">
-
+                                        <button  id="export" class="btn btn-outline-primary float-right" disabled>
+                                            Export
+                                            <i class="ti-notepad"></i>
+                                        </button>
                                     </div>
                                 </form>
-
-                                <button  id="export" class="btn btn-outline-primary float-right">
-                                    Export
-                                    <i class="ti-notepad"></i>
-                                </button>
-
 
                                 <script>
                                     $('#fromFillter').attr('autocomplete','off');
                                     $("#fromFillter").datetimepicker({
-                                        yearStart: 2020,
-                                        yearEnd: 2100,
                                         timepicker : false,
                                         datepicker : true,
                                         format: 'd-m-Y',
                                         theme : 'dark',
-                                        onShow: function(ct){
-                                            this.setOptions({
-                                                maxDate: $('#toFillter').val() ? $('#toFillter').val() : false
-                                            })
-                                        }
+                                        autoclose: true
                                     }).on("change", function() {
-
+                                        loadListScheduleFillter($(this).val(), $('#toFillter').val());
                                     });
+
 
                                    $('#toFillter').attr('autocomplete','off');
                                    $("#toFillter").datetimepicker({
-                                       yearStart: 2020,
-                                       yearEnd: 2100,
                                        timepicker : false,
                                        datepicker : true,
                                        format: 'd-m-Y',
                                        theme : 'dark',
-                                       onShow: function(ct){
-                                           this.setOptions({
-                                               minDate: $('#fromFillter').val() ? $('#fromFillter').val() : false
-                                           })
-                                       }
+                                       autoclose: true,
                                    }).on("change", function() {
-
-
+                                       loadListScheduleFillter($('#fromFillter').val(), $(this).val());
                                    });
-
-
                                 </script>
                             </div>
-
-
                             <table class="table table-striped">
                                 <thead>
                                 <tr>
@@ -270,6 +248,7 @@
                                     <th>End</th>
                                     <th>Date</th>
                                     <th>Total time</th>
+                                    <th>Note</th>
                                     <th>Action</th>
                                 </tr>
                                 </thead>
@@ -280,38 +259,8 @@
                             <div class="text-center mb-2"  id="loadingFillter" style="display: none;">
                                 <img src="{{asset("images/loading.gif")}}" alt="loading..." style="margin-bottom: 70px">
                             </div>
-                            <div id="seeMoreFillter" class="text-center" style="display: none; ">
-                                <button id= "moreNewPosts"class="btn btn-primary w-50" style="margin-bottom: 70px">
-                                    See more
-                                    <i class="ti-arrow-circle-down"></i>
-                                </button>
-                            </div>
                         </main>
                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-    {{--Modal--}}
-    <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Edit User</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="text-center mb-2"  id="loading_modal" style="display: none;">
-                        <img src="{{asset("images/loading.gif")}}" alt="loading..." style="margin-bottom: 190px; margin-top: 187px">
-                    </div>
-
-                    <form id="form_modal">
-
-                    </form>
                 </div>
             </div>
         </div>

@@ -21,10 +21,11 @@ use Illuminate\Support\Arr;
 $factory->define(User::class, function (Faker $faker) {
     $role = ['Admin', 'Manager', 'Employee'];
     $arr = [null, now()];
+
     return [
-        'name' => $faker->name,
+        'name' => $faker->firstName,
         'username' => $faker->userName,
-        'password' => '123456789',
+        'password' => '123456',
         'role' => Arr::random($role),
         'deleted_at' => Arr::random($arr),
         'remember_token' => Str::random(10),

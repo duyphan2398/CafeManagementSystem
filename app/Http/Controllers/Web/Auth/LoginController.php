@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Web\Auth;
 
 use App\Models\User;
+use Illuminate\Auth\Authenticatable;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 class LoginController extends Controller
 {
+    use Authenticatable;
     public function index(){
         return view('auth.login');
     }
@@ -16,7 +18,7 @@ class LoginController extends Controller
         $credentials = $request->only('username', 'password');
         if (Auth::attempt($credentials)) {
             session()->flash("success", "Login Successfully");
-            return redirect('/');
+            return redirect()->route('dashboard');
         }
         session()->flash("error", "Wrong Username Or Password");
         return redirect()->back();
