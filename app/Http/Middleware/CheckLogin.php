@@ -19,5 +19,7 @@ class CheckLogin
             return redirect()->back();
         }
         return $next($request);
+
+
     }
 }

@@ -12,10 +12,17 @@
             <ul class="list-inline">
                 <li class="list-inline-item">
                     <div class="dropdown">
-                        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">{{\Illuminate\Support\Facades\Auth::user()->name}}
-                            <span class="caret"></span></button>
-                        <ul class="dropdown-menu">
-                            <li><a href="{{url('logout')}}">Logout</a></li>
+                        <button style="border: 1px solid saddlebrown" class="btn dropdown-toggle text-white" type="button" data-toggle="dropdown">{{\Illuminate\Support\Facades\Auth::user()->name}}
+                            <span class="caret">
+
+                            </span>
+                        </button>
+                        <ul class="dropdown-menu bg-dark" >
+                            <li class="m-2">
+                                <a style=" color: white" class="" href="{{url('logout')}}">
+                                    Logout
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </li>

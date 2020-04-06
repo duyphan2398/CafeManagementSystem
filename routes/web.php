@@ -13,16 +13,46 @@ use Illuminate\Support\Facades\Route;
 |
 */
 /*Authen Routes*/
+
+/**/
 Route::group(['middleware' => 'checklogin'], function (){
     Route::get('login', 'Auth\LoginController@index')->name('login');
     Route::post('login', 'Auth\LoginController@create');
 
 });
 
-
+/*Routes Dashboard*/
 Route::group(['middleware' => 'checkloggedin'], function (){
     Route::get('logout', 'Auth\LoginController@logout');
-    Route::get('/', function () {
-        return view('homepage');
-    });
+    Route::get('', 'HomeController@index')->name('dashboard');
+
+    /*Manage Users*/
+    /*--------------users----------------*/
+    Route::get('users', 'ManageUsersController@index');
+    /*------------schedule------------*/
+    Route::get('schedule', 'ManageUsersController@schedule');
 });
+
+
+/* Route API for Web Call */
+Route::group(['middleware' => 'checkloggedin', 'prefix' => 'axios'], function (){
+    /*Manage Users*/
+    /*----------users---------*/
+    Route::get('getAllUsers', 'ManageUsersController@getAllUsers');
+    Route::get('users', 'ManageUsersController@show');
+    Route::delete('user/delete', 'ManageUsersController@delete');
+    Route::delete('user/forceDelete', 'ManageUsersController@forceDelete');
+    Route::get('user', 'ManageUsersController@getUser');
+    Route::patch('user/update','ManageUsersController@update');
+    Route::post('user/new','ManageUsersController@create');
+    Route::get('user/search', 'ManageUsersController@search');
+    /*----------schedule---------*/
+    Route::post('schedule/new','ManageUsersController@createSchedule');
+    Route::get('getAllUsersWithoutTrashed', 'ManageUsersController@getAllUsersWithoutTrashed');
+    Route::get('getScheduleToday', 'ManageUsersController@getScheduleToday');
+    Route::delete('schedule/delete','ManageUsersController@deleteSchedule');
+    Route::delete('schedule','ManageUsersController@getSchedule');
+    Route::post('getListScheduleFillter', 'ManageUsersController@getListScheduleFillter');
+    Route::post('schedules/export', 'ManageUsersController@exportScheduleCsv');
+});
+
