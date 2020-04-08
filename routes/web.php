@@ -28,31 +28,40 @@ Route::group(['middleware' => 'checkloggedin'], function (){
 
     /*Manage Users*/
     /*--------------users----------------*/
-    Route::get('users', 'ManageUsersController@index');
+    Route::get('users', 'ManageUsers\UserController@index');
     /*------------schedule------------*/
-    Route::get('schedule', 'ManageUsersController@schedule');
+    Route::get('schedules', 'ManageUsers\ScheduleController@schedule');
+
+    /*Warehouse*/
+    /*----------material---------*/
+    Route::get('materials','Warehouse\MaterialController@index');
 });
 
 
 /* Route API for Web Call */
 Route::group(['middleware' => 'checkloggedin', 'prefix' => 'axios'], function (){
+
     /*Manage Users*/
     /*----------users---------*/
-    Route::get('getAllUsers', 'ManageUsersController@getAllUsers');
-    Route::get('users', 'ManageUsersController@show');
-    Route::delete('user/delete', 'ManageUsersController@delete');
-    Route::delete('user/forceDelete', 'ManageUsersController@forceDelete');
-    Route::get('user', 'ManageUsersController@getUser');
-    Route::patch('user/update','ManageUsersController@update');
-    Route::post('user/new','ManageUsersController@create');
-    Route::get('user/search', 'ManageUsersController@search');
+    Route::get('getAllUsers', 'ManageUsers\UserController@getAllUsers');
+    Route::get('users', 'ManageUsers\UserController@show');
+    Route::delete('user/delete', 'ManageUsers\UserController@delete');
+    Route::delete('user/forceDelete', 'ManageUsers\UserController@forceDelete');
+    Route::get('user', 'ManageUsers\UserController@getUser');
+    Route::patch('user/update','ManageUsers\UserController@update');
+    Route::post('user/new','ManageUsers\UserController@create');
+    Route::get('user/search', 'ManageUsers\UserController@search');
     /*----------schedule---------*/
-    Route::post('schedule/new','ManageUsersController@createSchedule');
-    Route::get('getAllUsersWithoutTrashed', 'ManageUsersController@getAllUsersWithoutTrashed');
-    Route::get('getScheduleToday', 'ManageUsersController@getScheduleToday');
-    Route::delete('schedule/delete','ManageUsersController@deleteSchedule');
-    Route::delete('schedule','ManageUsersController@getSchedule');
-    Route::post('getListScheduleFillter', 'ManageUsersController@getListScheduleFillter');
-    Route::post('schedules/export', 'ManageUsersController@exportScheduleCsv');
+    Route::post('schedule/new','ManageUsers\ScheduleController@createSchedule');
+    Route::get('getAllUsersWithoutTrashed', 'ManageUsers\ScheduleController@getAllUsersWithoutTrashed');
+    Route::get('getScheduleToday', 'ManageUsers\ScheduleController@getScheduleToday');
+    Route::delete('schedule/delete','ManageUsers\ScheduleController@deleteSchedule');
+    Route::delete('schedule','ManageUsers\ScheduleController@getSchedule');
+    Route::post('getListScheduleFillter', 'ManageUsers\ScheduleController@getListScheduleFillter');
+    Route::post('schedules/export', 'ManageUsers\ScheduleController@exportScheduleCsv');
+
+    /*Warehouse*/
+    /*----------material---------*/
+
 });
 

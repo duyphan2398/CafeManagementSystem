@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers\Web\Auth;
 
-use App\Models\User;
+use App\Http\Controllers\WebBaseController;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
-class LoginController extends Controller
+class LoginController extends WebBaseController
 {
     use Authenticatable;
     public function index(){

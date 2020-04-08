@@ -21,7 +21,8 @@ class CreateUsersTable extends Migration
             $table->string('role')->default('Employee');
             $table->rememberToken();
             $table->softDeletes();
-            $table->timestamps();
+            $table->timestamp('updated_at')->useCurrent();
+            $table->timestamp('created_at')->useCurrent();
         });
     }
 
