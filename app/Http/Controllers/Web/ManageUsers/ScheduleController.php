@@ -10,7 +10,6 @@ use App\Models\Schedule;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class ScheduleController extends WebBaseController
 {
@@ -84,8 +83,8 @@ class ScheduleController extends WebBaseController
     }
 
     public function  getListScheduleFillter(Request $request){
-        $schedules = DB::table('schedules')
-            ->join('users', 'schedules.user_id', 'users.id')
+        $schedules = Schedule::query()
+            ->join('users', 'schedules.user_id', '=', 'users.id')
             ->select(['users.username','schedules.*' ])
             ->orderBy('date','ASC' )
             ->orderBy('start_time', 'ASC');
