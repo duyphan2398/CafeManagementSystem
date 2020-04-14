@@ -29,7 +29,6 @@ class AppServiceProvider extends ServiceProvider
                 $this->orWhere($attribute, 'LIKE', "%{$searchInput}%");
             }
             return $this;
-
         });
     }
 }

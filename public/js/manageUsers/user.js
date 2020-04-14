@@ -2,15 +2,10 @@ let currentPage = 0;
 let lastPage = 1;
 let output = ``;
 let user_id_modal = null;
-let array_username = [];
 let output_current = ``;
-axios.get(location.origin + '/axios/getAllUsers')
-    .then(function (response) {
-        response.data.users.forEach(function (user) {
-            array_username.push(user.username);
-        })
-});
-function addText(insert){
+let last_find = '';
+
+function addText(insert, auth_id= ''){
     outputAddText = `
                     <tr id="`+insert.id+`">
                         <td>`+insert.id+`</td>
@@ -19,18 +14,34 @@ function addText(insert){
                         <td>`+insert.role+`</td>
                         <td>`+insert.created_at+`</td>
                         <td>`;
-    if(insert.deleted_at == null){
+    if (auth_id && auth_id == insert.id){
         outputAddText +=
-            `<button name="`+insert.id+`" id="actived`+insert.id+`" class="btn btn-success state" style="display: block">Actived</button>
+            `    <button class="btn btn-success state" style="display: block" disabled>Actived</button>
+             </td>
+              <td>
+                    <button  class="edit btn btn-primary mb-1" style="width: 75px" disabled>
+                             Edit
+                     </button>
+                     <button  class="delete btn btn-danger mb-1" style="width: 75px" disabled>
+                             Delete
+                     </button>
+              </td>
+              </tr>
+            `;
+    }else
+    {
+        if(insert.deleted_at == null){
+            outputAddText +=
+                `<button name="`+insert.id+`" id="actived`+insert.id+`" class="btn btn-success state" style="display: block">Actived</button>
              <button name="`+insert.id+`"  id="blocked`+insert.id+`"class="btn btn-warning state text-white" style="display: none">Blocked</button>`;
-    }
-    else {
-        outputAddText +=
-            `<button name="`+insert.id+`" id="actived`+insert.id+`" class="btn btn-success state" style="display: none">Actived</button>
+        }
+        else {
+            outputAddText +=
+                `<button name="`+insert.id+`" id="actived`+insert.id+`" class="btn btn-success state" style="display: none">Actived</button>
              <button name="`+insert.id+`" id="blocked`+insert.id+`"class="btn btn-warning state text-white" style="display: block">Blocked</button>`;;
-    }
+        }
 
-    outputAddText +=` </td>
+        outputAddText +=` </td>
                           <td>
                             <button  name="`+insert.id+`" class="edit btn btn-primary mb-1" style="width: 75px">
                                      Edit
@@ -40,6 +51,8 @@ function addText(insert){
                              </button>
                           </td>
                      </tr> `;
+    }
+
     return outputAddText;
 }
 
@@ -104,8 +117,6 @@ function new_modal(insert){
 }
 $(document).ready(function () {
     $('#seeMore').click(function () {
-        $('#seeMore').removeAttr("style").hide();
-        $('#loading').show();
         currentPage++;
         axios.get(location.origin + '/axios/users?page=' + currentPage,
             $('#seeMore').removeAttr("style").hide(),
@@ -114,10 +125,18 @@ $(document).ready(function () {
             output = ``;
             lastPage = response.data.users.last_page;
             response.data.users.data.forEach(function (user) {
-                output+= addText(user);
+                output+= addText(user, response.data.auth_id);
             });
-            $('#loading').removeAttr("style").hide();
+
             $('#listUser').append(output);
+            $('#loading').removeAttr("style").hide();
+            if (lastPage > currentPage){
+                $('#seeMore').show();
+            }
+        }).catch(function (error) {
+            currentPage--;
+            toastr.error("Load New Fails");
+            $('#loading').removeAttr("style").hide();
             if (lastPage > currentPage){
                 $('#seeMore').show();
             }
@@ -237,7 +256,7 @@ $(document).ready(function () {
             }).then(function (response) {
                 $('#modal').modal('hide');
                 toastr.success("Updated Successfully");
-                $('#'+response.data.user.id).empty().replaceWith(addText(response.data.user));
+                $('#'+response.data.user.id).empty().replaceWith(addText(response.data.user, response.data.auth_id));
             }).catch(function (error) {
                 $('#modal').modal('hide');
                 toastr.error("Updated Fails");
@@ -296,7 +315,7 @@ $(document).ready(function () {
             }).then(function (response) {
                 $('#newUserModal').modal('hide');
                 toastr.success("Created Successfully");
-                $("#listUser").prepend(addText(response.data.user));
+                $("#listUser").prepend(addText(response.data.user, response.data.auth_id));
             }).catch(function (error) {
                 for ( key in error.response.data.errors) {
                     $("#"+key).after(`<label id="${key}-error" class="error" for="${key}">${error.response.data.errors[key]}</label>`);
@@ -310,71 +329,112 @@ $(document).ready(function () {
         $('#newUserModal').modal('show');
     });
 
+
+    //Search
     $('#searchForm').submit(function (event) {
         event.preventDefault();
         if ($('#searchUser').val() != '') {
-            $('#listUser').removeAttr("style").hide();
-            $('#seeMore').removeAttr("style").hide(),
+            $('#listUser').empty();
+            $('#seeMore').removeAttr("style").hide();
             $('#loading').show();
-            search = $('#searchUser').val();
+
+            let search = $('#searchUser').val();
             axios.get(location.origin + '/axios/user/search', {
                 params: {
                     search
                 }
             }).then(function (response) {
-                output =``;
+                let result = ``;
                 response.data.users.forEach(function (user) {
-                    output+=addText(user);
-                })
+                    result+=addText(user, response.data.auth_id);
+                });
                 $('#loading').removeAttr("style").hide();
-                $('#listUser').empty().append(output).show();
-
+                last_find = search;
+                $('#listUser').append(result);
+                toastr.success('Have '+response.data.users.length+' users found');
             }).catch(function (error) {
-                console.log(error);
-                $('#loading').removeAttr("style").hide();
-                $('#listUser').show();
-                toastr.warning('Could not found');
-                if (lastPage > currentPage){
-                    $('#seeMore').show();
-                }
-            })
-        }
-    })
-
-
-    $('#searchUser').keyup(function () {
-        if ($(this).val() == ''){
-            $('#listUser').empty();
-            $('#seeMore').removeAttr("style").hide();
-            $('#loading').show();
-            let count;
-            const async = async () => {
-                for (count = 1; count <= currentPage; count++) {
-                    $('#loading').show();
-                    $('#seeMore').removeAttr("style").hide();
-                    try {
-                        let asyncRequest = await axios.get(location.origin + '/axios/users?page=' + count
-                        )
-                        let data = asyncRequest.data;
-                        lastPage = data.users.last_page;
-                        output = ``;
-                        data.users.data.forEach(function (user) {
-                            output += addText(user);
-
+                if (last_find){
+                    search = last_find;
+                    axios.get(location.origin + '/axios/user/search', {
+                        params: {
+                            search
+                        }
+                    }).then(function (response) {
+                        let result = ``;
+                        response.data.users.forEach(function (user) {
+                            result+=addText(user, response.data.auth_id);
                         });
-                        $('#listUser').append(output);
+                        $('#loading').removeAttr("style").hide();
+                        $('#listUser').append(result);
+                        toastr.warning('Could not found');
+                    }).catch(function (error) {
+                        toastr.warning('Could not found');
+                        toastr.error('Server Error');
+                        $('#loading').removeAttr("style").hide();
+                    })
+                }
+                else {
+                    let result = ``;
+                    async function loadUsersList() {
+                        for (count = 1; count <= currentPage; count++) {
+                            try {
+                                $('#loading').show();
+                                let asyncRequest = await axios.get(location.origin + '/axios/users?page=' + count
+                                );
+                                let data = asyncRequest.data;
+                                lastPage = data.users.last_page;
+                                result = ``;
+                                data.users.data.forEach(function (user) {
+                                    result += addText(user, data.auth_id);
+                                });
+                                $('#listUser').append(result);
+                            }
+                            catch (e) {
+                                console.error(error);
+                            }
+                        }
                         $('#loading').removeAttr("style").hide();
                         if (lastPage > currentPage) {
                             $('#seeMore').show();
                         }
                     }
+                    loadUsersList();
+                    toastr.warning('Could not found');
+                }
+            })
+        }
+        else {
+            last_find = '';
+            $('#listUser').empty();
+            $('#seeMore').removeAttr("style").hide();
+            $('#loading').show();
+            let result = ``;
+            async function loadUsersList() {
+                for (count = 1; count <= currentPage; count++) {
+                    try {
+                        $('#loading').show();
+                        let asyncRequest = await axios.get(location.origin + '/axios/users?page=' + count
+                        );
+                        let data = asyncRequest.data;
+                        lastPage = data.users.last_page;
+                        result = ``;
+                        data.users.data.forEach(function (user){
+                            result += addText(user, data.auth_id);
+                        });
+                        $('#listUser').append(result);
+                    }
                     catch (e) {
-                        console.error(error);
+                        console.log(e);
                     }
                 }
+                $('#loading').removeAttr("style").hide();
+                if (lastPage > currentPage) {
+                    $('#seeMore').show();
+                }
             }
-            async();
-        };
+            loadUsersList();
+        }
+        $('#searchUser').val('');
     })
 });
 
