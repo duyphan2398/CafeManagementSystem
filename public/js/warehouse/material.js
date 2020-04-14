@@ -198,7 +198,7 @@ $(document).ready(function () {
         let material_id_delete = this.name;
         $.confirm({
             title: 'Confirm',
-            content: 'Are you sure ?',
+            content: '<div class="text-danger">It may be effect to the ingredient\'s product </div><br> Are you sure ? <br> ',
             buttons: {
                 Yes: {
                     btnClass: 'btn-success',

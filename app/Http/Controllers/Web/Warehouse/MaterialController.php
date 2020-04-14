@@ -71,6 +71,7 @@ class MaterialController extends WebBaseController
 
     public function delete(Request $request){
         $material = Material::query()->find($request->material_id_delete);
+        $material->products()->detach();
         if ($material && $material->delete()){
             return response()->json([
                 'status' => 'success',

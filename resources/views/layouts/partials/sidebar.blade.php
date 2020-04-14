@@ -20,7 +20,7 @@
                     <a href="{{url('users')}}">List Of Users</a>
                 </li>
                 <li>
-                    <a href="{{url('schedules')}}">Schedule</a>
+                    <a href="{{url('schedules')}}">Schedules</a>
                 </li>
                 {{--<li>
                     <a href="index3-horizontalmenu.html">Horizontal Sidebar</a>
@@ -31,12 +31,12 @@
             <a href="" aria-expanded="true">
                 <i class="ti-cup"></i>
                 <span>
-                    Food And Drinks
+                    Foods And Drinks
                 </span>
             </a>
             <ul class="collapse">
                 <li>
-                    <a href="{{url('users')}}">List Of Product</a>
+                    <a href="{{url('products')}}">List Of Product</a>
                 </li>
                 {{--<li>
                     <a href="index3-horizontalmenu.html">Horizontal Sidebar</a>
