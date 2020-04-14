@@ -177,8 +177,6 @@ $(document).ready(function () {
                 let  name = $("#nameEdit").val();
                 let  amount = $("#amountEdit").val();
                 let unit = $("#unitEdit").val();
-                console.log(unit);
-                console.log($("#unitEdit").val())
                 axios.patch(location.origin +'/axios/material/update',{
                     material_id,
                     name,
@@ -198,7 +196,6 @@ $(document).ready(function () {
     //Delete
     jQuery(document).on('click',".delete",function () {
         let material_id_delete = this.name;
-        console.log(material_id_delete);
         $.confirm({
             title: 'Confirm',
             content: 'Are you sure ?',
@@ -206,7 +203,6 @@ $(document).ready(function () {
                 Yes: {
                     btnClass: 'btn-success',
                     action : function () {
-                        console.log(material_id_delete);
                         window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content;
                         axios.delete(location.origin + '/axios/material/delete', {
                                 params: {material_id_delete}
@@ -249,7 +245,7 @@ $(document).ready(function () {
                 $('#loading').removeAttr("style").hide();
                 last_find = search;
                 $('#listMaterials').append(result);
-                toastr.success('Have '+response.data.materiala.length+' materials found');
+                toastr.success('Have '+response.data.materials.length+' materials found');
             }).catch(function (error) {
                 if (last_find){
                     search = last_find;
@@ -288,7 +284,7 @@ $(document).ready(function () {
                                 $('#listMaterials').append(result);
                             }
                             catch (e) {
-                                console.error(error);
+                                console.error(e);
                             }
                         }
                         $('#loading').removeAttr("style").hide();
@@ -323,7 +319,7 @@ $(document).ready(function () {
 
                     }
                     catch (e) {
-                        console.error(error);
+                        console.error(e);
                     }
                 }
                 $('#loading').removeAttr("style").hide();

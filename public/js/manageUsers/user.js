@@ -390,7 +390,7 @@ $(document).ready(function () {
                                 $('#listUser').append(result);
                             }
                             catch (e) {
-                                console.error(error);
+                                console.error(e);
                             }
                         }
                         $('#loading').removeAttr("style").hide();
