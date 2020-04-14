@@ -17,16 +17,11 @@ class UserController extends WebBaseController
         return view('workspace.manageUsers.users');
     }
 
-
     public function show(){
-        $users = User::withTrashed()->where('id', '<>', Auth::id())->orderBy('created_at','desc')->paginate(10);
-        return response()->json(['users' => $users],200);
-    }
-
-    public function getAllUsers(){
-        $users = User::withTrashed()->get();
+        $users = User::withTrashed()->orderBy('created_at','desc')->paginate(10);
         return response()->json([
-            'users' => $users
+            'users' => $users,
+            'auth_id' => Auth::id()
         ],200);
     }
 
@@ -78,10 +73,9 @@ class UserController extends WebBaseController
     }
 
     public function create(NewUserRequest $request){
-        if ( $request->validated()) {
-            $user = new User();
-            $user->fill($request->all());
-            if ($user->save()){
+        if ($request->validated()) {
+            $user = User::query()->create($request->validated());
+            if ($user){
                 return response()->json([
                     'status' => 'success',
                     'user' => $user
@@ -128,7 +122,7 @@ class UserController extends WebBaseController
             return response()->json([
                 'status' => 'success',
                 'user' => $user
-            ],201);
+            ],200);
         }
         return response()->json([
             'status' => 'fail',
@@ -141,7 +135,8 @@ class UserController extends WebBaseController
         if (count($users) > 0){
             return response()->json([
                 'status' => 'success',
-                'users' => $users
+                'users' => $users,
+                'auth_id' => Auth::id()
             ],200);
         }
         return response()->json([

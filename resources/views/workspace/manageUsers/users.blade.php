@@ -23,7 +23,7 @@
                     </div>
                     <div class="search-box pull-left">
                         <form id="searchForm" method="GET" >
-                            <input id="searchUser" type="text" name="search" placeholder="Search by name or username..." required>
+                            <input id="searchUser" type="text" name="search" placeholder="Search by name or username...">
                             <i class="ti-search"></i>
                         </form>
                     </div>

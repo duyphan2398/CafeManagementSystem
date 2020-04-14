@@ -43,7 +43,6 @@ Route::group(['middleware' => 'checkloggedin', 'prefix' => 'axios'], function ()
 
     /*Manage Users*/
     /*----------users---------*/
-    Route::get('getAllUsers', 'ManageUsers\UserController@getAllUsers');
     Route::get('users', 'ManageUsers\UserController@show');
     Route::delete('user/delete', 'ManageUsers\UserController@delete');
     Route::delete('user/forceDelete', 'ManageUsers\UserController@forceDelete');
@@ -62,6 +61,11 @@ Route::group(['middleware' => 'checkloggedin', 'prefix' => 'axios'], function ()
 
     /*Warehouse*/
     /*----------material---------*/
-
+    Route::get('materials','Warehouse\MaterialController@show');
+    Route::post('material/new', 'Warehouse\MaterialController@create');
+    Route::post('material', 'Warehouse\MaterialController@getMaterial');
+    Route::patch('material/update', 'Warehouse\MaterialController@update');
+    Route::delete('material/delete', 'Warehouse\MaterialController@delete');
+    Route::get('material/search','Warehouse\MaterialController@search');
 });
 

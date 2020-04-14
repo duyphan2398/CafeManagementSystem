@@ -1,7 +1,7 @@
 @extends('layouts.layout')
 
 @section('title')
-    Schedule
+    List Of Schedules
 @endsection
 
 @section('links')
@@ -43,7 +43,7 @@
                         <h4 class="page-title pull-left">Schedule Of Staffs</h4>
                         <ul class="breadcrumbs pull-left">
                             <li><a href="{{url('/')}}">Home</a></li>
-                            <li><span>schedule</span></li>
+                            <li><span>schedules</span></li>
                         </ul>
                     </div>
                 </div>
