@@ -65,65 +65,10 @@
         </div>
         <div class="main-menu">
             <div class="menu-inner">
-                <nav>
-                    <ul class="metismenu" id="menu">
-                        <li class="active">
-                            <a href="javascript:void(0)" aria-expanded="true"><i class="ti-dashboard"></i><span>dashboard</span></a>
-                            <ul class="collapse">
-                                <li class="active"><a href="index.html">ICO dashboard</a></li>
-                                <li><a href="index2.html">Ecommerce dashboard</a></li>
-                                <li><a href="index3.html">SEO dashboard</a></li>
-                            </ul>
-                        </li>
-                        <li>
-                            <a href="" aria-expanded="true">
-                                <i class="ti-face-smile"></i>
-                                <span>Manage Users
-                                </span>
-                            </a>
-                            <ul class="collapse">
-                                <li>
-                                    <a href="{{url('users')}}">List Of Users</a>
-                                </li>
-                                <li>
-                                    <a href="{{url('schedule')}}">Schedule</a>
-                                </li>
-                                {{--<li>
-                                    <a href="index3-horizontalmenu.html">Horizontal Sidebar</a>
-                                </li>--}}
-                            </ul>
-                        </li>
-                        <li>
-                            <a href="" aria-expanded="true">
-                                <i class="ti-cup"></i>
-                                <span>Manage Drinks
-                                </span>
-                            </a>
-                            <ul class="collapse">
-                                <li>
-                                    <a href="{{url('users')}}">List Of Drinks</a>
-                                </li>
-                                {{--<li>
-                                    <a href="index3-horizontalmenu.html">Horizontal Sidebar</a>
-                                </li>--}}
-                            </ul>
-                        </li>
-                        <li>
-                            <a href="{{url('logout')}}" aria-expanded="true">
-                                <i class="ti-shift-left"></i>
-                                <span>
-                                    Logout
-                                </span>
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
+                @include('layouts.partials.sidebar')
             </div>
         </div>
     </div>
-
-
-
     @yield('content')
    {{-----------}}
     @include('layouts.partials.footer')
