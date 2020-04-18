@@ -22,6 +22,7 @@ function addText(item){
                             Delete
                         </button>
                     </td>
+                    </tr>
                    `;
     return result;
 }

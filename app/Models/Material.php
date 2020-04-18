@@ -24,6 +24,6 @@ class Material extends Model
     // Relationships
     // ======================================================================
     public function products(){
-        return $this->belongsToMany( Product::class, 'ingredients');
+        return $this->belongsToMany( Product::class, 'ingredients')->withPivot('quantity','unit');;
     }
 }

@@ -17,7 +17,7 @@ class CreateProductsTable extends Migration
             $table->id();
             $table->string('name');
             $table->float('price');
-            $table->float('sale_price')->default(0);
+            $table->float('sale_price')->nullable()->default(null);
             $table->string('url')->default('default_url_product.png');
             $table->string('type');
             $table->timestamps();
@@ -29,7 +29,10 @@ class CreateProductsTable extends Migration
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
             $table->unsignedBigInteger('material_id');
             $table->foreign('material_id')->references('id')->on('materials')->onDelete('cascade');
+            $table->float('quantity')->default(0);
+            $table->string('unit');
             $table->primary(['product_id', 'material_id']);
+
         });
     }
 
