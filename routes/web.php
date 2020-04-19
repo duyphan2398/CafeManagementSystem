@@ -73,6 +73,9 @@ Route::group(['middleware' => 'checkloggedin', 'prefix' => 'axios'], function ()
 
     /*FoodsAndDrink*/
     /*----------product---------*/
-    Route::resource('products', FoodsAndDrinks\ProductController::class)->except(['index']);
+    Route::resource('products', FoodsAndDrinks\ProductController::class)->except(['index', 'update']);
+    Route::post('products/{product}','FoodsAndDrinks\ProductController@update');
+    Route::post('products/updateIngredient/{product}','FoodsAndDrinks\ProductController@updateIngredient');
+    Route::delete('products/deleteIngredient/{product}/{material}', 'FoodsAndDrinks\ProductController@deleteIngredient');
 });
 

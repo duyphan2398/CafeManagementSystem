@@ -21,7 +21,8 @@ class ProductsTableSeeder extends Seeder
             $product = new Product([
                 'name' => $faker->text(20),
                 'price' =>$price,
-                'sale_price' => ( $sale_price == $price) ? null: round($sale_price),
+                //'sale_price' => ( $sale_price == $price) ? null: round($sale_price),
+                'sale_price' => null,
                 'type' => Arr::random(['Food','Drink']),
             ]);
             $product->save();
@@ -38,9 +39,7 @@ class ProductsTableSeeder extends Seeder
                     'quantity' => $material->amount * 0.05,
                     'unit' => $material->unit
                 ]);
-
             }
-
         }
     }
 }

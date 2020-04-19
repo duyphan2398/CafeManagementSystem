@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Traits\ParseTimeStamp;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Material;
 
 class Product extends Model
 {
@@ -18,6 +17,10 @@ class Product extends Model
         'type'
     ];
 
+    protected $attributes = [
+        'url'           => 'default_url_product.png',
+        'sale_price'    => null
+    ];
     // ======================================================================
     // Relationships
     // ======================================================================
