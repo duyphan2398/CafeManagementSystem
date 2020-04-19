@@ -43,6 +43,22 @@ function edit_modal(item){
                         <label for="salePriceEdit">Sale Price</label>
                         <input name="sale_price" class="form-control" type="number" id="salePriceEdit" value="`+item.sale_price+`" readonly>
                     </div>
+                    <div class="form-group mt-2">
+                        <label for="sale_price">Type</label>
+                        <select class="form-control" name="type" id="">
+                        `;
+    if (item.type == 'Drink'){
+        modal+= `  <option value="Drink" selected>Drink</option>
+                   <option value="Food">Food</option>`;
+    }
+    else {
+        modal+= `  <option value="Drink">Drink</option>
+                   <option value="Food" selected>Food</option>`;
+    }
+
+            modal+= `
+                        </select>
+                    </div>
                     <div class="form-group mt-2 mb-2" >
                         <label style="cursor: pointer;" for="urlEdit">Image(only extension: PNG JPG JPEG)</label>
                         <input  onchange="readURL(this);"  accept="image/*" name="url" class="form-control-file border" type="file" id="urlEdit" value="`+item.url+`">
