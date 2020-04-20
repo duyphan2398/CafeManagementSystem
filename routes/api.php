@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Route;
 Route::post('login', 'Auth\LoginController@login');
 /*Route::post('refresh', 'Auth\LoginController@refresh');*/
 Route::group(['middleware' => 'auth:api'], function (){
-    Route::post('user', 'Auth\LoginController@user');
+    Route::get('users', 'Auth\LoginController@user');
     Route::post('logout', 'Auth\LoginController@logout');
 });
 

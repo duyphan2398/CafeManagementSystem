@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Auth;
 
 use App\Http\Controllers\ApiBaseController;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\LoginRequest;
 class LoginController extends ApiBaseController
@@ -51,7 +52,7 @@ class LoginController extends ApiBaseController
     public function user()
     {
         return response()->json([
-            "user" => Auth::guard('api')->user()
+            "users" => User::all()
         ],200);
     }
 }
