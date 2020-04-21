@@ -7,8 +7,38 @@ function addText(item){
                     <td>`+item.start_time+`</td>
                     <td>`+item.end_time+`</td>
                     <td>`+item.date+`</td>
-                    <td>`+item.total_time+`</td>
-                    <td>`;
+                    <td>`+item.total_time+`</td>`;
+    if(item.date == moment().format('DD-MM-YYYY')){
+        if (item.checkin_time){
+            result+= `<td>`+item.checkin_time+`</td>`;
+        }else{
+            result+= `<td>
+                             <button name="`+item.id+`"  class="checkin btn btn-info mb-1" >
+                                Checkin
+                             </button>
+                             <div name="`+item.id+`" class="text-center mb-2 loadingCheckin"  style="display: none;">
+                                <img src="`+location.origin+`/images/loading.gif" alt="loading..." style="margin-bottom: 70px">
+                            </div>
+                      </td>`;
+        }
+        if (item.checkout_time){
+            result+= `<td>`+item.checkout_time+`</td>`;
+        }else{
+            result+= `<td>
+                             <button name="`+item.id+`"  class="checkout btn btn-info mb-1">
+                                Checkout
+                             </button>
+                             <div name="`+item.id+`" class="text-center mb-2 loadingCheckout"  style="display: none;" >
+                                <img src="`+location.origin+`/images/loading.gif" alt="loading..." style="margin-bottom: 70px">
+                            </div>
+                      </td>`;
+        }
+    }else {
+        result+= `<td>`+item.checkin_time+`</td>
+                  <td>`+item.checkout_time+`</td>`;
+    }
+
+    result+=`                <td>`;
     if(item.note){
         result += `<textarea readonly class="form-control" rows="3">`+item.note+`</textarea>`;
     }
@@ -77,6 +107,8 @@ function loadListScheduleToday(){
         }).catch(function (error) {
             toastr.warning("Today's Schedule Is Empty");
             $("#listSchedule").empty().append(`<tr id="---">
+                        <td>---</td>
+                        <td>---</td>
                         <td>---</td>
                         <td>---</td>
                         <td>---</td>
@@ -186,7 +218,6 @@ $(document).ready(function () {
     $("#exportScheduleFillter").submit(function (e) {
         e.preventDefault();
     })
-
     $("#export").click(function () {
         toFillter = $('#toFillter').val();
         fromFillter = $("#fromFillter").val();
@@ -201,7 +232,41 @@ $(document).ready(function () {
              link.download = 'EmployeeSchedule('+fromFillter+'-To-'+toFillter+').csv';
              link.click();
              link.remove();
-
          });
+    });
+
+    /*Checkin - Checkout*/
+    jQuery(document).on('click',".checkin",function () {
+        let schedule_id = this.name;
+        $(this).removeAttr("style").hide();
+        $(".loadingCheckin[name='"+schedule_id+"']").show();
+        window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content;
+        axios.post(location.origin + '/axios/schedules/checkin/'+schedule_id)
+            .then(function (response) {
+                toastr.success("Have A Nice Working Day !");
+                loadListScheduleToday();
+            })
+            .catch(function (error) {
+                $(".loadingCheckin[name='"+schedule_id+"']").removeAttr("style").hide();
+                $(".checkin[name='"+schedule_id+"']").show();
+                toastr.error("Something Wrong ! Please refresh your browser");
+            });
+    });
+
+    jQuery(document).on('click',".checkout",function () {
+        let schedule_id = this.name;
+        $(this).removeAttr("style").hide();
+        $(".loadingCheckout[name='"+schedule_id+"']").show();
+        window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content;
+        axios.post(location.origin + '/axios/schedules/checkout/'+schedule_id)
+            .then(function (response) {
+                toastr.success("Thanks For Your Help ! <br> Have A Good Day");
+                loadListScheduleToday();
+            })
+            .catch(function (error) {
+                $(".loadingCheckout[name='"+schedule_id+"']").removeAttr("style").hide();
+                $(".checkout[name='"+schedule_id+"']").show();
+                toastr.error("Something Wrong ! Please refresh your browser <br> Or You have not checked in yet");
+            });
     });
 })

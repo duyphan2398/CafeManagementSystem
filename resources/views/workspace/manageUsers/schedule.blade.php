@@ -169,6 +169,8 @@
                                         <th>End</th>
                                         <th>Date</th>
                                         <th>Total time</th>
+                                        <th>Checkin At</th>
+                                        <th>Checkout At</th>
                                         <th>Note</th>
                                         <th>Action</th>
                                     </tr>
@@ -241,6 +243,8 @@
                                     <th>End</th>
                                     <th>Date</th>
                                     <th>Total time</th>
+                                    <th>Checkin At</th>
+                                    <th>Checkout At</th>
                                     <th>Note</th>
                                     <th>Action</th>
                                 </tr>

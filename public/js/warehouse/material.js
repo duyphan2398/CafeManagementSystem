@@ -13,6 +13,17 @@ function addText(item){
                     <td>`+item.name+`</td>
                     <td>`+item.amount+`</td>
                     <td>`+item.unit+`</td>
+                    <td>
+                    `;
+
+    if(item.note){
+        result += `<textarea readonly class="form-control" rows="3">`+item.note+`</textarea>`;
+    }
+    else{
+        result += `<textarea readonly class="form-control" rows="3"></textarea>`;
+    };
+
+    result += `    </td>
                     <td>`+item.updated_at+`</td>
                     <td>
                         <button  name="`+item.id+`" class="edit btn btn-primary mb-1" style="width: 75px">
@@ -50,8 +61,12 @@ function new_modal(insert){
                             <option value="BOTTLE">
                         </datalist>
                     </div>
+                     <div class="form-group mt-2">
+                        <label for="noteEdit">Note</label>
+                        <textarea class="form-control" name="noteEdit" id="noteEdit"  rows="3" >`+insert.note+`</textarea>
+                    </div>
                     <div class="modal-footer mt-4">
-                        <button type="submit" class="btn btn-primary">Create</button>
+                        <button type="submit" class="btn btn-primary">Update</button>
                     </div>
                 `;
     $('#form_modal').append(modal);
@@ -114,9 +129,10 @@ $(document).ready(function () {
             let name = $("#nameNew").val();
             let unit = $("#unitNew").val();
             let amount = $("#amountNew").val();
+            let note = $("#noteNew").val();
             window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content;
             axios.post(location.origin + '/axios/material/new', {
-               name, unit, amount
+               name, unit, amount, note
             }).then(function (response) {
                 $('#newMaterialModal').modal('hide');
                 toastr.success("Created Successfully");
@@ -178,11 +194,13 @@ $(document).ready(function () {
                 let  name = $("#nameEdit").val();
                 let  amount = $("#amountEdit").val();
                 let unit = $("#unitEdit").val();
+                let note = $("#noteEdit").val();
                 axios.patch(location.origin +'/axios/material/update',{
                     material_id,
                     name,
                     unit,
-                    amount
+                    amount,
+                    note
                 }).then(function (response) {
                     $('#modal').modal('hide');
                     toastr.success("Updated Successfully");

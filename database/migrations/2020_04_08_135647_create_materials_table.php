@@ -16,8 +16,9 @@ class CreateMaterialsTable extends Migration
         Schema::create('materials', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->float('amount')->default(0);
+            $table->float('amount', 10, 2)->default(0);
             $table->string('unit');
+            $table->string('note')->nullable()->default('');
             $table->timestamp('updated_at')->useCurrent();
             $table->timestamp('created_at')->useCurrent();
         });

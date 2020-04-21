@@ -24,6 +24,8 @@ class CreateSchedulesTable extends Migration
             $table->date('date');
             $table->float('total_time');
             $table->string('note')->nullable();
+            $table->time('checkin_time')->nullable();
+            $table->time('checkout_time')->nullable();
             $table->timestamp('updated_at')->useCurrent();
             $table->timestamp('created_at')->useCurrent();
         });

@@ -27,6 +27,7 @@ class UpdateMaterialRequest extends FormRequest
             'name'      => 'required|string',
             'amount'    => 'required|numeric',
             'unit'      => 'required|string',
+            'note'      => 'string'
         ];
     }
 }

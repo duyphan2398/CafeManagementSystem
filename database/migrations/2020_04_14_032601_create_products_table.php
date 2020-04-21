@@ -29,7 +29,7 @@ class CreateProductsTable extends Migration
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
             $table->unsignedBigInteger('material_id');
             $table->foreign('material_id')->references('id')->on('materials')->onDelete('cascade');
-            $table->float('quantity')->default(0);
+            $table->float('quantity', 10, 2)->default(0);
             $table->string('unit');
             $table->primary(['product_id', 'material_id']);
 

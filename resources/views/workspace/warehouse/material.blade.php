@@ -92,6 +92,10 @@
                                                 <option value="BOTTLE">
                                             </datalist>
                                         </div>
+                                        <div class="form-group mt-2">
+                                            <label for="note">Note</label>
+                                            <textarea class="form-control" name="noteNew" id="noteNew"  rows="3"></textarea>
+                                        </div>
                                         <div class="modal-footer mt-4">
                                             <button type="submit" class="btn btn-primary">Create</button>
                                         </div>
@@ -107,6 +111,7 @@
                             <th>Name</th>
                             <th>Amount</th>
                             <th>Unit</th>
+                            <th>Note</th>
                             <th>Updated_at</th>
                             <th>Action</th>
                         </tr>
