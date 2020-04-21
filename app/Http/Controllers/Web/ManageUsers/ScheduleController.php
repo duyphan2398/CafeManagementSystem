@@ -128,7 +128,7 @@ class ScheduleController extends WebBaseController
     }
 
     public function checkout(Schedule $schedule){
-        if ($this->checkin != null){
+        if ($this->checkin_time != null){
             $schedule->checkout_time = Carbon::now()->setTimezone('Asia/Ho_Chi_Minh')->format('H:i');
             if ($schedule->save()){
                 return response()->json([
