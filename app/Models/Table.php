@@ -19,5 +19,12 @@ class Table extends Model
     protected $attributes = [
         'status' => 'Empty'
     ];
+    // ======================================================================
+    // Relationships
+    // ======================================================================
+
+    public function receipts(){
+        return $this->hasMany(Receipt::class);
+    }
 }
 
