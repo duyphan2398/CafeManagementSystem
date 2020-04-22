@@ -58,7 +58,7 @@ function addText(insert, auth_id= ''){
 
 
 
-function new_modal(insert){
+function edit_modal(insert){
     let  modal = `
                         <input type="hidden" name="_token" value="`+token.content+`">
                         <div class="form-group">
@@ -205,7 +205,7 @@ $(document).ready(function () {
             }
         }).then(function (response) {
             $('#loading_modal').removeAttr("style").hide();
-            new_modal(response.data.user);
+            edit_modal(response.data.user);
         })
 
     });

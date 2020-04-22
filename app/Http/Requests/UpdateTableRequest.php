@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateMaterialRequest extends FormRequest
+class UpdateTableRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,10 +24,9 @@ class UpdateMaterialRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'      => 'required|string',
-            'amount'    => 'required|numeric',
-            'unit'      => 'required|string',
-            'note'      => 'string'
+            'name'      => 'required',
+            'note'      => 'string',
+            'status'    =>  'required|in:Empty, Using'
         ];
     }
 }

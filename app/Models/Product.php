@@ -1,30 +1,31 @@
 <?php
 
-
 namespace App\Models;
 
-use App\Models\Product;
 use App\Traits\ParseTimeStamp;
 use Illuminate\Database\Eloquent\Model;
-use Maatwebsite\Excel\Concerns\Exportable;
 
-
-class Material extends Model
+class Product extends Model
 {
-    use Exportable;
     use ParseTimeStamp;
 
     protected $fillable = [
         'name',
-        'amount',
-        'unit',
-        'note'
+        'price',
+        'sale_price',
+        'url',
+        'type'
     ];
 
+    protected $attributes = [
+        'url'           => 'default_url_product.png',
+        'sale_price'    => null
+    ];
     // ======================================================================
     // Relationships
     // ======================================================================
-    public function products(){
-        return $this->belongsToMany( Product::class, 'ingredients')->withPivot('quantity','unit');;
+
+    public function materials(){
+        return $this->belongsToMany(Material::class, 'ingredients')->withPivot('quantity','unit');
     }
 }

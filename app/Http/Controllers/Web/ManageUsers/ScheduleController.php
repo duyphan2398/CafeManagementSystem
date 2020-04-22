@@ -13,7 +13,6 @@ use Illuminate\Http\Request;
 
 class ScheduleController extends WebBaseController
 {
-    /*---------------schedule-----------------*/
     public function schedule(){
         return view('workspace.manageUsers.schedule');
     }
@@ -113,5 +112,34 @@ class ScheduleController extends WebBaseController
         $from = $request->fromFillter;
         $to = $request->toFillter;
         return (new ScheduleExport($from, $to))->download('EmployeeSchedule('.$from.'-To-'.$to.').csv', \Maatwebsite\Excel\Excel::CSV,  ['Content-Type' => 'text/csv']);
+    }
+
+    public function checkin(Schedule $schedule){
+        $schedule->checkin_time = Carbon::now()->setTimezone('Asia/Ho_Chi_Minh')->format('H:i');
+        if ($schedule->save()){
+            return response()->json([
+                'status' => 'success',
+            ], 200);
+        }
+        return response()->json([
+            'status' => 'fail',
+        ],404);
+    }
+
+    public function checkout(Schedule $schedule){
+        if ($schedule->checkin_time != null){
+            $schedule->checkout_time = Carbon::now()->setTimezone('Asia/Ho_Chi_Minh')->format('H:i');
+            if ($schedule->save()){
+                return response()->json([
+                    'status' => 'success',
+                ], 200);
+            }
+            return response()->json([
+                'status' => 'fail',
+            ],404);
+        }
+        return response()->json([
+            'status' => 'Checkin has not checked yet ! ',
+        ],400);
     }
 }
