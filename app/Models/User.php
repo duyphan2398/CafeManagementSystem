@@ -70,4 +70,11 @@ class User extends Authenticatable implements JWTSubject
     {
         return [];
     }
+
+    // ======================================================================
+    // Relationships
+    // ======================================================================
+    public function schedules(){
+        return $this->hasMany(Schedule::class);
+    }
 }

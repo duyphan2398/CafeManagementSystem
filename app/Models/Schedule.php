@@ -14,7 +14,7 @@ class Schedule extends Model
     use Exportable;
     use AddUser;
     use ParseTimeStamp;
-    
+
     protected $fillable = [
         'user_id',
         'start_time',
@@ -23,7 +23,9 @@ class Schedule extends Model
         'total_time',
         'note',
         'created_time',
-        'updated_time'
+        'updated_time',
+        'checkin_time',
+        'checkout_time'
     ];
 
     public function setDateAttribute($value){

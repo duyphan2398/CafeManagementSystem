@@ -51,12 +51,12 @@ class UserController extends WebBaseController
 
     public function forceDelete(Request $request){
         $user = User::withTrashed()->find($request->user_id);
+        $user->schedules()->delete();
         if ($user->forceDelete()){
             return response()->json([
                 'status' => 'success',
             ],200);
         }
-
     }
 
     public function getUser(Request $request){

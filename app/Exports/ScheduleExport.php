@@ -48,6 +48,8 @@ class ScheduleExport  implements FromQuery, WithHeadings, ShouldAutoSize {
             'start_time',
             'end_time',
             'total_time',
+            'checkin_time',
+            'checkout_time',
             'date',
             'note',
         ]);
@@ -64,6 +66,8 @@ class ScheduleExport  implements FromQuery, WithHeadings, ShouldAutoSize {
             'START_TIME',
             'END_TIME',
             'TOTAL_TIME',
+            'CHECKIN_TIME',
+            'CHECKOUT_TIME',
             'DATE',
             'NOTE',
         ];
