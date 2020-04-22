@@ -52,7 +52,8 @@ class LoginController extends ApiBaseController
     public function user()
     {
         return response()->json([
-            "users" => User::all()
+            "users"     => User::all(),
+            'message'   => 'success'
         ],200);
     }
 }

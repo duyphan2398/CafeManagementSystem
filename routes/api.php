@@ -22,6 +22,12 @@ Route::post('login', 'Auth\LoginController@login');
 Route::group(['middleware' => 'auth:api'], function (){
     Route::get('users', 'Auth\LoginController@user');
     Route::post('logout', 'Auth\LoginController@logout');
+    /*Schedules*/
+    Route::get('schedules/{user}', 'ScheduleController@getSchdulesByUserId');
+    /*Product*/
+    Route::apiResource('products', ProductController::class)->only('index');
+    /*Table*/
+    Route::apiResource('tables', TableController::class)->only('index');
 });
 
 
