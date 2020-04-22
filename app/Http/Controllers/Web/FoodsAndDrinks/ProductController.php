@@ -127,6 +127,9 @@ class ProductController extends WebBaseController
                 $product->url = $profileImage;
             }
             $product->save();
+            return response()->json([
+                'status' => 'success'
+            ],201);
             DB::commit();
         }
         catch (\Exception $exception){

@@ -38,6 +38,10 @@ Route::group(['middleware' => 'checkloggedin'], function (){
     /*FoodsAndDrink*/
     /*----------product---------*/
     Route::get('products', 'FoodsAndDrinks\ProductController@index');
+
+    /*ManageReceipts*/
+    /*----------table---------*/
+    Route::get('tables', 'ManageReceipts\TableController@index');
 });
 
 
@@ -78,5 +82,12 @@ Route::group(['middleware' => 'checkloggedin', 'prefix' => 'axios'], function ()
     Route::post('products/{product}','FoodsAndDrinks\ProductController@update');
     Route::post('products/updateIngredient/{product}','FoodsAndDrinks\ProductController@updateIngredient');
     Route::delete('products/deleteIngredient/{product}/{material}', 'FoodsAndDrinks\ProductController@deleteIngredient');
+
+    /*Manage Receipt*/
+    /*----------table---------*/
+    Route::resource('tables', ManageReceipts\TableController::class)->except(['index', 'update']);;
+    Route::post('tables/{table}','ManageReceipts\TableController@update');
+
+
 });
 

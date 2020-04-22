@@ -13,7 +13,6 @@ use Illuminate\Http\Request;
 
 class ScheduleController extends WebBaseController
 {
-    /*---------------schedule-----------------*/
     public function schedule(){
         return view('workspace.manageUsers.schedule');
     }
