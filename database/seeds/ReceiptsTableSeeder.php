@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Product;
 use App\Models\Table;
 use Carbon\Carbon;
+use Illuminate\Support\Arr;
 class ReceiptsTableSeeder extends Seeder
 {
     /**
@@ -16,7 +17,7 @@ class ReceiptsTableSeeder extends Seeder
     public function run()
     {
         /*Status 3 : Paid*/
-        for ($i = 1; $i <= 20; $i++){
+        for ($i = 1; $i <= 30; $i++){
             $user = User::query()
                 ->inRandomOrder()
                 ->first();
@@ -50,7 +51,8 @@ class ReceiptsTableSeeder extends Seeder
                 'table_id'              => $table_id,
                 'table_name'            => $table_name,
                 'user_id'               => $user_id,
-                'user_name'             => $user_name
+                'user_name'             => $user_name,
+                'created_at'            => $billing_at
             ]);
             $receipt->save();
             /*------------------------------*/

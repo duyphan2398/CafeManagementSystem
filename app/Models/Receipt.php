@@ -8,11 +8,13 @@ use App\Traits\AddUser;
 use App\Traits\ParseTimeStamp;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Maatwebsite\Excel\Concerns\Exportable;
 
 class Receipt extends Model
 {
     use AddUser;
     use ParseTimeStamp;
+    use Exportable;
     /*Status is [
 
         giá trị 1 : Wait for pay -> chờ thanh toán (trường hợp order đang mở billing_at và receipt_at null)
@@ -33,13 +35,13 @@ class Receipt extends Model
         'user_name'
     ];
     public function getBillingAtAttribute($billing_at){
-        return Carbon::parse($billing_at)->format('H:i d-m-Y');
+        return ($billing_at) ? Carbon::parse($billing_at)->format('H:i d-m-Y') : $billing_at;
     }
     public function getReceiptAtAttribute($receipt_at){
-        return Carbon::parse($receipt_at)->format('H:i d-m-Y');
+        return ($receipt_at) ? Carbon::parse($receipt_at)->format('H:i d-m-Y') : $receipt_at;
     }
     public function getExportAtAttribute($export_at){
-        return Carbon::parse($export_at)->format('H:i d-m-Y');
+        return ($export_at) ? Carbon::parse($export_at)->format('H:i d-m-Y') : $export_at;
     }
 
    /* public function setUserNameAttribute(){
@@ -60,6 +62,6 @@ class Receipt extends Model
     }
 
     public function table(){
-        return $this->hasOne(Table::class);
+        return $this->belongsTo(Table::class);
     }
 }
