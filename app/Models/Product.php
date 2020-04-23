@@ -28,4 +28,11 @@ class Product extends Model
     public function materials(){
         return $this->belongsToMany(Material::class, 'ingredients')->withPivot('quantity','unit');
     }
+
+    public function receipts(){
+        return $this
+            ->belongsToMany(Receipt::class, 'receipt_product')
+            ->using(ReceiptProduct::class)
+            ->withPivot('quantity', 'note', 'product_name', 'product_price', 'product_sale_price');
+    }
 }

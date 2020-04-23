@@ -38,28 +38,22 @@
                 <li>
                     <a href="{{url('products')}}">List Of Product</a>
                 </li>
-                {{--<li>
-                    <a href="index3-horizontalmenu.html">Horizontal Sidebar</a>
-                </li>--}}
             </ul>
         </li>
         <li>
             <a href="" aria-expanded="true">
-                <i class="ti-cup"></i>
+                <i class="ti-pencil-alt"></i>
                 <span>
                     Manage Receipts
                 </span>
             </a>
             <ul class="collapse">
                 <li>
-                    <a href="{{url('products')}}">Receipts</a>
+                    <a href="{{url('receipts')}}">Receipts</a>
                 </li>
                 <li>
                     <a href="{{url('tables')}}">List Of Tables</a>
                 </li>
-                {{--<li>
-                    <a href="index3-horizontalmenu.html">Horizontal Sidebar</a>
-                </li>--}}
             </ul>
         </li>
         <li>
@@ -73,9 +67,6 @@
                 <li>
                     <a href="{{url('materials')}}">List Of Materials</a>
                 </li>
-                {{--<li>
-                    <a href="index3-horizontalmenu.html">Horizontal Sidebar</a>
-                </li>--}}
             </ul>
         </li>
         <li>

@@ -84,6 +84,7 @@ function loadListScheduleFillter(from = $('#fromFillter').val(), to= $('#toFillt
                 resultFillter += addText(schedule);
 
             });
+            $("#listScheduleFillter").empty();
             $("#listScheduleFillter").append(resultFillter);
             $('#loadingFillter').removeAttr("style").hide();
             $('#export').removeAttr('disabled');

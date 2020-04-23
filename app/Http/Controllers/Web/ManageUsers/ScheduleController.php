@@ -105,7 +105,6 @@ class ScheduleController extends WebBaseController
         return response()->json([
             'status'=> 'Not found',
         ],404);
-
     }
 
     public function exportScheduleCsv(Request $request){
