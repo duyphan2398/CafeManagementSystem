@@ -28,6 +28,8 @@ Route::group(['middleware' => 'auth:api'], function (){
     Route::apiResource('products', ProductController::class)->only('index');
     /*Table*/
     Route::apiResource('tables', TableController::class)->only('index');
+    /*Receipt*/
+    Route::apiResource('receipts', ReceiptController::class)->only('index');
 });
 
 

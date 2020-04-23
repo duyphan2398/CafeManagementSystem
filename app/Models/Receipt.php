@@ -58,7 +58,7 @@ class Receipt extends Model
         return $this
             ->belongsToMany(Product::class, 'receipt_product')
             ->using(ReceiptProduct::class)
-            ->withPivot('quantity', 'note', 'product_name', 'product_price', 'product_sale_price');;
+            ->withPivot('receipt_id','product_name','quantity', 'note', 'product_name', 'product_price', 'product_sale_price');;
     }
 
     public function table(){
