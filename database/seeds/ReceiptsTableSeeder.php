@@ -15,62 +15,206 @@ class ReceiptsTableSeeder extends Seeder
      */
     public function run()
     {
-        $user = User::query()
-            ->inRandomOrder()
-            ->first();
-        $table = Table::query()
-            ->inRandomOrder()
-            ->first();
-        /*Date format*/
-        $year = Carbon::now()->year;
-        $month = Carbon::now()->month;
-        $date  = Carbon::now()->day;
-        $date_time = Carbon::create($year, $month - Arr::random([0,1]), rand(1,$date), 12, 15, 00);
-        /*-------------------------------------------*/
-        $status = 3;
-        $billing_at = $date_time;
-        $receipt_at = $date_time->subMinutes(60);
-        $export_at = $receipt_at;
-        //$sale_excluded_price = ;
-        //$sale_included_price = ;
-        $table_id = $table->id;
-        $table_name = $table->name;
-        $user_id = $user->id;
-        $user_name = $user->name;
+        /*Status 3 : Paid*/
+        for ($i = 1; $i <= 20; $i++){
+            $user = User::query()
+                ->inRandomOrder()
+                ->first();
+            $table = Table::query()
+                ->inRandomOrder()
+                ->first();
+            /*Date format*/
+            $year = Carbon::now()->year;
+            $month = Carbon::now()->month;
+            $date  = Carbon::now()->day;
+            $date_time = Carbon::create($year, $month - Arr::random([0,1]), rand(1,$date), 12, 15, 00);
+            /*-------------------------------------------*/
+            $status = 3;
+            $billing_at = $date_time->toDateTimeString();
+            $date_time = $date_time->addMinutes(60)->toDateTimeString();
+            $receipt_at = $date_time;
+            $export_at = $receipt_at;
+            $table_id = $table->id;
+            $table_name = $table->name;
+            $user_id = $user->id;
+            $user_name = $user->name;
 
-        $receipt = new Receipt();
-        $receipt->fill([
-            'status'                => $status,
-            'billing_at'            => $billing_at,
-            'receipt_at'            => $receipt_at,
-            'export_at'             => $export_at,
-            'sale_excluded_price'   => 1,
-            'sale_included_price'   => 1,
-            'table_id'              => $table_id,
-            'table_name'            => $table_name,
-            'user_id'               => $user_id,
-            'user_name'             => $user_name
-        ]);
-        $receipt->save();
-        /*------------------------------*/
-        /*Product*/
-        $products = Product::query()
-            ->inRandomOrder()
-            ->take(3);
-        /*Need Fix when have promotion*/
-        foreach ($products as $product){
-            $receipt_product = new ReceiptProduct();
-            $receipt_product->fill([
-                'receipt_id'        => $receipt->id,
-                'product_id'        => $product->id,
-                'quantity'          =>Arr::random([1,2,3]),
-                'note'              => null,
-                'product_name'      =>$product->name,
-                'product_price'     =>$product->price,
-                'product_sale_price'=>$product->sale_price
+            $receipt = new Receipt();
+            $receipt->fill([
+                'status'                => $status,
+                'billing_at'            => $billing_at,
+                'receipt_at'            => $receipt_at,
+                'export_at'             => $export_at,
+                'sale_excluded_price'   => null,
+                'sale_included_price'   => null,
+                'table_id'              => $table_id,
+                'table_name'            => $table_name,
+                'user_id'               => $user_id,
+                'user_name'             => $user_name
             ]);
-            $receipt_product->save();
+            $receipt->save();
+            /*------------------------------*/
+            /*Product*/
+            $products = Product::query()
+                ->inRandomOrder()
+                ->take(3)
+                ->get();
+            /*Need Fix when have promotion*/
+            $array_products = [];
+            $sale_excluded_price = 0;
+            $sale_included_price = 0;
+            foreach ($products as $product){
+                $quantity = Arr::random([1,2,3]);
+                $array_products[$product->id] = [
+                    'receipt_id'        => $receipt->id,
+                    'product_id'        => $product->id,
+                    'quantity'          => $quantity,
+                    'note'              => null,
+                    'product_name'      => $product->name,
+                    'product_price'     => $product->price,
+                    'product_sale_price'=> $product->sale_price
+                ];
+                $sale_excluded_price += $product->price * $quantity;
+                $sale_included_price += ($product->sale_price) ? ($product->sale_price*$quantity) : 0;
+            }
+            $receipt->products()->attach($array_products);
+            $receipt->sale_excluded_price = $sale_excluded_price;
+            $receipt->sale_included_price = ($sale_included_price == 0) ? null : $sale_included_price;
+            $receipt->save();
         }
-        /*------------------------------*/
+
+        /*Status 2 : Paid*/
+        for ($i = 1; $i <= 2; $i++){
+            $user = User::query()
+                ->inRandomOrder()
+                ->first();
+            $table = Table::query()
+                ->inRandomOrder()
+                ->first();
+            $table->status = 'Using';
+            $table->save();
+            /*Date format*/
+            $year = Carbon::now()->year;
+            $month = Carbon::now()->month;
+            $date  = Carbon::now()->day;
+            $date_time = Carbon::now()->subMinute(rand(5,30));
+            /*-------------------------------------------*/
+            $status = 2;
+            $billing_at = $date_time->toDateTimeString();
+            $receipt_at = null;
+            $export_at = null;
+            $table_id = $table->id;
+            $table_name = $table->name;
+            $user_id = $user->id;
+            $user_name = $user->name;
+
+            $receipt = new Receipt();
+            $receipt->fill([
+                'status'                => $status,
+                'billing_at'            => $billing_at,
+                'receipt_at'            => $receipt_at,
+                'export_at'             => $export_at,
+                'sale_excluded_price'   => null,
+                'sale_included_price'   => null,
+                'table_id'              => $table_id,
+                'table_name'            => $table_name,
+                'user_id'               => $user_id,
+                'user_name'             => $user_name
+            ]);
+            $receipt->save();
+            /*------------------------------*/
+            /*Product*/
+            $products = Product::query()
+                ->inRandomOrder()
+                ->take(3)
+                ->get();
+            /*Need Fix when have promotion*/
+            $array_products = [];
+            $sale_excluded_price = 0;
+            $sale_included_price = 0;
+            foreach ($products as $product){
+                $quantity = Arr::random([1,2,3]);
+                $array_products[$product->id] = [
+                    'receipt_id'        => $receipt->id,
+                    'product_id'        => $product->id,
+                    'quantity'          => $quantity,
+                    'note'              => null,
+                    'product_name'      => $product->name,
+                    'product_price'     => $product->price,
+                    'product_sale_price'=> $product->sale_price
+                ];
+                $sale_excluded_price += $product->price * $quantity;
+                $sale_included_price += ($product->sale_price) ? ($product->sale_price*$quantity) : 0;
+            }
+            $receipt->products()->attach($array_products);
+            $receipt->sale_excluded_price = $sale_excluded_price;
+            $receipt->sale_included_price = ($sale_included_price == 0) ? null : $sale_included_price;
+            $receipt->save();
+        }
+
+
+        for ($i = 1; $i <= 2; $i++){
+            $user = User::query()
+                ->inRandomOrder()
+                ->first();
+            $table = Table::query()
+                ->where('status', 'Empty')
+                ->inRandomOrder()
+                ->first();
+            $table->status = 'Using';
+            $table->save();
+
+            $status = 1;
+            $billing_at = null;
+            $receipt_at = null;
+            $export_at = null;
+            $table_id = $table->id;
+            $table_name = $table->name;
+            $user_id = $user->id;
+            $user_name = $user->name;
+
+            $receipt = new Receipt();
+            $receipt->fill([
+                'status'                => $status,
+                'billing_at'            => $billing_at,
+                'receipt_at'            => $receipt_at,
+                'export_at'             => $export_at,
+                'sale_excluded_price'   => null,
+                'sale_included_price'   => null,
+                'table_id'              => $table_id,
+                'table_name'            => $table_name,
+                'user_id'               => $user_id,
+                'user_name'             => $user_name
+            ]);
+            $receipt->save();
+            /*------------------------------*/
+            /*Product*/
+            $products = Product::query()
+                ->inRandomOrder()
+                ->take(3)
+                ->get();
+            /*Need Fix when have promotion*/
+            $array_products = [];
+            $sale_excluded_price = 0;
+            $sale_included_price = 0;
+            foreach ($products as $product){
+                $quantity = Arr::random([1,2,3]);
+                $array_products[$product->id] = [
+                    'receipt_id'        => $receipt->id,
+                    'product_id'        => $product->id,
+                    'quantity'          => $quantity,
+                    'note'              => null,
+                    'product_name'      => $product->name,
+                    'product_price'     => $product->price,
+                    'product_sale_price'=> $product->sale_price
+                ];
+                $sale_excluded_price += $product->price * $quantity;
+                $sale_included_price += ($product->sale_price) ? ($product->sale_price*$quantity) : 0;
+            }
+            $receipt->products()->attach($array_products);
+            $receipt->sale_excluded_price = $sale_excluded_price;
+            $receipt->sale_included_price = ($sale_included_price == 0) ? null : $sale_included_price;
+            $receipt->save();
+        }
     }
 }
