@@ -30,6 +30,11 @@ Route::group(['middleware' => 'auth:api'], function (){
     Route::apiResource('tables', TableController::class)->only('index');
     /*Receipt*/
     Route::apiResource('receipts', ReceiptController::class)->only('index');
+    Route::get('receipts/{receipt}', 'ReceiptController@show');
+    Route::delete('receipts/{receipt}', 'ReceiptController@destroy');
+    Route::delete('receipts/{receipt}/{product}', 'ReceiptController@destroyProductReceipt');
+    Route::post('receipts','ReceiptController@create');
+    Route::post('receipts/{receipt}/{product}','ReceiptController@createProductReceipt');
 });
 
 
