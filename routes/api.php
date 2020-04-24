@@ -35,6 +35,8 @@ Route::group(['middleware' => 'auth:api'], function (){
     Route::delete('receipts/{receipt}/{product}', 'ReceiptController@destroyProductReceipt');
     Route::post('receipts','ReceiptController@create');
     Route::post('receipts/{receipt}/{product}','ReceiptController@createProductReceipt');
+    Route::get('receipts/bill/{receipt}','ReceiptController@billReceipt');
+    Route::get('receipts/paid/{receipt}','ReceiptController@paidReceipt');
 });
 
 

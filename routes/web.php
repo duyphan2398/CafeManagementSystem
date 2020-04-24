@@ -1,5 +1,6 @@
 <?php
 
+use Barryvdh\DomPDF\Facade as PDF2;
 use Illuminate\Support\Facades\Route;
 /*
 |--------------------------------------------------------------------------
@@ -95,4 +96,10 @@ Route::group(['middleware' => 'checkloggedin', 'prefix' => 'axios'], function ()
     Route::post('getListReceiptFillter', 'ManageReceipts\ReceiptController@getListReceiptFillter');
     Route::post('receipts/export', 'ManageReceipts\ReceiptController@exportReceiptCsv');
 });
+/*
+Route::get('bill', function (){
+    $receipt = \App\Models\Receipt::query()->inRandomOrder()->first();
 
+    $pdf = PDF2::loadView('PDF.bill', ['receipt'=>(new \App\Transformers\ReceiptTranformer)->transform($receipt)]);
+    return $pdf->download('bill.pdf');
+});*/
