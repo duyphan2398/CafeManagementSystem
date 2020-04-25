@@ -18,6 +18,7 @@ class CreateTablesTable extends Migration
             $table->string('name');
             $table->string('note')->nullable();
             $table->string('status')->default('Empty');
+            $table->integer('user_id')->nullable();
             $table->timestamps();
         });
     }

@@ -94,6 +94,7 @@ class ReceiptsTableSeeder extends Seeder
                 ->inRandomOrder()
                 ->first();
             $table->status = 'Using';
+            $table->user_id = $user->id;
             $table->save();
             /*Date format*/
             $year = Carbon::now()->year;
@@ -164,6 +165,7 @@ class ReceiptsTableSeeder extends Seeder
                 ->inRandomOrder()
                 ->first();
             $table->status = 'Using';
+            $table->user_id = $user->id;
             $table->save();
 
             $status = 1;

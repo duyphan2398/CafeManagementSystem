@@ -5,7 +5,11 @@ namespace App\Http\Controllers\Api;
 
 
 use App\Http\Controllers\ApiBaseController;
+use App\Http\Requests\TableUpdateProducts;
+use App\Models\Product;
+use App\Models\Receipt;
 use App\Models\Table;
+use Illuminate\Support\Facades\DB;
 
 class TableController extends ApiBaseController
 {
@@ -14,5 +18,77 @@ class TableController extends ApiBaseController
             'tables'    => Table::all(),
             'message'   =>'success'
         ],200);
+    }
+
+    public function show(Table $table){
+        $result = [
+            'curent_total'          => null,
+            'receipt_id'            => null,
+            'product_list'         => [],
+            'current_user_using'    => null,
+            'created_at'            =>null,
+            'created_by_name'       =>null
+        ];
+
+        $receipt_product = [
+            'id'            => null,
+            'name'          => null,
+            'price'         => null,
+            'sale_price'    => null,
+            'quantity'      => null,
+            'note'          => null,
+            'product_type'  => null
+        ];
+        $receipt = Receipt::
+            where('table_id', $table->id)
+            ->whereIn('status', [1,2])
+            ->first();
+         ;
+        if ($receipt){
+            $result['current_total']        = $receipt->sale_excluded_price;
+            $result['receipt_id']           = $receipt->id;
+            $result['current_user_using']   = $table->user_id;
+            $result['created_by_name']      = $receipt->user->name;
+            $result['created_at']           = $receipt->created_at;
+            foreach ($receipt->products as $product){
+                $receipt_product['product_id']          = $product->id;
+                $receipt_product['product_name']        = $product->pivot->product_name;
+                $receipt_product['product_price']       = $product->pivot->product_price;
+                $receipt_product['product_sale_price']  = $product->pivot->prouct_sale_price;
+                $receipt_product['quantity']            = $product->pivot->quantity;
+                $receipt_product['note']                = $product->pivot->note;
+                $receipt_product['product_type']        = $product->type;
+                array_push($result['products_list'], $receipt_product);
+            }
+            return response()->json($result,200);
+        }
+        return response()->json($result,200);
+    }
+
+    public function updateProducts(TableUpdateProducts $request, Table $table){
+        $receipt = Receipt::where('table_id', $table->id)
+            ->whereIn('status', [1,2])
+            ->first();
+        if ($receipt){
+            $receipt->products()->detach();
+            foreach ($request->product_list as $item){
+                $product = Product::find($item['id']);
+                DB::table('receipt_product')->insert([
+                    'receipt_id'            => $receipt->id,
+                    'product_id'            => $product->id,
+                    'quantity'              => $item['quantity'],
+                    'note'                  => $item['note'],
+                    'product_name'          => $product->name,
+                    'product_price'         => $product->price,
+                    'product_sale_price'    => $product->sale_price,
+                ]);
+            }
+            return response()->json([
+                'message' => 'success'
+            ],201);
+        }
+        return response()->json([
+            'message' => 'Not found receipt'
+        ],404);
     }
 }
