@@ -95,10 +95,7 @@ Route::group(['middleware' => 'checkloggedin', 'prefix' => 'axios'], function ()
     Route::resource('receipts', ManageReceipts\ReceiptController::class)->except(['index', 'update']);
     Route::post('getListReceiptFillter', 'ManageReceipts\ReceiptController@getListReceiptFillter');
     Route::post('receipts/export', 'ManageReceipts\ReceiptController@exportReceiptCsv');
+    /*----------promotion---------*/
+    //Route::get('promotions', 'ManageReceipts\PromotionController@showAll');
 });
 
-Route::get('test', function (){
-    $product = \App\Models\Product::find(4);
-
-    dd($product->sale_price);
-});

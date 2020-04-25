@@ -9,6 +9,7 @@ use App\Http\Requests\UpdateIngredientRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Models\Material;
 use App\Models\Product;
+use App\Models\Promotion;
 use App\Transformers\ProductTransformer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -48,8 +49,9 @@ class ProductController extends WebBaseController
             $query->where('product_id', $product->id);
         })->get();
         return response()->json([
-            'product' =>  (new ProductTransformer)->transform($product),
-            'ingredient_orther' => $ingredient_orther
+            'product'               =>  (new ProductTransformer)->transform($product),
+            'ingredient_orther'     => $ingredient_orther,
+            'promotions'            => Promotion::all()
         ], 200);
     }
 
@@ -64,6 +66,15 @@ class ProductController extends WebBaseController
                 $profileImage = $product->id. "." . $request->url->getClientOriginalExtension();
                 $request->url->move($destinationPath, $profileImage);
                 $product->url = $profileImage;
+            }
+            if ($request->promotion_id == null) {
+                $product->promotion_id = null;
+            }
+            else{
+                $promotion = Promotion::find($request->promotion_id);
+                if ($promotion){
+                    $product->promotion_id = $promotion->id;
+                }
             }
             $product->update($request->except(['url','sale_price']));
             DB::commit();
