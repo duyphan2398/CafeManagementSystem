@@ -15,7 +15,7 @@ class TableController extends ApiBaseController
 {
     public function index(){
         return response()->json([
-            'tables'    => Table::all(),
+            'tables'    => Table::all()->sortBy('name'),
             'message'   =>'success'
         ],200);
     }
