@@ -9,18 +9,23 @@ use App\Http\Requests\TableUpdateProducts;
 use App\Models\Product;
 use App\Models\Receipt;
 use App\Models\Table;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class TableController extends ApiBaseController
 {
     public function index(){
+        $result = [];
+        foreach (Table::all()->sortBy('name') as $table) {
+            array_push($result, $table);
+        }
         return response()->json([
-            'tables'    => Table::all()->sortBy('name'),
+            'tables'    => $result,
             'message'   =>'success'
         ],200);
     }
 
-    public function show(Table $table){
+    public function show(Request $request, Table $table){
         $result = [
             'current_total'          => null,
             'current_sale_total'    => null,
@@ -28,6 +33,7 @@ class TableController extends ApiBaseController
             'product_list'          => [],
             'current_user_using'    => null,
             'created_at'            =>null,
+            'host'                  => $request->getHttpHost().'/images/products/',
             'created_by_name'       =>null
         ];
 
@@ -38,7 +44,8 @@ class TableController extends ApiBaseController
             'sale_price'    => null,
             'quantity'      => null,
             'note'          => null,
-            'type'          => null
+            'type'          => null,
+            'url'           => null
         ];
         $receipt = Receipt::
             where('table_id', $table->id)
@@ -57,9 +64,10 @@ class TableController extends ApiBaseController
                 $receipt_product['name']        = $product->pivot->product_name;
                 $receipt_product['price']       = $product->pivot->product_price;
                 $receipt_product['sale_price']  = $product->pivot->product_sale_price;
-                $receipt_product['quantity']            = $product->pivot->quantity;
-                $receipt_product['note']                = $product->pivot->note;
+                $receipt_product['quantity']    = $product->pivot->quantity;
+                $receipt_product['note']        = $product->pivot->note;
                 $receipt_product['type']        = $product->type;
+                $receipt_product['url']        = $product->url;
                 array_push($result['product_list'], $receipt_product);
             }
             return response()->json($result,200);
