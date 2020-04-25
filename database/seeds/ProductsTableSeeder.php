@@ -23,6 +23,7 @@ class ProductsTableSeeder extends Seeder
                 'price' =>$price,
                 //'sale_price' => ( $sale_price == $price) ? null: round($sale_price),
                 'sale_price' => null,
+                'promotion_id' => Arr::random([null, null,1 , 2]),
                 'type' => Arr::random(['Food','Drink']),
             ]);
             $product->save();

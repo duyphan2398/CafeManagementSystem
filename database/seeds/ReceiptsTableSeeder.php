@@ -77,11 +77,11 @@ class ReceiptsTableSeeder extends Seeder
                     'product_sale_price'=> $product->sale_price
                 ];
                 $sale_excluded_price += $product->price * $quantity;
-                $sale_included_price += ($product->sale_price) ? ($product->sale_price*$quantity) : 0;
+                $sale_included_price += ($product->sale_price) ? ($product->sale_price*$quantity) : ($product->price * $quantity);
             }
             $receipt->products()->attach($array_products);
             $receipt->sale_excluded_price = $sale_excluded_price;
-            $receipt->sale_included_price = ($sale_included_price == 0) ? null : $sale_included_price;
+            $receipt->sale_included_price = $sale_included_price;
             $receipt->save();
         }
 
@@ -147,11 +147,11 @@ class ReceiptsTableSeeder extends Seeder
                     'product_sale_price'=> $product->sale_price
                 ];
                 $sale_excluded_price += $product->price * $quantity;
-                $sale_included_price += ($product->sale_price) ? ($product->sale_price*$quantity) : 0;
+                $sale_included_price += ($product->sale_price) ? ($product->sale_price*$quantity) : ($product->price * $quantity);
             }
             $receipt->products()->attach($array_products);
             $receipt->sale_excluded_price = $sale_excluded_price;
-            $receipt->sale_included_price = ($sale_included_price == 0) ? null : $sale_included_price;
+            $receipt->sale_included_price = $sale_included_price;
             $receipt->save();
         }
 
@@ -213,11 +213,11 @@ class ReceiptsTableSeeder extends Seeder
                     'product_sale_price'=> $product->sale_price
                 ];
                 $sale_excluded_price += $product->price * $quantity;
-                $sale_included_price += ($product->sale_price) ? ($product->sale_price*$quantity) : 0;
+                $sale_included_price += ($product->sale_price) ? ($product->sale_price*$quantity) : ($product->price * $quantity);
             }
             $receipt->products()->attach($array_products);
             $receipt->sale_excluded_price = $sale_excluded_price;
-            $receipt->sale_included_price = ($sale_included_price == 0) ? null : $sale_included_price;
+            $receipt->sale_included_price = $sale_included_price;
             $receipt->save();
         }
     }

@@ -18,7 +18,6 @@ use Illuminate\Http\Request;
 use Illuminate\Session\Store;
 use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade as PDF2;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 
 class ReceiptController extends ApiBaseController
@@ -59,9 +58,16 @@ class ReceiptController extends ApiBaseController
         ],400);
     }
 
+    //Tam thoi khong dung Da co thay the update bang table
     public function createProductReceipt(CreateProductReceiptRequest $request, Receipt $receipt, Product $product){
         if ($receipt->status == 1 || $receipt->status == 2){
-            $receipt->products()->syncWithoutDetaching($product->id, $request->only('note', 'quantity'));
+            $receipt->products()->syncWithoutDetaching($product->id, [
+                'product_price'         => $product->price,
+                'product_sale_price'    => $product->sale_price,
+                'product_name'          => $product->name,
+                'quantity'              => $request->quantity,
+                'note'                  => $request->note,
+            ]);
 //---------------------- //Real time  Change price
             return response()->json([
                 'receipt' => (new ReceiptTranformer)->transform($receipt),
@@ -113,7 +119,7 @@ class ReceiptController extends ApiBaseController
             DB::beginTransaction();
             try {
                 $receipt->products()->detach($product->id);
-//------------------------------------   //Change Price Real time
+//------------------------------------   // Real time
                 DB::commit();
                 return response()->json([
                     'receipt' => (new ReceiptTranformer)->transform($receipt),

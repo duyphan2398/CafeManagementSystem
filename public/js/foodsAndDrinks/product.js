@@ -7,6 +7,7 @@ function addText(item){
                                 <td>`+item.name+`</td>
                                 <td>`+item.price+`</td>
                                 <td>`+item.sale_price+`</td>
+                                <td>`+item.promotion_id+`</td>
                                 <td>
                                     <img style="width: 60px; height: 60px" src="`+location.origin+`/images/products/`+item.url+`" alt="image_product">
                                 </td>
@@ -251,10 +252,6 @@ $(document).ready(function () {
                     required: true,
                     digits: true,
                 },
-                sale_price: {
-                    required: false,
-                    digits: true,
-                },
                 url: {
                     required: false,
                     extension: "jpg|png|jpeg"
@@ -267,9 +264,6 @@ $(document).ready(function () {
                 },
                 price: {
                     required: "Please enter the price",
-                    digits: "Input is only accepted digits",
-                },
-                sale_price: {
                     digits: "Input is only accepted digits",
                 },
                 url : {
@@ -386,10 +380,6 @@ $(document).ready(function () {
                 required: true,
                 digits: true,
             },
-            sale_price: {
-                required: false,
-                digits: true,
-            },
             url: {
                 required: false,
                 extension: "jpg|png|jpeg"
@@ -402,9 +392,6 @@ $(document).ready(function () {
             },
             price: {
                 required: "Please enter the price",
-                digits: "Input is only accepted digits",
-            },
-            sale_price: {
                 digits: "Input is only accepted digits",
             },
             url : {

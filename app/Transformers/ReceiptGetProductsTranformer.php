@@ -18,7 +18,7 @@ class ReceiptGetProductsTranformer
                 'quantity'                  => (integer) $product->pivot->quantity,
                 'note'                      => (string)  $product->pivot->note,
                 'product_price'             => (float)   $product->pivot->product_price,
-                'product_sale_price'        => (float)   $product->pivot->product_sale_price,
+                'product_sale_price'        => (float)   ($product->pivot->product_sale_price) ? $product->pivot->product_sale_price : null,
             ]);
         }
         return $data;

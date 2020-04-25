@@ -46,7 +46,11 @@
     </tbody>
 </table>
 <hr>
-<h5>Total: {{($receipt['sale_included_price']) ? $receipt['sale_included_price'] : $receipt['sale_excluded_price']}}</h5>
+<h5>Total: {{$receipt['sale_excluded_price']}}</h5>
+@if(($receipt['sale_included_price']) && ($receipt['sale_included_price'] < $receipt['sale_excluded_price']))
+    <br>
+    <h5>Total include sale : {{$receipt['sale_included_price']}}</h5>
+@endif
 <hr>
 <h4>
     Customer Service : mycafe@cafemail.com

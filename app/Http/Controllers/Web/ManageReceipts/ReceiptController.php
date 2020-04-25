@@ -7,7 +7,6 @@ namespace App\Http\Controllers\Web\ManageReceipts;
 use App\Exports\ReceiptExport;
 use App\Http\Controllers\WebBaseController;
 use App\Models\Receipt;
-use App\Models\Table;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;

@@ -22,9 +22,10 @@ class TableController extends ApiBaseController
 
     public function show(Table $table){
         $result = [
-            'curent_total'          => null,
+            'current_total'          => null,
+            'current_sale_total'    => null,
             'receipt_id'            => null,
-            'product_list'         => [],
+            'product_list'          => [],
             'current_user_using'    => null,
             'created_at'            =>null,
             'created_by_name'       =>null
@@ -37,7 +38,7 @@ class TableController extends ApiBaseController
             'sale_price'    => null,
             'quantity'      => null,
             'note'          => null,
-            'product_type'  => null
+            'type'          => null
         ];
         $receipt = Receipt::
             where('table_id', $table->id)
@@ -46,19 +47,20 @@ class TableController extends ApiBaseController
          ;
         if ($receipt){
             $result['current_total']        = $receipt->sale_excluded_price;
+            $result['current_sale_total']   = $receipt->sale_included_price;
             $result['receipt_id']           = $receipt->id;
             $result['current_user_using']   = $table->user_id;
             $result['created_by_name']      = $receipt->user->name;
             $result['created_at']           = $receipt->created_at;
             foreach ($receipt->products as $product){
-                $receipt_product['product_id']          = $product->id;
-                $receipt_product['product_name']        = $product->pivot->product_name;
-                $receipt_product['product_price']       = $product->pivot->product_price;
-                $receipt_product['product_sale_price']  = $product->pivot->prouct_sale_price;
+                $receipt_product['id']          = $product->id;
+                $receipt_product['name']        = $product->pivot->product_name;
+                $receipt_product['price']       = $product->pivot->product_price;
+                $receipt_product['sale_price']  = $product->pivot->product_sale_price;
                 $receipt_product['quantity']            = $product->pivot->quantity;
                 $receipt_product['note']                = $product->pivot->note;
-                $receipt_product['product_type']        = $product->type;
-                array_push($result['products_list'], $receipt_product);
+                $receipt_product['type']        = $product->type;
+                array_push($result['product_list'], $receipt_product);
             }
             return response()->json($result,200);
         }

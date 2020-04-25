@@ -44,12 +44,21 @@ class Receipt extends Model
         return ($export_at) ? Carbon::parse($export_at)->format('H:i d-m-Y') : $export_at;
     }
 
-   /* public function setUserNameAttribute(){
-        $this->attributes['user_name'] = User::find($this->attributes['user_id'])->name;
+    public function getPriceExcludedSaleAttribute($price_excluded_sale){
+        $price_excluded_sale = 0;
+        foreach ($this->products() as $product){
+            $price_excluded_sale += $product->pivot->product_price * $product->pivot->quantity;
+         }
+        return $price_excluded_sale;
     }
-    public function setTableNameAttribute(){
-        $this->attributes['table_name'] = Table::find($this->attributes['table_id'])->name;
-    }*/
+
+    public function getPriceIncludedSaleAttribute($price_included_sale){
+        $price_included_sale = 0;
+        foreach ($this->products() as $product){
+            $price_included_sale += ($product->pivot->product_sale_price) ? ($product->pivot->product_sale_price * $product->pivot->quantity) : $product->pivot->product_price * $product->pivot->quantity;
+        }
+        return $price_included_sale;
+    }
     // ======================================================================
     // Relationships
     // ======================================================================
