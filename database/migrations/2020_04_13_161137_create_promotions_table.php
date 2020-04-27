@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTablesTable extends Migration
+class CreatePromotionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,13 @@ class CreateTablesTable extends Migration
      */
     public function up()
     {
-        Schema::create('tables', function (Blueprint $table) {
+        Schema::create('promotions', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('note')->nullable();
-            $table->string('status')->default('Empty');
-            $table->integer('user_id')->nullable();
+            $table->string('description')->nullable();
+            $table->dateTime('start_at');
+            $table->dateTime('end_at');
+            $table->float('sale_percent', 10, 2);
             $table->timestamps();
         });
     }
@@ -30,6 +31,6 @@ class CreateTablesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tables');
+        Schema::dropIfExists('promotions');
     }
 }

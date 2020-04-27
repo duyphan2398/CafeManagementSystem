@@ -1,5 +1,6 @@
 <?php
 
+use Barryvdh\DomPDF\Facade as PDF2;
 use Illuminate\Support\Facades\Route;
 /*
 |--------------------------------------------------------------------------
@@ -42,6 +43,10 @@ Route::group(['middleware' => 'checkloggedin'], function (){
     /*ManageReceipts*/
     /*----------table---------*/
     Route::get('tables', 'ManageReceipts\TableController@index');
+    /*----------receipt---------*/
+    Route::get('receipts', 'ManageReceipts\ReceiptController@index');
+    /*----------promotion---------*/
+    Route::get('promotions', 'ManageReceipts\PromotionController@index');
 });
 
 
@@ -67,6 +72,7 @@ Route::group(['middleware' => 'checkloggedin', 'prefix' => 'axios'], function ()
     Route::post('schedules/export', 'ManageUsers\ScheduleController@exportScheduleCsv');
     Route::post('schedules/checkin/{schedule}','ManageUsers\ScheduleController@checkin');
     Route::post('schedules/checkout/{schedule}','ManageUsers\ScheduleController@checkout');
+
     /*Warehouse*/
     /*----------material---------*/
     Route::get('materials','Warehouse\MaterialController@show');
@@ -85,9 +91,13 @@ Route::group(['middleware' => 'checkloggedin', 'prefix' => 'axios'], function ()
 
     /*Manage Receipt*/
     /*----------table---------*/
-    Route::resource('tables', ManageReceipts\TableController::class)->except(['index', 'update']);;
+    Route::resource('tables', ManageReceipts\TableController::class)->except(['index', 'update']);
     Route::post('tables/{table}','ManageReceipts\TableController@update');
-
-
+    /*----------receipt---------*/
+    Route::resource('receipts', ManageReceipts\ReceiptController::class)->except(['index', 'update']);
+    Route::post('getListReceiptFillter', 'ManageReceipts\ReceiptController@getListReceiptFillter');
+    Route::post('receipts/export', 'ManageReceipts\ReceiptController@exportReceiptCsv');
+    /*----------promotion---------*/
+    Route::delete('promotions/{promotion}', 'ManageReceipts\PromotionController@destroy');
 });
 

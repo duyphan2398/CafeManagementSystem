@@ -17,12 +17,13 @@ class ProductsTableSeeder extends Seeder
         $faker = \Faker\Factory::create();
         for ($i = 0; $i < $this->total; $i++) {
             $price = $faker->numberBetween(10000,50000);
-            $sale_price = $price * Arr::random([ 0.9, 0.8, 0.5, 1 ,1 ,1 ]);
+            //$sale_price = $price * Arr::random([ 0.9, 0.8, 0.5, 1 ,1 ,1 ]);
             $product = new Product([
                 'name' => $faker->text(20),
                 'price' =>$price,
                 //'sale_price' => ( $sale_price == $price) ? null: round($sale_price),
                 'sale_price' => null,
+                'promotion_id' => Arr::random([null, null, 1, 1, 2, 2, 3]),
                 'type' => Arr::random(['Food','Drink']),
             ]);
             $product->save();

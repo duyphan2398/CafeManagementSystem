@@ -7,6 +7,7 @@ function addText(item){
                                 <td>`+item.name+`</td>
                                 <td>`+item.price+`</td>
                                 <td>`+item.sale_price+`</td>
+                                <td>`+item.promotion_id+`</td>
                                 <td>
                                     <img style="width: 60px; height: 60px" src="`+location.origin+`/images/products/`+item.url+`" alt="image_product">
                                 </td>
@@ -29,7 +30,7 @@ function addText(item){
     return result;
 }
 
-function edit_modal(item){
+function edit_modal(item, promotions){
     let  modal = `
                     <div class="form-group mt-2">
                         <label for="nameEdit">Name</label>
@@ -42,6 +43,25 @@ function edit_modal(item){
                     <div class="form-group mt-2" >
                         <label for="salePriceEdit">Sale Price</label>
                         <input name="sale_price" class="form-control" type="number" id="salePriceEdit" value="`+item.sale_price+`" readonly>
+                    </div>
+                    <div class="form-group mt-2" >
+                        <label for="promotionEdit">Promotion</label>
+                         <select class="form-control" name="promotion_id" id="">
+                             <option value="null" selected>Not Setting</option>
+                                `;
+
+    promotions.forEach(function (promotion) {
+
+
+        if (promotion.id == item.promotion_id){
+            modal+= `<option value="`+promotion.id+`" selected>`+promotion.id+` : `+promotion.name+`</option>`
+        }
+        else {
+            modal+= `<option value="`+promotion.id+`">`+promotion.id+` : `+promotion.name+`</option>`
+        }
+    });
+          modal+=      `
+                        </select>
                     </div>
                     <div class="form-group mt-2">
                         <label for="sale_price">Type</label>
@@ -170,7 +190,7 @@ $(document).ready(function () {
         axios.get(location.origin + '/axios/products/'+ product_id_modal
         ).then(function (response) {
             $('#loading_modal').removeAttr("style").hide();
-            edit_modal(response.data.product);
+            edit_modal(response.data.product, response.data.promotions);
         })
 
     });
@@ -251,10 +271,6 @@ $(document).ready(function () {
                     required: true,
                     digits: true,
                 },
-                sale_price: {
-                    required: false,
-                    digits: true,
-                },
                 url: {
                     required: false,
                     extension: "jpg|png|jpeg"
@@ -267,9 +283,6 @@ $(document).ready(function () {
                 },
                 price: {
                     required: "Please enter the price",
-                    digits: "Input is only accepted digits",
-                },
-                sale_price: {
                     digits: "Input is only accepted digits",
                 },
                 url : {
@@ -386,10 +399,6 @@ $(document).ready(function () {
                 required: true,
                 digits: true,
             },
-            sale_price: {
-                required: false,
-                digits: true,
-            },
             url: {
                 required: false,
                 extension: "jpg|png|jpeg"
@@ -402,9 +411,6 @@ $(document).ready(function () {
             },
             price: {
                 required: "Please enter the price",
-                digits: "Input is only accepted digits",
-            },
-            sale_price: {
                 digits: "Input is only accepted digits",
             },
             url : {

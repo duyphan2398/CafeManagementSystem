@@ -112,6 +112,7 @@
                             <th>Name</th>
                             <th>Price</th>
                             <th>Sale_Price</th>
+                            <th>Promotion ID</th>
                             <th>Image</th>
                             <th>Ingredients</th>
                             <th>Action</th>
@@ -122,6 +123,7 @@
                                 <td>11</td>
                                 <td>fdsfsfdsfs</td>
                                 <td>1111</td>
+                                <th>1212</th>
                                 <td>11</td>
                                 <td>
                                     <img style="width: 60px; height: 60px" src="{{asset('images/products/default_url_product.png')}}" alt="image_product">
