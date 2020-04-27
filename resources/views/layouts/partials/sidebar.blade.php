@@ -54,6 +54,9 @@
                 <li>
                     <a href="{{url('tables')}}">List Of Tables</a>
                 </li>
+                <li>
+                    <a href="{{url('promotions')}}">List Of Promotions</a>
+                </li>
             </ul>
         </li>
         <li>

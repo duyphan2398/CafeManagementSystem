@@ -45,6 +45,8 @@ Route::group(['middleware' => 'checkloggedin'], function (){
     Route::get('tables', 'ManageReceipts\TableController@index');
     /*----------receipt---------*/
     Route::get('receipts', 'ManageReceipts\ReceiptController@index');
+    /*----------promotion---------*/
+    Route::get('promotions', 'ManageReceipts\PromotionController@index');
 });
 
 
@@ -96,6 +98,6 @@ Route::group(['middleware' => 'checkloggedin', 'prefix' => 'axios'], function ()
     Route::post('getListReceiptFillter', 'ManageReceipts\ReceiptController@getListReceiptFillter');
     Route::post('receipts/export', 'ManageReceipts\ReceiptController@exportReceiptCsv');
     /*----------promotion---------*/
-    //Route::get('promotions', 'ManageReceipts\PromotionController@showAll');
+    Route::delete('promotions/{promotion}', 'ManageReceipts\PromotionController@destroy');
 });
 

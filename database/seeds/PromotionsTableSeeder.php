@@ -27,5 +27,13 @@ class PromotionsTableSeeder extends Seeder
             'end_at' =>\Carbon\Carbon::today()->addMonth(),
             'sale_percent' => 0.1
         ]);
+
+        DB::table('promotions')->insert([
+            'name' => 'My Cafe Birthday',
+            'description' => 'Discount 50% for the some drink',
+            'start_at' => \Carbon\Carbon::yesterday()->subMonth(),
+            'end_at' =>\Carbon\Carbon::yesterday(),
+            'sale_percent' => 0.5
+        ]);
     }
 }

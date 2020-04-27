@@ -20,9 +20,12 @@ class Product extends Model
 
     protected $attributes = [
         'url'           => 'default_url_product.png',
-        'sale_price'    => null
+        'sale_price'    => null,
     ];
 
+    /*public function getPriceAttribute($price){
+        return number_format($price, 0);
+    }*/
 
     public function getSalePriceAttribute(){
         if ($this->promotion){
