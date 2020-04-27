@@ -23,9 +23,9 @@ class Product extends Model
         'sale_price'    => null,
     ];
 
-    /*public function getPriceAttribute($price){
-        return number_format($price, 0);
-    }*/
+    public function getPriceAttribute($price){
+        return round($price);
+    }
 
     public function getSalePriceAttribute(){
         if ($this->promotion){
@@ -34,7 +34,7 @@ class Product extends Model
             $startDate = date('Y-m-d', strtotime($this->promotion->start_at));
             $endDate = date('Y-m-d', strtotime($this->promotion->end_at));
             if ($this->promotion->sale_percent && ($currentDate >= $startDate) && ($currentDate <= $endDate)){
-               return  $this->price - ($this->promotion->sale_percent *  $this->price);
+               return  round($this->price - ($this->promotion->sale_percent *  $this->price));
             }
             else {
                 return null ;

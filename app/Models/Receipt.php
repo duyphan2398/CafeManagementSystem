@@ -49,7 +49,7 @@ class Receipt extends Model
         foreach ($this->products() as $product){
             $price_excluded_sale += $product->pivot->product_price * $product->pivot->quantity;
          }
-        return $price_excluded_sale;
+        return round($price_excluded_sale);
     }
 
     public function getPriceIncludedSaleAttribute($price_included_sale){
@@ -57,7 +57,7 @@ class Receipt extends Model
         foreach ($this->products() as $product){
             $price_included_sale += ($product->pivot->product_sale_price) ? ($product->pivot->product_sale_price * $product->pivot->quantity) : $product->pivot->product_price * $product->pivot->quantity;
         }
-        return $price_included_sale;
+        return round($price_included_sale);
     }
     // ======================================================================
     // Relationships
