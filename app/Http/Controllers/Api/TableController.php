@@ -26,12 +26,19 @@ class TableController extends ApiBaseController
         ],200);
     }
 
-
     public function show(Request $request, Table $table){
         $receipt = Receipt::
             where('table_id', $table->id)
             ->whereIn('status', [1,2])
             ->first();
+
+        if ($table->user_id != null){
+            return response()->json([
+                'message' => 'Have orther user using !'
+            ],400);
+        }
+        $table->user_id = Auth::guard('api')->id();
+        $table->save();
         if ($receipt){
             return response()->json($this->result($request, $receipt, $table),200);
         }
@@ -80,12 +87,14 @@ class TableController extends ApiBaseController
         ],201);
     }
 
-    public function changeState(Table $table){
+    public function changeStateToNull(Table $table){
         if ($table->user_id){
             $table->user_id = null;
         }
         else{
-            $table->user_id = Auth::guard('api')->id();
+           return  response()->json([
+               'messages' => 'Don\'t have anybody use this table !'
+           ], 400);
         }
         if ($table->save()){
             return response()->json([
@@ -93,7 +102,7 @@ class TableController extends ApiBaseController
             ],200);
         }
         return response()->json([
-            'messages'  =>'fail'
-        ],200);
+            'messages'  =>'fail to sale user using to null'
+        ],400);
     }
 }
