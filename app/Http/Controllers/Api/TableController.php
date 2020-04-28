@@ -32,7 +32,7 @@ class TableController extends ApiBaseController
             ->whereIn('status', [1,2])
             ->first();
 
-        if ($table->user_id != null){
+        if ($table->user_id != null && $table->user_id != Auth::guard('api')->id()){
             return response()->json([
                 'message' => 'Have orther user using !'
             ],400);
