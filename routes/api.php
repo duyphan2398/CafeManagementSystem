@@ -30,6 +30,7 @@ Route::group(['middleware' => 'auth:api'], function (){
     Route::apiResource('tables', TableController::class)->only('index');
     Route::get('tables/{table}', 'TableController@show');
     Route::post('tables/{table}/updateProducts','TableController@updateProducts');
+    Route::get('tables/{table}/state', 'TableController@changeState');
     /*Receipt*/
     Route::apiResource('receipts', ReceiptController::class)->only('index');
     Route::get('receipts/{receipt}', 'ReceiptController@show');
