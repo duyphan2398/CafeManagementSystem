@@ -47,7 +47,7 @@ function edit_modal(item, promotions){
                     <div class="form-group mt-2" >
                         <label for="promotionEdit">Promotion</label>
                          <select class="form-control" name="promotion_id" id="">
-                             <option value="null" selected>Not Setting</option>
+                             <option value="" selected>Not Setting</option>
                                 `;
 
     promotions.forEach(function (promotion) {

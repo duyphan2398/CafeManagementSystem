@@ -67,16 +67,17 @@ class ProductController extends WebBaseController
                 $request->url->move($destinationPath, $profileImage);
                 $product->url = $profileImage;
             }
-            if ($request->promotion_id == null) {
-                $product->promotion_id = null;
-            }
-            else{
+            if ($request->promotion_id) {
                 $promotion = Promotion::find($request->promotion_id);
                 if ($promotion){
                     $product->promotion_id = $promotion->id;
                 }
             }
-            $product->update($request->except(['url','sale_price']));
+            else{
+                $product->promotion_id = null;
+            }
+            $product->fill($request->except(['url','sale_price', 'promotion_id']));
+            $product->save();
             DB::commit();
         }
         catch (\Exception $exception){

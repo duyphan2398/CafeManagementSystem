@@ -20,7 +20,7 @@ class CreateProductsTable extends Migration
             $table->float('sale_price', 10, 2)->nullable()->default(null);
             $table->string('url')->default('default_url_product.png');
             $table->string('type');
-            $table->integer('promotion_id')->nullable();
+            $table->integer('promotion_id')->nullable()->default(null);
             $table->timestamps();
         });
 
