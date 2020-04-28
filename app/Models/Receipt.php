@@ -44,20 +44,38 @@ class Receipt extends Model
         return ($export_at) ? Carbon::parse($export_at)->format('H:i d-m-Y') : $export_at;
     }
 
-    public function getPriceExcludedSaleAttribute($price_excluded_sale){
-        $price_excluded_sale = 0;
-        foreach ($this->products() as $product){
-            $price_excluded_sale += $product->pivot->product_price * $product->pivot->quantity;
+    public function getSaleExcludedPriceAttribute(){
+        $sale_excluded_price = 0;
+        foreach ($this->products as $product){
+            $sale_excluded_price += $product->pivot->product_price * $product->pivot->quantity;
          }
-        return round($price_excluded_sale);
+        return round($sale_excluded_price);
     }
 
-    public function getPriceIncludedSaleAttribute($price_included_sale){
-        $price_included_sale = 0;
-        foreach ($this->products() as $product){
-            $price_included_sale += ($product->pivot->product_sale_price) ? ($product->pivot->product_sale_price * $product->pivot->quantity) : $product->pivot->product_price * $product->pivot->quantity;
+    public function setSaleExcludedPriceAttribute()
+    {
+        $sale_excluded_price = 0;
+        foreach ($this->products as $product){
+            $sale_excluded_price += $product->pivot->product_price * $product->pivot->quantity;
         }
-        return round($price_included_sale);
+        $this->attributes['sale_excluded_price'] = round($sale_excluded_price);;
+    }
+
+    public function getSaleIncludedPriceAttribute(){
+        $sale_included_price = 0;
+        foreach ($this->products as $product){
+            $sale_included_price += ($product->pivot->product_sale_price) ? ($product->pivot->product_sale_price * $product->pivot->quantity) : $product->pivot->product_price * $product->pivot->quantity;
+        }
+        return round($sale_included_price);
+    }
+
+    public function setSaleIncludedPriceAttribute()
+    {
+        $sale_included_price = 0;
+        foreach ($this->products as $product){
+            $sale_included_price += ($product->pivot->product_sale_price) ? ($product->pivot->product_sale_price * $product->pivot->quantity) : $product->pivot->product_price * $product->pivot->quantity;
+        }
+        $this->attributes['sale_included_price'] = round($sale_included_price);;
     }
     // ======================================================================
     // Relationships

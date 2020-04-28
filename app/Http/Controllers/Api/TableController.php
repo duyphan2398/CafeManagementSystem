@@ -10,6 +10,7 @@ use App\Models\Product;
 use App\Models\Receipt;
 use App\Models\Table;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class TableController extends ApiBaseController
@@ -25,80 +26,74 @@ class TableController extends ApiBaseController
         ],200);
     }
 
-    public function show(Request $request, Table $table){
-        $result = [
-            'current_total'          => null,
-            'current_sale_total'    => null,
-            'receipt_id'            => null,
-            'product_list'          => [],
-            'current_user_using'    => null,
-            'created_at'            =>null,
-            'host'                  => $request->getHttpHost().'/images/products/',
-            'created_by_name'       =>null
-        ];
 
-        $receipt_product = [
-            'id'            => null,
-            'name'          => null,
-            'price'         => null,
-            'sale_price'    => null,
-            'quantity'      => null,
-            'note'          => null,
-            'type'          => null,
-            'url'           => null
-        ];
+    public function show(Request $request, Table $table){
         $receipt = Receipt::
             where('table_id', $table->id)
             ->whereIn('status', [1,2])
             ->first();
-         ;
         if ($receipt){
-            $result['current_total']        = $receipt->sale_excluded_price;
-            $result['current_sale_total']   = $receipt->sale_included_price;
-            $result['receipt_id']           = $receipt->id;
-            $result['current_user_using']   = $table->user_id;
-            $result['created_by_name']      = $receipt->user->name;
-            $result['created_at']           = $receipt->created_at;
-            foreach ($receipt->products as $product){
-                $receipt_product['id']          = $product->id;
-                $receipt_product['name']        = $product->pivot->product_name;
-                $receipt_product['price']       = $product->pivot->product_price;
-                $receipt_product['sale_price']  = $product->pivot->product_sale_price;
-                $receipt_product['quantity']    = $product->pivot->quantity;
-                $receipt_product['note']        = $product->pivot->note;
-                $receipt_product['type']        = $product->type;
-                $receipt_product['url']        = $product->url;
-                array_push($result['product_list'], $receipt_product);
-            }
-            return response()->json($result,200);
+            return response()->json($this->result($request, $receipt, $table),200);
         }
-        return response()->json($result,200);
+        return response()->json($this->result($request, $receipt, $table),200);
     }
 
+
+    //Update and Create Receipt
     public function updateProducts(TableUpdateProducts $request, Table $table){
         $receipt = Receipt::where('table_id', $table->id)
             ->whereIn('status', [1,2])
             ->first();
-        if ($receipt){
-            $receipt->products()->detach();
-            foreach ($request->product_list as $item){
-                $product = Product::find($item['id']);
-                DB::table('receipt_product')->insert([
-                    'receipt_id'            => $receipt->id,
-                    'product_id'            => $product->id,
-                    'quantity'              => $item['quantity'],
-                    'note'                  => $item['note'],
-                    'product_name'          => $product->name,
-                    'product_price'         => $product->price,
-                    'product_sale_price'    => $product->sale_price,
-                ]);
-            }
+        if (!$receipt) {
+            $receipt = new Receipt();
+            $table->status = 'Using';
+            $table->save();
+//---------------------- //Real time
+            $receipt->fill([
+                'table_id' => $table->id,
+                'user_id'   => Auth::guard('api')->id()
+            ]);
+            $receipt->status = 1;
+            $receipt->user_name = $receipt->user->name;
+            $receipt->table_name = $receipt->table->name;
+            $receipt->save();
+        }
+        $receipt->products()->detach();
+        foreach ($request->product_list as $item){
+            $product = Product::find($item['id']);
+            DB::table('receipt_product')->insert([
+                'receipt_id'            => $receipt->id,
+                'product_id'            => $product->id,
+                'quantity'              => $item['quantity'],
+                'note'                  => $item['note'],
+                'product_name'          => $product->name,
+                'product_price'         => $product->price,
+                'product_sale_price'    => $product->sale_price,
+            ]);
+        }
+        $receipt->sale_excluded_price;
+        $receipt->sale_included_price;
+        $result =  $this->result($request, $receipt, $table);
+        $result['message'] = 'success';
+        return response()->json([
+            $result
+        ],201);
+    }
+
+    public function changeState(Table $table){
+        if ($table->user_id){
+            $table->user_id = null;
+        }
+        else{
+            $table->user_id = Auth::guard('api')->id();
+        }
+        if ($table->save()){
             return response()->json([
-                'message' => 'success'
-            ],201);
+                'messages'  =>'success'
+            ],200);
         }
         return response()->json([
-            'message' => 'Not found receipt'
-        ],404);
+            'messages'  =>'fail'
+        ],200);
     }
 }
