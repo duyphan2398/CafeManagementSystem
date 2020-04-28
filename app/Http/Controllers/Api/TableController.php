@@ -82,9 +82,9 @@ class TableController extends ApiBaseController
         $receipt->sale_included_price;
         $result =  $this->result($request, $receipt, $table);
         $result['message'] = 'success';
-        return response()->json([
+        return response()->json(
             $result
-        ],201);
+        ,201);
     }
 
     public function changeStateToNull(Table $table){
