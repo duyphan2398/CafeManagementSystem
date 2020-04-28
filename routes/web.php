@@ -30,7 +30,7 @@ Route::group(['middleware' => 'checkloggedin'], function (){
     /*--------------users----------------*/
     Route::get('users', 'ManageUsers\UserController@index');
     /*------------schedule------------*/
-    Route::get('schedules', 'ManageUsers\ScheduleController@schedule');
+    Route::get('schedules', 'ManageUsers\ScheduleController@schedule')->name('schedules');
 
     /*Warehouse*/
     /*----------material---------*/

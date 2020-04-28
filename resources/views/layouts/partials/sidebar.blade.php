@@ -1,13 +1,13 @@
 <nav>
     <ul class="metismenu" id="menu">
-        <li class="active">
+        {{--<li class="active">
             <a href="javascript:void(0)" aria-expanded="true"><i class="ti-dashboard"></i><span>dashboard</span></a>
             <ul class="collapse">
                 <li class="active"><a href="index.html">ICO dashboard</a></li>
                 <li><a href="index2.html">Ecommerce dashboard</a></li>
                 <li><a href="index3.html">SEO dashboard</a></li>
             </ul>
-        </li>
+        </li>--}}
         <li>
             <a href="" aria-expanded="true">
                 <i class="ti-face-smile"></i>
