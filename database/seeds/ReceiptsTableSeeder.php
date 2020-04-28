@@ -17,7 +17,7 @@ class ReceiptsTableSeeder extends Seeder
     public function run()
     {
         /*Status 3 : Paid*/
-        for ($i = 1; $i <= 30; $i++){
+        for ($i = 1; $i <= 40; $i++){
             $user = User::query()
                 ->inRandomOrder()
                 ->first();
@@ -86,7 +86,7 @@ class ReceiptsTableSeeder extends Seeder
         }
 
         /*Status 2 : Paid*/
-        for ($i = 1; $i <= 2; $i++){
+        for ($i = 1; $i <= 3; $i++){
             $user = User::query()
                 ->inRandomOrder()
                 ->first();
@@ -156,7 +156,7 @@ class ReceiptsTableSeeder extends Seeder
         }
 
 
-        for ($i = 1; $i <= 2; $i++){
+        for ($i = 1; $i <= 4; $i++){
             $user = User::query()
                 ->inRandomOrder()
                 ->first();
@@ -165,7 +165,7 @@ class ReceiptsTableSeeder extends Seeder
                 ->inRandomOrder()
                 ->first();
             $table->status = 'Using';
-            $table->user_id = Arr::random([$user->id, null]);
+            $table->user_id = null;
             $table->save();
 
             $status = 1;
