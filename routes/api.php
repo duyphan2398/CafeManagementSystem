@@ -40,6 +40,10 @@ Route::group(['middleware' => 'auth:api'], function (){
     Route::post('receipts/{receipt}/{product}','ReceiptController@createProductReceipt');
     Route::get('receipts/bill/{receipt}','ReceiptController@billReceipt');
     Route::get('receipts/paid/{receipt}','ReceiptController@paidReceipt');
+    /*Promotions*/
+    Route::get('promotions', 'PromotionController@index');
+    Route::get('promotions/{promotion}','PromotionController@show');
+
 });
 
 
