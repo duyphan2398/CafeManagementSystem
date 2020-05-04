@@ -1,5 +1,5 @@
 <footer>
     <div class="footer-area">
-        <p>©  Duy Phan & Thuan Vu's System ©  Copy template</p>
+        <p>--- Coffee is the best thing to douse the sunrise with ---</p>
     </div>
 </footer>

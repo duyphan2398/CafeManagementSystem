@@ -16,44 +16,45 @@
         }
     </style>
 </head>
-<body class="text-center">
-<h1 class="content">My Cafe Receipt</h1>
-<h4 class="content">Address: 2/12A Tan Thuan Tay District 7 HCM city</h4>
-<h4 class="content">Contact: 0936221326</h4>
-<h5 class="content">Date: {{$receipt['export_at']}}</h5>
-<hr class="w-50">
-<h3>Thank you</h3>
-<table class="table w-75 center">
-    <thead>
-    <tr>
-        <th>Product</th>
-        <th>Quantity</th>
-        <th>Unit price</th>
-        <th>Total price</th>
-        <th>Sale price</th>
-    </tr>
-    </thead>
-    <tbody>
-    @foreach($receipt['products'] as $product)
-        <tr>
-            <td>{{$product['product_name']}}</td>
-            <td>{{$product['quantity']}}</td>
-            <td>{{$product['product_price']}}</td>
-            <td>{{$product['product_price'] * $product['quantity']}}</td>
-            <td>{{($product['product_sale_price']) ? $product['product_sale_price'] * $product['quantity'] : '--'}}</td>
-        </tr>
-    @endforeach
-    </tbody>
-</table>
-<hr>
-<h5>Total: {{$receipt['sale_excluded_price']}}</h5>
-@if(($receipt['sale_included_price']) && ($receipt['sale_included_price'] < $receipt['sale_excluded_price']))
-    <br>
-    <h5>Total include sale : {{$receipt['sale_included_price']}}</h5>
-@endif
-<hr>
-<h4>
-    Customer Service : mycafe@cafemail.com
-</h4>
-</body>
+    <body class="text-center">
+        <img src="{!! asset('images/logo.png') !!}" style="width: 100px; height: 100px" alt="logo">
+        <h1 class="content">My Cafe Receipt</h1>
+        <h4 class="content">Address: 2/12A Tan Thuan Tay District 7 HCM city</h4>
+        <h4 class="content">Contact: 0936221326</h4>
+        <h5 class="content">Date: {{$receipt['export_at']}}</h5>
+        <hr class="w-50">
+        <h3>Thank you</h3>
+        <table class="table w-75 center">
+            <thead>
+            <tr>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Unit price</th>
+                <th>Total price</th>
+                <th>Sale price</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach($receipt['products'] as $product)
+                <tr>
+                    <td>{{$product['product_name']}}</td>
+                    <td>{{$product['quantity']}}</td>
+                    <td>{{$product['product_price']}}</td>
+                    <td>{{$product['product_price'] * $product['quantity']}}</td>
+                    <td>{{($product['product_sale_price']) ? $product['product_sale_price'] * $product['quantity'] : '--'}}</td>
+                </tr>
+            @endforeach
+            </tbody>
+        </table>
+        <hr>
+        <h5>Price excluded sale: {{$receipt['sale_excluded_price']}}</h5>
+        @if(($receipt['sale_included_price']) && ($receipt['sale_included_price'] < $receipt['sale_excluded_price']))
+            <br>
+            <h5>Price included sale: {{$receipt['sale_included_price']}}</h5>
+        @endif
+        <hr>
+        <h4>
+            Customer Service : mycafe@cafemail.com
+        </h4>
+    </body>
 </html>

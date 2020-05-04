@@ -97,6 +97,8 @@ Route::group(['middleware' => 'checkloggedin', 'prefix' => 'axios'], function ()
     Route::resource('receipts', ManageReceipts\ReceiptController::class)->except(['index', 'update']);
     Route::post('getListReceiptFillter', 'ManageReceipts\ReceiptController@getListReceiptFillter');
     Route::post('receipts/export', 'ManageReceipts\ReceiptController@exportReceiptCsv');
+    Route::get('receipts/billing/{receipt}', 'ManageReceipts\ReceiptController@billing');
+    Route::get('receipts/receipt/{receipt}', 'ManageReceipts\ReceiptController@receipt');
     /*----------promotion---------*/
     Route::delete('promotions/{promotion}', 'ManageReceipts\PromotionController@destroy');
     Route::post('promotions', 'ManageReceipts\PromotionController@create');
