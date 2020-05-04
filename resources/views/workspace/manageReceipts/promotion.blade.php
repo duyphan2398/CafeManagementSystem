@@ -61,7 +61,7 @@
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title">New Table</h5>
+                                    <h5 class="modal-title">New Promotion</h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
@@ -167,7 +167,7 @@
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title">Edit Table</h5>
+                            <h5 class="modal-title">Edit Promotion</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -176,8 +176,59 @@
                             <div class="text-center mb-2"  id="loading_modal" style="display: none;">
                                 <img src="{{asset("images/loading.gif")}}" alt="loading..." style="margin-bottom: 190px; margin-top: 187px">
                             </div>
-                            <form id="form_modal" enctype="multipart/form-data">
+                            <form id="form_modal">
+                                <div class="form-group mt-2">
+                                    <label for="name">Name</label>
+                                    <input id="name_edit" name="name" type="text" class="form-control" value="" placeholder="">
+                                </div>
+                                <div class="form-group mt-2" >
+                                    <label for="salePriceEdit">Description</label>
+                                    <textarea id="description_edit" name="description" class="form-control" rows="3"></textarea>
+                                </div>
+                                <div class="form-group mt-2">
+                                    <label for="start_at">Start At</label>
+                                    <input  id="start_at_edit" name="start_at"  type="text" class="form-control" value="">
+                                </div>
+                                <div class="form-group mt-2">
+                                    <label for="end_at">End At</label>
+                                    <input  id="end_at_edit" name="end_at"  type="text" class="form-control" value="`+item.end_at+`">
+                                </div>
+                                <div class="form-group mt-2">
+                                    <label for="sale_percent">Sale percent</label>
+                                    <input   id="sale_percent_edit" min="1" max="100" name="sale_percent" type="number" class="sale_percent form-control" value="">
+                                </div>
+                                <div class="modal-footer mt-3">
+                                    <button type="submit" class="btn btn-primary">Update</button>
+                                </div>
                             </form>
+                            <script>
+                                $('#start_at_edit').attr('autocomplete','off');
+                                $('#start_at_edit').datetimepicker({
+                                    timepicker : false,
+                                    datepicker : true,
+                                    format: 'd-m-Y',
+                                    theme: "dark",
+                                    onShow: function(ct){
+                                        this.setOptions({
+                                            /* maxDate: $('#end_at_new').val() ?  $('#end_at_new').val() : false*/
+                                        })
+                                    }
+                                });
+
+                                $('#end_at_edit').attr('autocomplete','off');
+                                $("#end_at_edit").datetimepicker({
+                                    timepicker : false,
+                                    datepicker : true,
+                                    format: 'd-m-Y',
+                                    theme: "dark",
+                                    onShow: function(ct){
+                                        this.setOptions({
+                                            /* minDate: $('#start_at_new').val() ? $('#start_at_new').val() : false*/
+                                        })
+                                    }
+                                });
+
+                            </script>
                         </div>
                     </div>
                 </div>

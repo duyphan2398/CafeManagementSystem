@@ -36,6 +36,41 @@ function loadList(){
     });
 }
 
+function edit_modal(item){
+    /*let  modal = `
+                    <div class="form-group mt-2">
+                        <label for="name">Name</label>
+                        <input name="name" type="text" class="form-control" value="`+item.name+`" placeholder="Name">
+                    </div>
+                    <div class="form-group mt-2" >
+                        <label for="salePriceEdit">Description</label>
+                        <textarea name="note" class="form-control" rows="3">`+item.description+`</textarea>
+                    </div>
+                    <div class="form-group mt-2">
+                        <label for="start_at">Start At</label>
+                        <input  id="start_at_edit" name="start_at"  type="text" class="form-control" value="`+item.start_at+`">
+                    </div>
+                    <div class="form-group mt-2">
+                        <label for="end_at">End At</label>
+                        <input  id="end_at_edit" name="end_at"  type="text" class="form-control" value="`+item.end_at+`">
+                    </div>
+                    <div class="form-group mt-2">
+                        <label for="sale_percent">Sale percent</label>
+                        <input   min="1" max="100" name="sale_percent" type="number" class="sale_percent form-control" value="">
+                    </div>
+                 <div class="modal-footer mt-3">
+                    <button type="submit" class="btn btn-primary">Update</button>
+                </div>
+                 `;*/
+    $('#name_edit').val(item.name);
+    $('#description_edit').val(item.description);
+    $('#start_at_edit').val(item.start_at);
+    $('#end_at_edit').val(item.end_at);
+    $('#sale_percent_edit').val(item.sale_percent*100);
+    $('#form_modal').show();
+    $('#loading_modal').removeAttr("style").hide();
+}
+
 $(document).ready(function () {
     /*Delete Table*/
     jQuery(document).on('click',".delete",function () {
@@ -84,10 +119,10 @@ $(document).ready(function () {
                 required: true,
             },
             start_at:{
-
+                required: true
             },
             end_at: {
-
+                required: true
             },
             sale_percent: {
                 required: true,
@@ -104,15 +139,14 @@ $(document).ready(function () {
             var formData = new FormData(form);
             const config = {
                 headers: {
-                    'content-type': 'multipart/form-data',
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
                 }
             };
-            axios.post(location.origin +'/axios/tables' , formData, config)
+            axios.post(location.origin +'/axios/promotions' , formData, config)
                 .then(function (response) {
                     loadList();
-                    $('#newTableForm').trigger("reset");
-                    $('#newTableModal').modal('hide');
+                    $('#newPromotionForm').trigger("reset");
+                    $('#newPromotionModal').modal('hide');
                     toastr.success("Created Successfully");
                 })
                 .catch(function (error) {
@@ -121,6 +155,70 @@ $(document).ready(function () {
         }
     });
 
+    /*Edit*/
+    jQuery(document).on('click',".edit",function () {
+        promotion_id_modal = this.name;
+        $('#form_modal').removeAttr("style").hide();
+        $('#loading_modal').show();
+        $('#modal').modal('show');
+        axios.get(location.origin + '/axios/promotions/'+ promotion_id_modal
+        ).then(function (response) {
+            $('#loading_modal').removeAttr("style").hide();
+            edit_modal(response.data.promotion);
+        })
+    });
+
+    /*Form Edit Submit*/
+    $("#form_modal")
+        .submit(function(e) {
+            e.preventDefault();
+        })
+        .validate({
+            rules: {
+                name: {
+                    required: true,
+                    maxlength: 255
+                },
+                description: {
+                    required: true,
+                },
+                start_at:{
+                    required: true
+                },
+                end_at: {
+                    required: true
+                },
+                sale_percent: {
+                    required: true,
+                    min: 1,
+                    max: 100,
+                }
+            },
+            messages: {
+                name: {
+                    required: "Please enter the name",
+                    maxlength: "Max length is 255 characters"
+                },
+            },
+            submitHandler:  function(form) {
+                var formData = new FormData(form);
+                const config = {
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    }
+                };
+                axios.post(location.origin +'/axios/promotions/'+promotion_id_modal, formData, config)
+                    .then(function (response) {
+                        loadList();
+                        $('#modal').modal('hide');
+                        toastr.success("Updated Successfully");
+                    })
+                    .catch(function (error) {
+                        $('#modal').modal('hide');
+                        toastr.error("Updated Fails");
+                    });
+            }
+        });
 });
 
 $(window).on('load', function () {

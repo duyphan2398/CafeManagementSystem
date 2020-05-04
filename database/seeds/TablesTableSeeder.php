@@ -25,6 +25,16 @@ class TablesTableSeeder extends Seeder
             'note'  => 'The right top table'
         ]);
         Table::create([
+            'name'  => 'A4',
+            'note'  => 'The first downstair'
+        ]);
+        Table::create([
+            'name'  => 'A5',
+            'note'  => 'The second downstair'
+        ]);
+
+
+        Table::create([
             'name'  => 'B1',
             'note'  => 'The left bottom table'
         ]);
@@ -35,6 +45,14 @@ class TablesTableSeeder extends Seeder
         Table::create([
             'name'  => 'B3',
             'note'  => 'The right bottom table'
+        ]);
+        Table::create([
+            'name'  => 'B4',
+            'note'  => 'The first upstair'
+        ]);
+        Table::create([
+            'name'  => 'B5',
+            'note'  => 'The second upstair'
         ]);
     }
 }

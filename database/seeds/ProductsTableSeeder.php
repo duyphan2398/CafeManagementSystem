@@ -6,7 +6,7 @@ use App\Models\Product;
 use App\Models\Material;
 class ProductsTableSeeder extends Seeder
 {
-    protected $total = 20;
+    protected $total = 30;
     /**
      * Run the database seeds.
      *

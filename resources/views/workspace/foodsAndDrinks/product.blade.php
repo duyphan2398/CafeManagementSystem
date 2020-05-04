@@ -163,6 +163,7 @@
                             <th>Name</th>
                             <th>Price</th>
                             <th>Sale_Price</th>
+                            <th>Promotion ID</th>
                             <th>Image</th>
                             <th>Ingredients</th>
                             <th>Action</th>

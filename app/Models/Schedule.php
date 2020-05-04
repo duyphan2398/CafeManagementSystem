@@ -35,5 +35,7 @@ class Schedule extends Model
     public function getDateAttribute($value){
         return  Carbon::parse($value)->format('d-m-Y');
     }
-
+    public function getTotalTimeAttribute($value){
+        return  round($value,2);
+    }
 }

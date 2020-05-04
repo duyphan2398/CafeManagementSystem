@@ -6,8 +6,8 @@ function addText(item){
                                 <td>`+item.id+`</td>
                                 <td>`+item.name+`</td>
                                 <td>`+item.price+`</td>
-                                <td>`+item.sale_price+`</td>
-                                <td>`+item.promotion_id+`</td>
+                                <td>`+((item.sale_price) ? (item.sale_price) : ('--'))+`</td>
+                                <td>`+((item.promotion_id) ? (item.promotion_id): ('--'))+`</td>
                                 <td>
                                     <img style="width: 60px; height: 60px" src="`+location.origin+`/images/products/`+item.url+`" alt="image_product">
                                 </td>
@@ -47,7 +47,7 @@ function edit_modal(item, promotions){
                     <div class="form-group mt-2" >
                         <label for="promotionEdit">Promotion</label>
                          <select class="form-control" name="promotion_id" id="">
-                             <option value="null" selected>Not Setting</option>
+                             <option value="" selected>Not Setting</option>
                                 `;
 
     promotions.forEach(function (promotion) {

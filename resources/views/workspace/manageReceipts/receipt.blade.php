@@ -1,7 +1,7 @@
 @extends('layouts.layout')
 
 @section('title')
-    List Of Schedules
+    List Of Receipts
 @endsection
 
 @section('links')
@@ -13,10 +13,11 @@
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
     <script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    <script src="https://printjs-4de6.kxcdn.com/print.min.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://printjs-4de6.kxcdn.com/print.min.css">
 @endsection
 
 @section('content')
-
     <div class="main-content">
         <!-- header area start -->
         <div class="header-area">
