@@ -41,7 +41,7 @@ class ClearReceipts extends Command
         if ($this->confirm('Are you sure ?')) {
             $this->info('Processing...');
             $file = new Filesystem;
-            $file->cleanDirectory('storage/app/public/export/pdf/paid');
+            $file->cleanDirectory('public/export/pdf/paid');
             $this->info('Successfully !');
         }
     }

@@ -40,12 +40,14 @@ class ClearImageProducts extends Command
     public function handle()
     {
         if ($this->confirm('Are you sure ?')) {
+            $this->info('Processing...');
             $exclude = 'default_url_product.png';
             $filesForDelete = array_filter(glob("public/images/products/*"), function ($file) use ($exclude) {
                 return false === strpos($file, $exclude);
             });
             $file = new Filesystem;
             $file->delete($filesForDelete);
+            $this->info('Successfully !');
         }
     }
 }

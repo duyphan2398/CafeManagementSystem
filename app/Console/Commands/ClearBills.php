@@ -41,7 +41,7 @@ class ClearBills extends Command
         if ($this->confirm('Are you sure ?')) {
             $this->info('Processing...');
             $file = new Filesystem;
-            $file->cleanDirectory('storage/app/public/export/pdf/bill');
+            $file->cleanDirectory('public/export/pdf/bill');
             $this->info('Successfully !');
         }
     }
