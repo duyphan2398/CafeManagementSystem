@@ -23,7 +23,8 @@ Route::group(['middleware' => 'auth:api'], function (){
     Route::get('users', 'Auth\LoginController@user');
     Route::post('logout', 'Auth\LoginController@logout');
     /*Schedules*/
-    Route::get('schedules/{user}', 'ScheduleController@getSchdulesByUserId');
+    Route::get('schedules', 'ScheduleController@getSchdulesByUserId');
+    Route::get('schedules/filter', 'ScheduleController@getSchdulesFilter');
     /*Product*/
     Route::apiResource('products', ProductController::class)->only('index');
     /*Table*/
@@ -43,7 +44,6 @@ Route::group(['middleware' => 'auth:api'], function (){
     /*Promotions*/
     Route::get('promotions', 'PromotionController@index');
     Route::get('promotions/{promotion}','PromotionController@show');
-
 });
 
 
