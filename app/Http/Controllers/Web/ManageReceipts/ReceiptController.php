@@ -90,16 +90,16 @@ class ReceiptController extends WebBaseController
                 $receipt->status = 2;
                 //in PDF kèm theo
                 $pdf = PDF2::loadView('PDF.bill', ['receipt'=>(new \App\Transformers\ReceiptTranformer)->transform($receipt)]);
-                $url = 'public\export\pdf\bill\\';
-                Storage::delete($url.$receipt->id.'.pdf');
-                Storage::put($url.$receipt->id.'.pdf', $pdf->output());
+                $url = '\bill\\';
+                Storage::disk('public')->delete($url.$receipt->id.'.pdf');
+                Storage::disk('public')->put($url.$receipt->id.'.pdf', $pdf->output());
 //------------------------------------   // Real time
                 $receipt->save();
                 DB::commit();
                 return response()->json([
                     'receipt' => (new ReceiptTranformer)->transform($receipt),
                     'bill'    => $receipt->id.'.pdf',
-                    'host'    => '/storage/export/pdf/bill/',
+                    'host'    => '/export/pdf/bill/',
                     'message' => 'success'
                 ],200);
 
@@ -128,9 +128,9 @@ class ReceiptController extends WebBaseController
                 $receipt->status = 3;
                 //in PDF kèm theo
                 $pdf = PDF2::loadView('PDF.paid', ['receipt'=>(new \App\Transformers\ReceiptTranformer)->transform($receipt)]);
-                $url = 'public\export\pdf\paid\\';
-                Storage::delete($url.$receipt->id.'.pdf');
-                Storage::put($url.$receipt->id.'.pdf', $pdf->output());
+                $url = '\paid\\';
+                Storage::disk('public')->delete($url.$receipt->id.'.pdf');
+                Storage::disk('public')->put($url.$receipt->id.'.pdf', $pdf->output());
 //------------------------------------   // Real time
                 $table = $receipt->table;
                 $table->status = 'Empty';
@@ -140,7 +140,7 @@ class ReceiptController extends WebBaseController
                 return response()->json([
                     'receipt' => (new ReceiptTranformer)->transform($receipt),
                     'paid'    => $receipt->id.'.pdf',
-                    'host'    => '/storage/export/pdf/paid/',
+                    'host'    => '/export/pdf/paid/',
                     'message' => 'success'
                 ],200);
 
