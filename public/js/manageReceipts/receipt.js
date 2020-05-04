@@ -17,9 +17,28 @@ function addText(item){
             }
 
 
-    result +=                    `<td>`+item.billing_at+`</td>
-                        <td>`+item.receipt_at+`</td>
-                        <td>`+item.export_at+`</td>
+    result +=          `<td>
+
+                            <button name='`+item.id+`' class="billing btn btn-outline-success mr-1">
+                                <ti class ='ti-write'></ti>
+                             </button>
+                             <div name="`+item.id+`" class="text-center mb-2 loadingBilling"  style="display: none;">
+                                <img src="`+location.origin+`/images/loading.gif" alt="loading..." class="mr-1" style="width: 45px; height: 45px;">
+                            </div>
+                            `+((item.billing_at) ? (item.billing_at) : (''))+`
+                        </td>
+                        <td>
+                            <div name="`+item.id+`" class="text-center mb-2 loadingReceipt"  style="display: none;">
+                                <img src="`+location.origin+`/images/loading.gif" alt="loading..."  class="mr-1" style="width: 45px; height: 45px;">
+                            </div>
+                            <button  name='`+item.id+`'class="receipt btn btn-outline-success mr-1">
+                                <ti class ='ti-receipt'></ti>
+                             </button>`+
+                            ((item.receipt_at) ? (item.receipt_at) : ('')) +`
+                        </td>
+                        <td class="pt-3">
+                            `+
+                            ((item.export_at) ? (item.export_at) : ('--'))+`</td>
                         <td>`+item.sale_excluded_price+`</td>
                         <td>`+item.sale_included_price+`</td>
                         <td>
@@ -153,6 +172,60 @@ $(document).ready(function () {
             link.click();
             link.remove();
         });
+    });
+
+    jQuery(document).on('click',".billing",function () {
+        let receipt_id = this.name;
+        $(this).removeAttr("style").hide();
+        $(".loadingBilling[name='"+receipt_id+"']").css('display', 'inline-block');
+        axios.get(location.origin + '/axios/receipts/billing/'+receipt_id)
+            .then(function (response) {
+                loadListReceiptFillter();
+                loadList();
+                toastr.success("Billing Successfully !");
+                let link = document.createElement('a');
+                link.href = response.data.host+response.data.bill;
+                link.setAttribute("download",  'Bill-'+response.data.receipt.id+'.pdf');
+                link.click();
+                link.remove();
+                printJS(response.data.host+response.data.bill);
+        })
+            .catch(function (error) {
+                $(".loadingBilling[name='"+receipt_id+"']").removeAttr("style").hide();
+                $(".billing[name='"+receipt_id+"']").show();
+                if (error.response.status == 400) {
+                    toastr.error('The Receipt Had been payed');
+                }else{
+                    toastr.error('Billing Fails');
+                }
+        })
+    });
+
+    jQuery(document).on('click',".receipt",function () {
+        let receipt_id = this.name;
+        $(this).removeAttr("style").hide();
+        $(".loadingReceipt[name='"+receipt_id+"']").css('display', 'inline-block');
+        axios.get(location.origin + '/axios/receipts/receipt/'+receipt_id)
+            .then(function (response) {
+                loadListReceiptFillter();
+                loadList();
+                toastr.success("Receipt Successfully !");
+                let link = document.createElement('a');
+                link.href = response.data.host+response.data.paid;
+                link.setAttribute("download",  'Receipt-'+response.data.receipt.id+'.pdf');
+                link.click();
+                link.remove();
+                printJS(response.data.host+response.data.paid);
+            })
+            .catch(function (error) {
+                $(".loadingReceipt[name='"+receipt_id+"']").removeAttr("style").hide();
+                $(".receipt[name='"+receipt_id+"']").show();
+                if (error.response.status == 400) {
+                    toastr.error('The Receipt Had not been billed');
+                }else{
+                    toastr.error('Receipt Fails');
+                }
+            })
     });
 });
 

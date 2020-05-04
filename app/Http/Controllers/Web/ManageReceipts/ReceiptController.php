@@ -7,9 +7,12 @@ namespace App\Http\Controllers\Web\ManageReceipts;
 use App\Exports\ReceiptExport;
 use App\Http\Controllers\WebBaseController;
 use App\Models\Receipt;
+use App\Transformers\ReceiptTranformer;
+use Barryvdh\DomPDF\Facade as PDF2;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class ReceiptController extends WebBaseController
 {
@@ -77,5 +80,81 @@ class ReceiptController extends WebBaseController
         $from = $request->fromFillter;
         $to = $request->toFillter;
         return (new ReceiptExport($from, $to))->download('ReceiptList('.$from.'-To-'.$to.').csv', \Maatwebsite\Excel\Excel::CSV,  ['Content-Type' => 'text/csv']);
+    }
+
+    public function billing(Request $request, Receipt $receipt){
+        if ($receipt->status == 1 || $receipt->status == 2){
+            DB::beginTransaction();
+            try {
+                $receipt->billing_at = Carbon::now();
+                $receipt->status = 2;
+                //in PDF kèm theo
+                $pdf = PDF2::loadView('PDF.bill', ['receipt'=>(new \App\Transformers\ReceiptTranformer)->transform($receipt)]);
+                $url = 'public\export\pdf\bill\\';
+                Storage::delete($url.$receipt->id.'.pdf');
+                Storage::put($url.$receipt->id.'.pdf', $pdf->output());
+//------------------------------------   // Real time
+                $receipt->save();
+                DB::commit();
+                return response()->json([
+                    'receipt' => (new ReceiptTranformer)->transform($receipt),
+                    'bill'    => $receipt->id.'.pdf',
+                    'host'    => '/storage/export/pdf/bill/',
+                    'message' => 'success'
+                ],200);
+
+            }catch (\Exception $exception){
+                DB::rollBack();
+                return response()->json([
+                    'message'   => 'fail - server error'
+                ], 404);
+            }
+        }
+        else{
+            return response()->json([
+                'message' => 'The receipt has not suitable status - status 1 and 2 are accept to delete'
+            ],400);
+        }
+    }
+
+    public function receipt(Request $request, Receipt $receipt){
+        if ($receipt->status == 2 || $receipt->status == 3 ){
+            DB::beginTransaction();
+            try {
+                if ($receipt->status == 2) {
+                    $receipt->receipt_at = Carbon::now();
+                }
+                $receipt->export_at = Carbon::now();
+                $receipt->status = 3;
+                //in PDF kèm theo
+                $pdf = PDF2::loadView('PDF.paid', ['receipt'=>(new \App\Transformers\ReceiptTranformer)->transform($receipt)]);
+                $url = 'public\export\pdf\paid\\';
+                Storage::delete($url.$receipt->id.'.pdf');
+                Storage::put($url.$receipt->id.'.pdf', $pdf->output());
+//------------------------------------   // Real time
+                $table = $receipt->table;
+                $table->status = 'Empty';
+                $receipt->save();
+                $table->save();
+                DB::commit();
+                return response()->json([
+                    'receipt' => (new ReceiptTranformer)->transform($receipt),
+                    'paid'    => $receipt->id.'.pdf',
+                    'host'    => '/storage/export/pdf/paid/',
+                    'message' => 'success'
+                ],200);
+
+            }catch (\Exception $exception){
+                DB::rollBack();
+                return response()->json([
+                    'message'   => 'fail - server error'
+                ], 404);
+            }
+        }
+        else{
+            return response()->json([
+                'message' => 'The receipt has not suitable status - status 2 and 3 are accept to delete'
+            ],400);
+        }
     }
 }

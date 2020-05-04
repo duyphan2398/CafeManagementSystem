@@ -17,6 +17,7 @@
     </style>
 </head>
     <body class="text-center">
+        <img src="{!! asset('images/logo.png') !!}" style="width: 100px; height: 100px" alt="logo">
         <h1 class="content">My Cafe Bill</h1>
         <h4 class="content">Address: 2/12A Tan Thuan Tay District 7 HCM city</h4>
         <h4 class="content">Contact: 0936221326</h4>
@@ -40,16 +41,16 @@
                     <td>{{$product['quantity']}}</td>
                     <td>{{$product['product_price']}}</td>
                     <td>{{$product['product_price'] * $product['quantity']}}</td>
-                    <td>{{($product['product_sale_price']) ? $product['product_sale_price'] * $product['quantity'] : '--'}}</td>
+                    <td>{{($product['product_sale_price']) ? ($product['product_sale_price'] * $product['quantity']) : ('--')}}</td>
                 </tr>
             @endforeach
             </tbody>
         </table>
         <hr>
-        <h5>Total: {{($receipt['sale_excluded_price']}}</h5>
+        <h5>Price excluded sale: {{$receipt['sale_excluded_price']}}</h5>
         @if(($receipt['sale_included_price']) && ($receipt['sale_included_price'] < $receipt['sale_excluded_price']))
             <br>
-            <h5>{{$receipt['sale_included_price']}}</h5>
+            <h5>Price included sale: {{$receipt['sale_included_price']}}</h5>
         @endif
         <hr>
         <h4>
