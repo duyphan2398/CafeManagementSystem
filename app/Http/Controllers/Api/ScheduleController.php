@@ -27,7 +27,7 @@ class ScheduleController extends ApiBaseController
         });
 
         return response()->json([
-            'schedule_list'            => $query->get(),
+            'schedule_list'       => $query->orderBy('date')->get(),
             'message'             => 'success',
             'total_schedules'     => $query->count()
         ],200);
