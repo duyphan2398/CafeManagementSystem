@@ -35,7 +35,7 @@ Route::group(['middleware' => 'checkloggedin'], function (){
     /*Warehouse*/
     /*----------material---------*/
     Route::get('materials','Warehouse\MaterialController@index');
-
+    Route::get('statistics', 'Warehouse\StatisticController@index');
     /*FoodsAndDrink*/
     /*----------product---------*/
     Route::get('products', 'FoodsAndDrinks\ProductController@index');
@@ -81,6 +81,8 @@ Route::group(['middleware' => 'checkloggedin', 'prefix' => 'axios'], function ()
     Route::patch('material/update', 'Warehouse\MaterialController@update');
     Route::delete('material/delete', 'Warehouse\MaterialController@delete');
     Route::get('material/search','Warehouse\MaterialController@search');
+    /*----------statistic---------*/
+    Route::get('statistics/diagram1','Warehouse\StatisticController@dataDiagram1');
 
     /*FoodsAndDrink*/
     /*----------product---------*/

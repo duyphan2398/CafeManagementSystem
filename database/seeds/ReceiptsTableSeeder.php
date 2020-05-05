@@ -17,7 +17,7 @@ class ReceiptsTableSeeder extends Seeder
     public function run()
     {
         /*Status 3 : Paid*/
-        for ($i = 1; $i <= 40; $i++){
+        for ($i = 1; $i <= 200; $i++){
             $user = User::query()
                 ->inRandomOrder()
                 ->first();
@@ -28,7 +28,7 @@ class ReceiptsTableSeeder extends Seeder
             $year = Carbon::now()->year;
             $month = Carbon::now()->month;
             $date  = Carbon::now()->day;
-            $date_time = Carbon::create($year, $month - Arr::random([0,1]), rand(1,$date), 12, 15, 00);
+            $date_time = Carbon::create($year, $month - Arr::random([0,1,2,3,4]), rand(1,$date), 12, 15, 00);
             /*-------------------------------------------*/
             $status = 3;
             $billing_at = $date_time->toDateTimeString();

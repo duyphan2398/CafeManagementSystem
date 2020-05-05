@@ -82,6 +82,7 @@
 .card-body {
     padding: 25.6px;
     padding: 1.6rem;
+    text-align: center;
 }
 
 .h-full {

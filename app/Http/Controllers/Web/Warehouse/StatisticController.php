@@ -1,0 +1,43 @@
+<?php
+
+
+namespace App\Http\Controllers\Web\Warehouse;
+
+
+use App\Http\Controllers\WebBaseController;
+use App\Models\Receipt;
+use Carbon\Carbon;
+
+class StatisticController extends WebBaseController
+{
+    public function index(){
+        return view('workspace.warehouse.statistic');
+    }
+
+    public function dataDiagram1(){
+        $data = [];
+        $countMonth = Carbon::today()->subMonths(12);
+
+        for ($i = 1; $i<=13; $i++){
+            $receipts = Receipt::whereYear('created_at', '=', $countMonth->year)
+                             ->whereMonth('created_at', '=', $countMonth->month)
+                             ->get();
+            $sale_excluded_total = 0;
+            $sale_included_total = 0;
+            foreach ($receipts as $receipt){
+                $sale_excluded_total+= $receipt->sale_excluded_price;
+                $sale_included_total+=$receipt->sale_included_price;
+            }
+            array_push($data, [
+                'month' => $countMonth->month,
+                'total_receipts' => $receipts->count(),
+                'sale_exluded_total' =>$sale_excluded_total,
+                'sale_included_total' => $sale_included_total,
+            ]);
+            $countMonth->addMonth();
+        }
+
+        return $data;
+    }
+
+}
