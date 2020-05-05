@@ -24,7 +24,6 @@ Route::group(['middleware' => 'auth:api'], function (){
     Route::post('logout', 'Auth\LoginController@logout');
     /*Schedules*/
     Route::get('schedules', 'ScheduleController@getSchdulesByUserId');
-    Route::get('schedules/filter', 'ScheduleController@getSchdulesFilter');
     /*Product*/
     Route::apiResource('products', ProductController::class)->only('index');
     /*Table*/
