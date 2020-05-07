@@ -21,7 +21,7 @@ class ScheduleController extends ApiBaseController
 
         /*Count date from start to end*/
         $from = strtotime($request->start_at);
-        $to = strtotime($request->end_at);
+        $to = strtotime($request->end_at.'+1 day');
         $start = new DateTime(date('Y-m-d', $from));
         $end = new DateTime(date('Y-m-d', $to));
         $interval = new DateInterval('P1D');
