@@ -59,7 +59,7 @@ class ScheduleController extends ApiBaseController
             $schedule =Schedule::query()->where('user_id', $user->id)->where('date', '=', Carbon::parse($date)->format('Y-m-d'))->first();
 
             if ($schedule){
-                $data['user_id']       = $user->id;
+                $data['user_id']       = $schedule->user_id;
                 $data['start_time']    = $schedule->start_time;
                 $data['end_time']      = $schedule->end_time;
                 $data['date']          = $schedule->date;
