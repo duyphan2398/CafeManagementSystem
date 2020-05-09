@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Web\Warehouse;
 use App\Http\Controllers\WebBaseController;
 use App\Models\Product;
 use App\Models\Receipt;
+use App\Models\Schedule;
 use Carbon\Carbon;
 
 class StatisticController extends WebBaseController
@@ -69,5 +70,28 @@ class StatisticController extends WebBaseController
             'data'  => $result,
             'total' => $total
         ],200);
+    }
+
+    public function dataDiagram3(){
+        $data = [];
+        $countMonth = Carbon::today()->subMonths(12);
+
+        for ($i = 1; $i<=13; $i++){
+            $schedules = Schedule::whereYear('date', '=', $countMonth->year)
+                ->whereMonth('created_at', '=', $countMonth->month)
+                ->get();
+            $total_time = 0;
+            foreach ($schedules as $schedule){
+                $total_time+= $schedule->total_time;
+
+            }
+            array_push($data, [
+                'month' => $countMonth->format('M/Y'),
+                'total_schedules' => $total_time,
+                'total' => $schedules->count()
+            ]);
+            $countMonth->addMonth();
+        }
+        return $data;
     }
 }

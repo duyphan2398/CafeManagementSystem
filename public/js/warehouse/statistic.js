@@ -184,3 +184,93 @@ function getRandomColor() {
     }
     return color;
 }
+
+
+axios.get(location.origin + '/axios/statistics/diagram3')
+    .then(function (response) {
+        console.log(response);
+        var label = [];
+        var dataTotal = [];
+        var totalSchedules = [];
+        $('#loadingDiagram3').removeAttr("style").hide();
+        $('#amlinechart3').show();
+
+        response.data.forEach(function (item) {
+            label.push(item.month);
+            totalSchedules.push(item.total_schedules);
+            dataTotal.push(item.total);
+        });
+        var ctx = document.getElementById('amlinechart3').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: label,
+                datasets: [{
+                    label: 'Total Hours',
+                    data: dataTotal,
+                    backgroundColor: [
+                        'rgba(43,231,13,0.5)',
+                        'rgba(43,231,13,0.5)',
+                        'rgba(43,231,13,0.5)',
+                        'rgba(43,231,13,0.5)',
+                        'rgba(43,231,13,0.5)',
+                        'rgba(43,231,13,0.5)',
+                        'rgba(43,231,13,0.5)',
+                        'rgba(43,231,13,0.5)',
+                        'rgba(43,231,13,0.5)',
+                        'rgba(43,231,13,0.5)',
+                        'rgba(43,231,13,0.5)',
+                        'rgba(43,231,13,0.5)',
+                        'rgba(43,231,13,0.5)'
+                    ],
+                    borderColor: [
+                        'rgb(43,231,13)',
+                        'rgb(43,231,13)',
+                        'rgb(43,231,13)',
+                        'rgb(43,231,13)',
+                        'rgb(43,231,13)',
+                        'rgb(43,231,13)',
+                        'rgb(43,231,13)',
+                        'rgb(43,231,13)',
+                        'rgb(43,231,13)',
+                        'rgb(43,231,13)',
+                        'rgb(43,231,13)',
+                        'rgb(43,231,13)',
+                        'rgb(43,231,13)'
+                    ],
+                    borderWidth: 1,
+                    hoverBorderWidth: 3,
+                }]
+            },
+            options: {
+                title: {
+                    display: true,
+                    text: 'Total Hours From This Month Last Year To This Month'
+                },
+                scales: {
+                    yAxes: [{
+                        scaleLabel: {
+                            display: true,
+                            labelString: "Hours",
+                            fontFamily: "TimeNewRoman",
+                            fontColor: "black",
+                        },
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }],
+                    xAxes: [{
+                        scaleLabel: {
+                            display: true,
+                            labelString: "Month/Year",
+                            fontFamily: "TimeNewRoman",
+                            fontColor: "black",
+                        },
+                    }]
+                }
+            }
+        });
+    }).catch(function (error) {
+    $('#loadingDiagram3').removeAttr("style").hide();
+    $('#amlinechart3').show();
+});

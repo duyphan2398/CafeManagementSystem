@@ -38,7 +38,7 @@
         <div class="main-content-inner">
             <!-- line chart start -->
             <div class="row">
-                <div class="col-lg-6 mt-5">
+                <div class="col-lg-12 mt-5">
                     <div class="card text-center">
                         <div class="card-body">
                             <div class="text-center mb-2"  id="loadingDiagram1" style="display: block;">
@@ -48,7 +48,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-6 mt-5">
+                <div class="col-lg-12 mt-5">
                     <div class="card ">
                         <div class="card-body">
                             <div class="text-center mb-2"  id="loadingDiagram2" style="display: inline-block;">
@@ -58,31 +58,15 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-6 mt-5">
+                <div class="col-lg-12 mt-5">
                     <div class="card">
                         <div class="card-body">
-                            <div id="amlinechart3"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6 mt-5">
-                    <div class="card">
-                        <div class="card-body">
-                            <div id="amlinechart4"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6 mt-5">
-                    <div class="card">
-                        <div class="card-body">
-                            <div id="amlinechart5"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6 mt-5">
-                    <div class="card">
-                        <div class="card-body">
-                            <div id="verview-shart"></div>
+                            <div class="card-body">
+                                <div class="text-center mb-2"  id="loadingDiagram3" style="display: inline-block;">
+                                    <img src="{{asset("images/loading.gif")}}" alt="loading..." style="height: 70px;">
+                                </div>
+                                <canvas id="amlinechart3" style="display: none"></canvas>
+                            </div>
                         </div>
                     </div>
                 </div>

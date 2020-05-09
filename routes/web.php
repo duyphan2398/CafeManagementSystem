@@ -84,7 +84,7 @@ Route::group(['middleware' => 'checkloggedin', 'prefix' => 'axios'], function ()
     /*----------statistic---------*/
     Route::get('statistics/diagram1','Warehouse\StatisticController@dataDiagram1');
     Route::get('statistics/diagram2','Warehouse\StatisticController@dataDiagram2');
-
+    Route::get('statistics/diagram3','Warehouse\StatisticController@dataDiagram3');
     /*FoodsAndDrink*/
     /*----------product---------*/
     Route::resource('products', FoodsAndDrinks\ProductController::class)->except(['index', 'update']);
