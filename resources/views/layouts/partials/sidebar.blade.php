@@ -1,5 +1,6 @@
 <nav>
     <ul class="metismenu" id="menu">
+        @can('viewAny', \App\Models\User::class)
         <li>
             <a href="" aria-expanded="true">
                 <i class="ti-face-smile"></i>
@@ -16,6 +17,7 @@
                 </li>
             </ul>
         </li>
+        @endcan
         <li>
             <a href="" aria-expanded="true">
                 <i class="ti-cup"></i>

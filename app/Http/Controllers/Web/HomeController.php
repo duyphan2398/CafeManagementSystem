@@ -3,6 +3,6 @@ namespace App\Http\Controllers\Web;
 use App\Http\Controllers\Controller;
 class HomeController extends Controller{
     public function index(){
-        return redirect()->route('schedules');
+        return redirect()->route('receipts');
     }
 }

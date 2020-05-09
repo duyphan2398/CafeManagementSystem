@@ -28,7 +28,7 @@ Route::group(['middleware' => 'checkloggedin'], function (){
 
     /*Manage Users*/
     /*--------------users----------------*/
-    Route::get('users', 'ManageUsers\UserController@index');
+    Route::get('users', 'ManageUsers\UserController@index')->middleware('can:viewAny, App\Models\User');
     /*------------schedule------------*/
     Route::get('schedules', 'ManageUsers\ScheduleController@schedule')->name('schedules');
 
@@ -44,7 +44,7 @@ Route::group(['middleware' => 'checkloggedin'], function (){
     /*----------table---------*/
     Route::get('tables', 'ManageReceipts\TableController@index');
     /*----------receipt---------*/
-    Route::get('receipts', 'ManageReceipts\ReceiptController@index');
+    Route::get('receipts', 'ManageReceipts\ReceiptController@index')->name('receipts');
     /*----------promotion---------*/
     Route::get('promotions', 'ManageReceipts\PromotionController@index');
 });
@@ -55,13 +55,13 @@ Route::group(['middleware' => 'checkloggedin', 'prefix' => 'axios'], function ()
 
     /*Manage Users*/
     /*----------users---------*/
-    Route::get('users', 'ManageUsers\UserController@show');
-    Route::delete('user/delete', 'ManageUsers\UserController@delete');
-    Route::delete('user/forceDelete', 'ManageUsers\UserController@forceDelete');
-    Route::get('user', 'ManageUsers\UserController@getUser');
-    Route::patch('user/update','ManageUsers\UserController@update');
-    Route::post('user/new','ManageUsers\UserController@create');
-    Route::get('user/search', 'ManageUsers\UserController@search');
+    Route::get('users', 'ManageUsers\UserController@show')->middleware('can:view, App\Models\User');
+    Route::delete('user/delete', 'ManageUsers\UserController@destroy')->middleware('can:delete, App\Models\User');
+    Route::delete('user/forceDelete', 'ManageUsers\UserController@forceDelete')->middleware('can:forceDelete, App\Models\User');
+    Route::get('user', 'ManageUsers\UserController@getUser')->middleware('can:getUser, App\Models\User');
+    Route::patch('user/update','ManageUsers\UserController@edit')->middleware('can:update, App\Models\User');
+    Route::post('user/new','ManageUsers\UserController@create')->middleware('can:create, App\Models\User');
+    Route::get('user/search', 'ManageUsers\UserController@search')->middleware('can:search, App\Models\User');
     /*----------schedule---------*/
     Route::post('schedule/new','ManageUsers\ScheduleController@createSchedule');
     Route::get('getAllUsersWithoutTrashed', 'ManageUsers\ScheduleController@getAllUsersWithoutTrashed');
