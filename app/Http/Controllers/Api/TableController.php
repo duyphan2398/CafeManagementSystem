@@ -41,7 +41,7 @@ class TableController extends ApiBaseController
 
         $table->user_id = Auth::guard('api')->id();
         $table->save();
-        event(new ChangeStateTableEvent($this->result($request, $receipt, $table)));
+        event(new ChangeStateTableEvent('A table is chosen by a user'));
         if ($receipt){
             return response()->json($this->result($request, $receipt, $table),200);
         }
@@ -58,7 +58,6 @@ class TableController extends ApiBaseController
             $receipt = new Receipt();
             $table->status = 'Using';
             $table->save();
-//---------------------- //Real time
             $receipt->fill([
                 'table_id' => $table->id,
                 'user_id'   => Auth::guard('api')->id()
@@ -85,12 +84,13 @@ class TableController extends ApiBaseController
         $receipt->sale_included_price;
         $result =  $this->result($request, $receipt, $table);
         $result['message'] = 'success';
+        event(new ChangeStateTableEvent('A table updated'));
         return response()->json(
             $result
         ,201);
     }
 
-    public function changeStateToNull(Table $table){
+    public function changeStateToNull(Request $request, Table $table){
         if ($table->user_id){
             $table->user_id = null;
         }
@@ -100,12 +100,13 @@ class TableController extends ApiBaseController
            ], 400);
         }
         if ($table->save()){
+            event(new ChangeStateTableEvent('Change state User_using to null'));
             return response()->json([
                 'messages'  =>'success'
             ],200);
         }
         return response()->json([
-            'messages'  =>'fail to sale user using to null'
+            'messages'  =>'fail to save the using user  to null'
         ],400);
     }
 }
