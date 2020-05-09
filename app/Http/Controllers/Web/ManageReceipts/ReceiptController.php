@@ -4,6 +4,7 @@
 namespace App\Http\Controllers\Web\ManageReceipts;
 
 
+use App\Events\ChangeStateTableEvent;
 use App\Exports\ReceiptExport;
 use App\Http\Controllers\WebBaseController;
 use App\Models\Receipt;
@@ -64,6 +65,7 @@ class ReceiptController extends WebBaseController
             }
             $receipt->delete();
             DB::commit();
+            event(new ChangeStateTableEvent('A table is deleted'));
             return response()->json([
                 'message' => 'success'
             ],200);
@@ -93,7 +95,6 @@ class ReceiptController extends WebBaseController
                 $url = '\bill\\';
                 Storage::disk('public')->delete($url.$receipt->id.'.pdf');
                 Storage::disk('public')->put($url.$receipt->id.'.pdf', $pdf->output());
-//------------------------------------   // Real time
                 $receipt->save();
                 DB::commit();
                 return response()->json([
@@ -126,17 +127,17 @@ class ReceiptController extends WebBaseController
                 }
                 $receipt->export_at = Carbon::now();
                 $receipt->status = 3;
-                //in PDF kèm theo
+                //export PDF file
                 $pdf = PDF2::loadView('PDF.paid', ['receipt'=>(new \App\Transformers\ReceiptTranformer)->transform($receipt)]);
                 $url = '\paid\\';
                 Storage::disk('public')->delete($url.$receipt->id.'.pdf');
                 Storage::disk('public')->put($url.$receipt->id.'.pdf', $pdf->output());
-//------------------------------------   // Real time
                 $table = $receipt->table;
                 $table->status = 'Empty';
                 $receipt->save();
                 $table->save();
                 DB::commit();
+                event(new ChangeStateTableEvent('A table is receipted'));
                 return response()->json([
                     'receipt' => (new ReceiptTranformer)->transform($receipt),
                     'paid'    => $receipt->id.'.pdf',

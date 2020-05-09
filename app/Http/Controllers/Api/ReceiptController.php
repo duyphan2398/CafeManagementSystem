@@ -36,12 +36,13 @@ class ReceiptController extends ApiBaseController
         ],200);
     }
 
+    /*Method do not user*/
     public function create(CreateReceiptRequest $request){
         $table = Table::find($request->table_id);
         if ($table->status == 'Empty'){
             $table->status = 'Using';
             $table->save();
-//---------------------- //Real time
+            //--------- //Real time
             $receipt = new Receipt();
             $receipt->fill($request->only(['table_id', 'user_id']));
             $receipt->status = 1;
@@ -58,7 +59,7 @@ class ReceiptController extends ApiBaseController
         ],400);
     }
 
-    //Tam thoi khong dung Da co thay the update bang table
+    /*Method do not user*/
     public function createProductReceipt(CreateProductReceiptRequest $request, Receipt $receipt, Product $product){
         if ($receipt->status == 1 || $receipt->status == 2){
             $receipt->products()->syncWithoutDetaching($product->id, [
@@ -68,7 +69,7 @@ class ReceiptController extends ApiBaseController
                 'quantity'              => $request->quantity,
                 'note'                  => $request->note,
             ]);
-//---------------------- //Real time  Change price
+            //------------- //Real time  Change price
             return response()->json([
                 'receipt' => (new ReceiptTranformer)->transform($receipt),
                 'message'  => 'success'
@@ -85,6 +86,7 @@ class ReceiptController extends ApiBaseController
         ],200);
     }
 
+    /*Method do not user*/
     public function destroy(Receipt $receipt){
         if ($receipt->status == 1){
             DB::beginTransaction();
@@ -93,7 +95,7 @@ class ReceiptController extends ApiBaseController
                 $table = $receipt->table;
                 $table->status = 'Empty';
                 $table->save();
-//---------------------- //Real time
+                //-------------- //Real time
                 $receipt->delete();
                 DB::commit();
                 return response()->json([
@@ -114,12 +116,13 @@ class ReceiptController extends ApiBaseController
         }
     }
 
+    /*Method do not user*/
     public function destroyProductReceipt(Receipt $receipt, Product $product){
         if ($receipt->status == 1 || $receipt->status == 2){
             DB::beginTransaction();
             try {
                 $receipt->products()->detach($product->id);
-//------------------------------------   // Real time
+                //-----------------------------   // Real time
                 DB::commit();
                 return response()->json([
                     'receipt' => (new ReceiptTranformer)->transform($receipt),
@@ -140,7 +143,7 @@ class ReceiptController extends ApiBaseController
         }
     }
 
-    //get billing_at
+    /*Method do not user*/
     public function billReceipt(Request $request,Receipt $receipt){
         if ($receipt->status == 1 || $receipt->status == 2){
             DB::beginTransaction();
@@ -152,7 +155,7 @@ class ReceiptController extends ApiBaseController
                 $url = 'public\export\pdf\bill\\';
                 Storage::delete($url.$receipt->id.'.pdf');
                 Storage::put($url.$receipt->id.'.pdf', $pdf->output());
-//------------------------------------   // Real time
+                //-----------------------------   // Real time
                 $receipt->save();
                 DB::commit();
                 return response()->json([
@@ -176,7 +179,7 @@ class ReceiptController extends ApiBaseController
         }
     }
 
-    //get receipt_at
+    /*Method do not user*/
     public function paidReceipt(Request $request, Receipt $receipt){
         if ($receipt->status == 2 || $receipt->status == 3 ){
             DB::beginTransaction();
@@ -191,7 +194,7 @@ class ReceiptController extends ApiBaseController
                 $url = 'public\export\pdf\paid\\';
                 Storage::delete($url.$receipt->id.'.pdf');
                 Storage::put($url.$receipt->id.'.pdf', $pdf->output());
-//------------------------------------   // Real time
+                //---------------------------------   // Real time
                 $table = $receipt->table;
                 $table->status = 'Empty';
                 $receipt->save();
