@@ -83,6 +83,7 @@ Route::group(['middleware' => 'checkloggedin', 'prefix' => 'axios'], function ()
     Route::get('material/search','Warehouse\MaterialController@search');
     /*----------statistic---------*/
     Route::get('statistics/diagram1','Warehouse\StatisticController@dataDiagram1');
+    Route::get('statistics/diagram2','Warehouse\StatisticController@dataDiagram2');
 
     /*FoodsAndDrink*/
     /*----------product---------*/

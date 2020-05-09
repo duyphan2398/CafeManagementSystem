@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Web\Warehouse;
 
 
 use App\Http\Controllers\WebBaseController;
+use App\Models\Product;
 use App\Models\Receipt;
 use Carbon\Carbon;
 
@@ -29,9 +30,9 @@ class StatisticController extends WebBaseController
                 $sale_included_total+=$receipt->sale_included_price;
             }
             array_push($data, [
-                'month' => $countMonth->month,
+                'month' => $countMonth->format('M/Y'),
                 'total_receipts' => $receipts->count(),
-                'sale_exluded_total' =>$sale_excluded_total,
+                'sale_excluded_total' =>$sale_excluded_total,
                 'sale_included_total' => $sale_included_total,
             ]);
             $countMonth->addMonth();
@@ -40,4 +41,33 @@ class StatisticController extends WebBaseController
         return $data;
     }
 
+    public function dataDiagram2(){
+        $data = [];
+        $total = 0;
+        $receipts = Receipt::query()->whereMonth('created_at', '=', Carbon::now()->subMonth()->month)->get();
+        foreach ($receipts as $receipt){
+            foreach ($receipt->products as $product){
+                if (array_key_exists($product->name, $data)){
+                    $data[$product->name] += $product->pivot->quantity;
+                    $total+=  $product->pivot->quantity;
+                }else {
+                    $data[$product->name] = $product->pivot->quantity;
+                    $total+=  $product->pivot->quantity;
+                }
+            }
+        }
+        $result = [];
+        arsort($data);
+        foreach ($data as $productName => $productTotal){
+            array_push($result, [
+                'name'                      => $productName,
+                'total_product'             => $productTotal,
+                'total_product_percent'     => round(($productTotal/$total)* 100, 2)
+            ]);
+        }
+        return response()->json([
+            'data'  => $result,
+            'total' => $total
+        ],200);
+    }
 }

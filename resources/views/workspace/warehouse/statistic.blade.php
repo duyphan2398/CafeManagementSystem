@@ -41,10 +41,10 @@
                 <div class="col-lg-6 mt-5">
                     <div class="card text-center">
                         <div class="card-body">
-                            <div class="text-center mb-2"  id="loadingDiagram1" style="display: inline-block;">
-                                <img src="{{asset("images/loading.gif")}}" alt="loading..." style="height: 70px;">
+                            <div class="text-center mb-2"  id="loadingDiagram1" style="display: block;">
+                                <img src="{{asset("images/loading.gif")}}" alt="loading..." style="height: 70px">
                             </div>
-                            <canvas id="amlinechart1"></canvas>
+                            <canvas id="amlinechart1" style="display: none"></canvas>
                         </div>
                     </div>
                 </div>
@@ -54,7 +54,7 @@
                             <div class="text-center mb-2"  id="loadingDiagram2" style="display: inline-block;">
                                 <img src="{{asset("images/loading.gif")}}" alt="loading..." style="height: 70px;">
                             </div>
-                            <div id="amlinechart2"></div>
+                            <canvas id="amlinechart2" style="display: none"></canvas>
                         </div>
                     </div>
                 </div>
