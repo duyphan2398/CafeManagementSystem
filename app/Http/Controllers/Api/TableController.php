@@ -4,6 +4,7 @@
 namespace App\Http\Controllers\Api;
 
 
+use App\Events\ChangeStateTableEvent;
 use App\Http\Controllers\ApiBaseController;
 use App\Http\Requests\TableUpdateProducts;
 use App\Models\Product;
@@ -37,8 +38,10 @@ class TableController extends ApiBaseController
                 'message' => 'Have orther user using !'
             ],400);
         }
+
         $table->user_id = Auth::guard('api')->id();
         $table->save();
+        event(new ChangeStateTableEvent($this->result($request, $receipt, $table)));
         if ($receipt){
             return response()->json($this->result($request, $receipt, $table),200);
         }
