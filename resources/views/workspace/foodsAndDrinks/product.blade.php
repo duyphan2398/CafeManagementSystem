@@ -6,6 +6,28 @@
 
 @section('links')
     <script src="{{asset('js/foodsAndDrinks/product.js')}}"></script>
+    <style>
+        @if(!\Illuminate\Support\Facades\Auth::user()->isAdmin())
+            .action {
+                display: none !important;
+            }
+            .edit{
+                display: none !important;
+            }
+            .delete{
+                display: none !important;
+            }
+            #insert_ingredient_form{
+                display: none !important;
+            }
+            #newProductButton{
+                display: none !important;
+            }
+            .ingredient_delete{
+                display: none !important;
+            }
+        @endif
+    </style>
 @endsection
 
 @section('content')
@@ -115,7 +137,7 @@
                             <th>Promotion ID</th>
                             <th>Image</th>
                             <th>Ingredients</th>
-                            <th>Action</th>
+                            <th class="action">Action</th>
                         </tr>
                         </thead>
                         <tbody  id="listDrinks">
@@ -166,7 +188,7 @@
                             <th>Promotion ID</th>
                             <th>Image</th>
                             <th>Ingredients</th>
-                            <th>Action</th>
+                            <th class="action">Action</th>
                         </tr>
                         </thead>
                         <tbody  id="listFoods">

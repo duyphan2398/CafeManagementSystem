@@ -21,6 +21,7 @@ class ProductController extends WebBaseController
 
     public function index(Request $request)
     {
+        $this->authorize('index', Product::class);
         if ($request->ajax){
             $drinks_product = Product::where('type', 'Drink')
                 ->orderBy('created_at', 'desc')
@@ -45,6 +46,7 @@ class ProductController extends WebBaseController
     }
 
     public function show(Product $product){
+        $this->authorize('show', Product::class);
         $ingredient_orther = Material::whereDoesntHave('products',function($query) use ($product) {
             $query->where('product_id', $product->id);
         })->get();
@@ -56,6 +58,7 @@ class ProductController extends WebBaseController
     }
 
     public function update(UpdateProductRequest $request, Product $product){
+        $this->authorize('update', Product::class);
         DB::beginTransaction();
         try {
             if ($request->url){
@@ -89,6 +92,7 @@ class ProductController extends WebBaseController
     }
 
     public function destroy(Product $product){
+        $this->authorize('destroy', Product::class);
         $product->materials()->detach();
         if ($product->url != 'default_url_product.png' ){
             File::delete(public_path('images\products\\' .$product->url));
@@ -100,6 +104,7 @@ class ProductController extends WebBaseController
     }
 
     public function updateIngredient(UpdateIngredientRequest $request, Product $product){
+        $this->authorize('updateIngredient', Product::class);
         $product->materials()->attach($request->material_id, [
             'quantity'  => $request->quantity,
             'unit'      => $request->unit
@@ -115,6 +120,7 @@ class ProductController extends WebBaseController
     }
 
     public function deleteIngredient(Product $product, Material $material){
+        $this->authorize('deleteIngredient', Product::class);
         $product->materials()->detach($material->id);
         $ingredient_orther = Material::whereDoesntHave('products',function($query) use ($product) {
             $query->where('product_id', $product->id);
@@ -127,6 +133,7 @@ class ProductController extends WebBaseController
     }
 
     public function store(CreateProductRequest $request){
+        $this->authorize('store', Product::class);
         DB::beginTransaction();
         try {
             $product = new  Product();

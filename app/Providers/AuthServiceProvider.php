@@ -2,7 +2,11 @@
 
 namespace App\Providers;
 
+use App\Models\Product;
+use App\Models\Schedule;
 use App\Models\User;
+use App\Policies\ProductPolicy;
+use App\Policies\SchedulePolicy;
 use App\Policies\UserPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
@@ -15,7 +19,9 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        User::class => UserPolicy::class,
+        User::class                 =>  UserPolicy::class,
+        Schedule::class             =>  SchedulePolicy::class,
+        Product::class              =>  ProductPolicy::class,
     ];
 
     /**

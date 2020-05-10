@@ -18,6 +18,7 @@
             </ul>
         </li>
         @endcan
+        @can('index', \App\Models\Product::class)
         <li>
             <a href="" aria-expanded="true">
                 <i class="ti-cup"></i>
@@ -31,6 +32,7 @@
                 </li>
             </ul>
         </li>
+        @endcan
         <li>
             <a href="" aria-expanded="true">
                 <i class="ti-pencil-alt"></i>
@@ -45,9 +47,11 @@
                 <li>
                     <a href="{{url('tables')}}">List Of Tables</a>
                 </li>
+                @can('index', \App\Models\Product::class)
                 <li>
                     <a href="{{url('promotions')}}">List Of Promotions</a>
                 </li>
+
             </ul>
         </li>
         <li>
