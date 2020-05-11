@@ -68,7 +68,17 @@ function edit_modal(item){
     $('#form_modal').append(modal);
 }
 
+/*Pusher*/
+var pusher = new Pusher('625e6f2e093b6e564050', {
+    cluster: 'ap1'
+});
+var channel = pusher.subscribe('mobile');
+
 $(document).ready(function () {
+    /*Pusher*/
+    channel.bind('changeStateTable-event', function(data) {
+        loadList();
+    });
     /*Edit*/
     jQuery(document).on('click',".edit",function () {
         table_id_modal = this.name;
@@ -199,6 +209,9 @@ $(document).ready(function () {
             }
         });
     });
+
+
+
 
 });
 
