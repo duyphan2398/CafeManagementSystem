@@ -47,11 +47,11 @@
                 <li>
                     <a href="{{url('tables')}}">List Of Tables</a>
                 </li>
-                @can('index', \App\Models\Product::class)
+                @can('index', \App\Models\Promotion::class)
                 <li>
                     <a href="{{url('promotions')}}">List Of Promotions</a>
                 </li>
-
+                @endcan
             </ul>
         </li>
         <li>

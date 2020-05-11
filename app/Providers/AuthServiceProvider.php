@@ -2,10 +2,14 @@
 
 namespace App\Providers;
 
+use App\Models\Material;
 use App\Models\Product;
+use App\Models\Promotion;
 use App\Models\Schedule;
 use App\Models\User;
+use App\Policies\MaterialPolicy;
 use App\Policies\ProductPolicy;
+use App\Policies\PromotionPolicy;
 use App\Policies\SchedulePolicy;
 use App\Policies\UserPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
@@ -22,6 +26,8 @@ class AuthServiceProvider extends ServiceProvider
         User::class                 =>  UserPolicy::class,
         Schedule::class             =>  SchedulePolicy::class,
         Product::class              =>  ProductPolicy::class,
+        Promotion::class            =>  PromotionPolicy::class,
+        Material::class             =>  MaterialPolicy::class
     ];
 
     /**
