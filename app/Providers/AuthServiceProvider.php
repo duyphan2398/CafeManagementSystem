@@ -27,7 +27,7 @@ class AuthServiceProvider extends ServiceProvider
         Schedule::class             =>  SchedulePolicy::class,
         Product::class              =>  ProductPolicy::class,
         Promotion::class            =>  PromotionPolicy::class,
-        Material::class             =>  MaterialPolicy::class
+        Material::class             =>  MaterialPolicy::class,
     ];
 
     /**
@@ -39,6 +39,14 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
+        Gate::before(function (User $user) {
+            if ($user->isAdmin()) {
+                return true;
+            }
+        });
+
+        Gate::define('statistics', function (User $user) {
+            return $user->isManager();
+        });
     }
 }
