@@ -5,6 +5,7 @@
 @endsection
 
 @section('links')
+    <script src="https://js.pusher.com/6.0/pusher.min.js"></script>
     <script src="{{asset('js/manageReceipts/table.js')}}"></script>
 @endsection
 
