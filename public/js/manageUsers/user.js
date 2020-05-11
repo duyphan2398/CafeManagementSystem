@@ -135,7 +135,7 @@ $(document).ready(function () {
             }
         }).catch(function (error) {
             currentPage--;
-            toastr.error("Load New Fails");
+            toastr.error("Load Users Fails");
             $('#loading').removeAttr("style").hide();
             if (lastPage > currentPage){
                 $('#seeMore').show();

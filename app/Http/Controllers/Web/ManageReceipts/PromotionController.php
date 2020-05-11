@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\DB;
 class PromotionController extends WebBaseController
 {
     public function index(Request $request){
+        $this->authorize('index', Promotion::class);
         if ($request->ajax) {
             return response()->json([
                 'promotions' => Promotion::all(),
@@ -27,6 +28,7 @@ class PromotionController extends WebBaseController
     }
 
     public function destroy(Promotion $promotion){
+        $this->authorize('destroy', Promotion::class);
         DB::beginTransaction();
         try {
             Product::where('promotion_id', $promotion->id)->update([
@@ -49,6 +51,7 @@ class PromotionController extends WebBaseController
     }
 
     public function create(CreatePromotionRequest $request){
+        $this->authorize('create', Promotion::class);
         $promotion = new  Promotion();
         $promotion->fill( $request->only(['name', 'description']));
         $promotion->start_at = Carbon::parse($request->start_at);
@@ -65,6 +68,7 @@ class PromotionController extends WebBaseController
     }
 
     public function show(Promotion $promotion){
+        $this->authorize('show', Promotion::class);
         return response()->json([
             'promotion' => $promotion,
             'status'    =>  'success'
@@ -72,6 +76,7 @@ class PromotionController extends WebBaseController
     }
 
     public function update(UpdatePromotionRequest $request, Promotion $promotion){
+        $this->authorize('update', Promotion::class);
         $promotion->update([
             'name'                  => $request->name,
             'description'           => $request->description,

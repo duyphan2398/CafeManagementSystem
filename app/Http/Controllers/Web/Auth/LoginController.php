@@ -17,7 +17,7 @@ class LoginController extends WebBaseController
         $credentials = $request->only('username', 'password');
         if (Auth::attempt($credentials)) {
             session()->flash("success", "Login Successfully");
-            return redirect()->route('dashboard');
+            return redirect()->route('receipts');
         }
         session()->flash("error", "Wrong Username Or Password");
         return redirect()->back();

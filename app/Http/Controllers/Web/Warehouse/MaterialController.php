@@ -14,15 +14,18 @@ use Illuminate\Http\Request;
 class MaterialController extends WebBaseController
 {
     public function index(){
+        $this->authorize('index', Material::class);
         return view('workspace.warehouse.material');
     }
 
     public function show(){
+        $this->authorize('show', Material::class);
         $materials = Material::query()->orderBy('updated_at','desc')->paginate(10);
         return response()->json(['materials' => $materials],200);
     }
 
     public function create(NewMaterialRequest $request){
+        $this->authorize('create', Material::class);
         if ($request->validated()) {
            $material = Material::query()->create($request->validated());
             if ($material){
@@ -45,6 +48,7 @@ class MaterialController extends WebBaseController
     }
 
     public function getMaterial(Request $request){
+        $this->authorize('getMaterial', Material::class);
         $materia = Material::find($request->material_id);
         if ($materia){
             return response()->json([
@@ -57,6 +61,7 @@ class MaterialController extends WebBaseController
     }
 
     public function update(UpdateMaterialRequest $request){
+        $this->authorize('update', Material::class);
         $material = Material::query()->find($request->material_id);
         if ($material && $material->update($request->except('unit'))){
             return response()->json([
@@ -70,6 +75,7 @@ class MaterialController extends WebBaseController
     }
 
     public function delete(Request $request){
+        $this->authorize('delete', Material::class);
         $material = Material::query()->find($request->material_id_delete);
         $material->products()->detach();
         if ($material && $material->delete()){
@@ -83,6 +89,7 @@ class MaterialController extends WebBaseController
     }
 
     public function search(Request $request){
+        $this->authorize('search', Material::class);
         $materials = Material::query()->whereLike(['name','id'],$request->search)->get();
         if (count($materials) > 0){
             return response()->json([

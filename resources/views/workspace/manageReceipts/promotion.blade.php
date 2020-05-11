@@ -11,6 +11,18 @@
     <script src="http://code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
     <script src="{{asset('js/manageReceipts/promotion.js')}}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    <style>
+        @cannot(' update', \App\Models\Promotion::class)
+            .action, .edit, .delete {
+                display: none !important;
+            }
+        @endcannot
+        @cannot('create', \App\Models\Promotion::class)
+            #newPromotionButton {
+            display: none !important;
+            }
+        @endcannot
+    </style>
 @endsection
 
 @section('content')
@@ -135,7 +147,7 @@
                             <th>Start_at</th>
                             <th>End_at</th>
                             <th>Sale Percent (%)</th>
-                            <th>Action</th>
+                            <th class="action">Action</th>
                         </tr>
                         </thead>
                         <tbody  id="listPromotions">

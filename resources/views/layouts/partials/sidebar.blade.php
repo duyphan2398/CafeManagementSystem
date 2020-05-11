@@ -1,5 +1,6 @@
 <nav>
     <ul class="metismenu" id="menu">
+        @can('viewAny', \App\Models\User::class)
         <li>
             <a href="" aria-expanded="true">
                 <i class="ti-face-smile"></i>
@@ -16,6 +17,8 @@
                 </li>
             </ul>
         </li>
+        @endcan
+        @can('index', \App\Models\Product::class)
         <li>
             <a href="" aria-expanded="true">
                 <i class="ti-cup"></i>
@@ -29,6 +32,7 @@
                 </li>
             </ul>
         </li>
+        @endcan
         <li>
             <a href="" aria-expanded="true">
                 <i class="ti-pencil-alt"></i>
@@ -43,11 +47,14 @@
                 <li>
                     <a href="{{url('tables')}}">List Of Tables</a>
                 </li>
+                @can('index', \App\Models\Promotion::class)
                 <li>
                     <a href="{{url('promotions')}}">List Of Promotions</a>
                 </li>
+                @endcan
             </ul>
         </li>
+        @if(\Illuminate\Support\Facades\Auth::user()->isAdmin() || \Illuminate\Support\Facades\Auth::user()->isManager())
         <li>
             <a href="" aria-expanded="true">
                 <i class="ti-home"></i>
@@ -64,6 +71,7 @@
                 </li>
             </ul>
         </li>
+         @endif
         <li>
             <a href="{{url('logout')}}" aria-expanded="true">
                 <i class="ti-shift-left"></i>

@@ -104,7 +104,7 @@ function editIngredient(ingredient, item) {
                                         <th>Material Name</th>
                                         <th>Quantity</th>
                                         <th>Unit</th>
-                                        <th>Action</th>
+                                        <th class="action">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>`;
