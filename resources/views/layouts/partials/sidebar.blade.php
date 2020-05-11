@@ -54,6 +54,7 @@
                 @endcan
             </ul>
         </li>
+        @if(\Illuminate\Support\Facades\Auth::user()->isAdmin() || \Illuminate\Support\Facades\Auth::user()->isManager())
         <li>
             <a href="" aria-expanded="true">
                 <i class="ti-home"></i>
@@ -70,6 +71,7 @@
                 </li>
             </ul>
         </li>
+         @endif
         <li>
             <a href="{{url('logout')}}" aria-expanded="true">
                 <i class="ti-shift-left"></i>
