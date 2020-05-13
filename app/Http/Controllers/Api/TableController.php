@@ -9,6 +9,7 @@ use App\Http\Controllers\ApiBaseController;
 use App\Http\Requests\TableUpdateProducts;
 use App\Models\Product;
 use App\Models\Receipt;
+use App\Models\Schedule;
 use App\Models\Table;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -28,6 +29,15 @@ class TableController extends ApiBaseController
     }
 
     public function show(Request $request, Table $table){
+        $mineScheduleToday = Schedule::where('user_id', Auth::guard('api')->id())
+            ->where('date', today()->format('Y-m-d'))->first();
+        if ( !isset($mineScheduleToday->checkin_time) && !$mineScheduleToday->checkin_time){
+                return response()->json([
+                'flag_checkin'  => false,
+                'message'       => 'Not checkin yet!'
+            ],400);
+        }
+
         $receipt = Receipt::
             where('table_id', $table->id)
             ->whereIn('status', [1,2])
