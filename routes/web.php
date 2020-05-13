@@ -96,6 +96,8 @@ Route::group(['middleware' => 'checkloggedin', 'prefix' => 'axios'], function ()
     /*----------table---------*/
     Route::resource('tables', ManageReceipts\TableController::class)->except(['index', 'update']);
     Route::post('tables/{table}','ManageReceipts\TableController@update');
+    Route::get('tables/changeUserUsing/{table}', 'ManageReceipts\TableController@changeUserUsing');
+    Route::get('tables/changeStatus/{table}', 'ManageReceipts\TableController@changeStatus');
     /*----------receipt---------*/
     Route::resource('receipts', ManageReceipts\ReceiptController::class)->except(['index', 'update']);
     Route::post('getListReceiptFillter', 'ManageReceipts\ReceiptController@getListReceiptFillter');
