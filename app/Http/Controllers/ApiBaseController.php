@@ -5,8 +5,9 @@ namespace App\Http\Controllers;
 
 class ApiBaseController extends Controller
 {
-    public function result($request, $receipt, $table){
+    public function result($request, $receipt, $table, $flag_checkin = true){
         $result = [
+            'flag_checkin'          => $flag_checkin,
             'receipt_id'            => null,
             'current_total'         => null,
             'current_sale_total'    => null,
