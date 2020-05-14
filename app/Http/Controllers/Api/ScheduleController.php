@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\ApiBaseController;
 use App\Models\Schedule;
+use App\Models\User;
 use Carbon\Carbon;
 use DateTime;
 use DatePeriod;
@@ -85,4 +86,31 @@ class ScheduleController extends ApiBaseController
         ],200);
     }
 
+
+    public function check(Request $request){
+        $request->validate([
+            'username' => 'required|exists:users,username'
+        ]);
+        $user = User::whereUsername($request->username)->first();
+        $mineScheduleToday = Schedule::where('user_id', $user->id)
+            ->where('date', today()->format('Y-m-d'))->first();
+        if ($mineScheduleToday){
+            if ($mineScheduleToday->checkin_time) {
+                $mineScheduleToday->checkout_time = now();
+                $mineScheduleToday->save();
+                return response()->json([
+                    'message' => 'Checkout Successfully. Thanks your help !'
+                ],200);
+            }else{
+                $mineScheduleToday->checkin_time = now();
+                $mineScheduleToday->save();
+                return response()->json([
+                    'message' => 'Checkin Successfully. Have a nive working day!'
+                ],200);
+            }
+        }
+        return response()->json([
+            'message' => 'Could not find schedule today. !'
+        ],400);
+    }
 }
