@@ -31,31 +31,32 @@ class TableController extends ApiBaseController
     public function show(Request $request, Table $table){
         $mineScheduleToday = Schedule::where('user_id', Auth::guard('api')->id())
             ->where('date', today()->format('Y-m-d'))->first();
-        if ( !isset($mineScheduleToday->checkin_time) && !$mineScheduleToday->checkin_time){
+        if ( $mineScheduleToday && $mineScheduleToday->checkin_time) {
+            $receipt = Receipt::
+            where('table_id', $table->id)
+                ->whereIn('status', [1, 2])
+                ->first();
+
+            if ($table->user_id != null && $table->user_id != Auth::guard('api')->id()) {
                 return response()->json([
+                    'message' => 'Have orther user using !'
+                ], 400);
+            }
+
+            $table->user_id = Auth::guard('api')->id();
+            $table->save();
+            event(new ChangeStateTableEvent('A table is chosen by a user'));
+            if ($receipt) {
+                return response()->json($this->result($request, $receipt, $table), 200);
+            }
+            return response()->json($this->result($request, $receipt, $table), 200);
+        }
+        else {
+            return response()->json([
                 'flag_checkin'  => false,
                 'message'       => 'Not checkin yet!'
             ],400);
         }
-
-        $receipt = Receipt::
-            where('table_id', $table->id)
-            ->whereIn('status', [1,2])
-            ->first();
-
-        if ($table->user_id != null && $table->user_id != Auth::guard('api')->id()){
-            return response()->json([
-                'message' => 'Have orther user using !'
-            ],400);
-        }
-
-        $table->user_id = Auth::guard('api')->id();
-        $table->save();
-        event(new ChangeStateTableEvent('A table is chosen by a user'));
-        if ($receipt){
-            return response()->json($this->result($request, $receipt, $table),200);
-        }
-        return response()->json($this->result($request, $receipt, $table),200);
     }
 
 
