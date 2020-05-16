@@ -134,6 +134,7 @@ class ReceiptController extends WebBaseController
                 Storage::disk('public')->put($url.$receipt->id.'.pdf', $pdf->output());
                 $table = $receipt->table;
                 $table->status = 'Empty';
+                $table->user_id = null;
                 $receipt->save();
                 $table->save();
                 DB::commit();
