@@ -191,7 +191,7 @@ class ReceiptController extends ApiBaseController
                 $receipt->status = 3;
                 //in PDF kèm theo
                 $pdf = PDF2::loadView('PDF.paid', ['receipt'=>(new \App\Transformers\ReceiptTranformer)->transform($receipt)]);
-                $url = 'public\export\pdf\paid\\';
+                $url = '\paid\\';
                 Storage::disk('public')->delete($url.$receipt->id.'.pdf');
                 Storage::disk('public')->put($url.$receipt->id.'.pdf', $pdf->output());
                 $table = $receipt->table;
