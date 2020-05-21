@@ -23,7 +23,8 @@ class Promotion extends Model
     public function getEndAtAttribute($end_at){
         return Carbon::parse($end_at)->format('d-m-Y');
     }
+
     public function products(){
-        return $this->hasMany(Product::class);
+    return $this->belongsToMany(Product::class, 'product_promotion', 'promotion_id', 'product_id')->withTimestamps();
     }
 }

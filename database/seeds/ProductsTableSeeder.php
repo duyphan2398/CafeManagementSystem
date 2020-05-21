@@ -15,16 +15,30 @@ class ProductsTableSeeder extends Seeder
     public function run()
     {
         $faker = \Faker\Factory::create();
+        $faker->addProvider(new \FakerRestaurant\Provider\en_US\Restaurant($faker));
+
         for ($i = 0; $i < $this->total; $i++) {
             $price = $faker->numberBetween(10000,50000);
-            //$sale_price = $price * Arr::random([ 0.9, 0.8, 0.5, 1 ,1 ,1 ]);
+            $type = Arr::random(['Food','Drink']);
+            //Check unique of product name
+            $flag = true;
+            while ($flag)
+            {
+                $name = ($type == 'Food') ? ($faker->foodName()) : ($faker->beverageName());
+                if (Product::where('name', $name)->exists()){
+                    $flag = true;
+                }
+                else {
+                    $flag = false;
+                }
+            }
+            //Create
             $product = new Product([
-                'name' => $faker->text(20),
-                'price' =>$price,
-                //'sale_price' => ( $sale_price == $price) ? null: round($sale_price),
-                'sale_price' => null,
-                'promotion_id' => Arr::random([null, null, 1, 1, 2, 2, 3]),
-                'type' => Arr::random(['Food','Drink']),
+                'name'          => $name,
+                'price'         => $price,
+                'sale_price'    => null,
+                'type'          => $type,
+                'description'   => $faker->paragraph($nbSentences = 1, $variableNbSentences = true)
             ]);
             $product->save();
 
@@ -40,6 +54,10 @@ class ProductsTableSeeder extends Seeder
                     'quantity' => $material->amount * 0.05,
                     'unit' => $material->unit
                 ]);
+            }
+
+            if (rand(0,1) == 0) {
+                $product->promotions()->save(\App\Models\Promotion::query()->inRandomOrder()->first());
             }
         }
     }

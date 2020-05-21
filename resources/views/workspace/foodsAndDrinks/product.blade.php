@@ -141,29 +141,6 @@
                         </tr>
                         </thead>
                         <tbody  id="listDrinks">
-                            <tr id="`+item.id+`">
-                                <td>11</td>
-                                <td>fdsfsfdsfs</td>
-                                <td>1111</td>
-                                <th>1212</th>
-                                <td>11</td>
-                                <td>
-                                    <img style="width: 60px; height: 60px" src="{{asset('images/products/default_url_product.png')}}" alt="image_product">
-                                </td>
-                                <td>
-                                    <button class="ml-2 btn btn-outline-info">
-                                        <i class="ti-notepad"></i>
-                                    </button>
-                                </td>
-                                <td>
-                                    <button  name="`+item.id+`" class="edit btn btn-primary mb-1" style="width: 75px">
-                                        Edit
-                                    </button>
-                                    <button name="`+item.id+`"  class="delete btn btn-danger mb-1" style="width: 75px">
-                                        Delete
-                                    </button>
-                                </td>
-                            </tr>
                         </tbody>
                     </table>
                     <div class="text-center mb-2"  id="loadingDrinks" style="display: none;">
