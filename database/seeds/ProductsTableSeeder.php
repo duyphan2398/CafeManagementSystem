@@ -18,7 +18,7 @@ class ProductsTableSeeder extends Seeder
         $faker->addProvider(new \FakerRestaurant\Provider\en_US\Restaurant($faker));
 
         for ($i = 0; $i < $this->total; $i++) {
-            $price = $faker->numberBetween(10000,50000);
+            $price = Arr::random([50000,45000,65000,35000,20000,25000,40000,30000,55000,60000]);
             $type = Arr::random(['Food','Drink']);
             //Check unique of product name
             $flag = true;

@@ -28,6 +28,7 @@ class Product extends Model
         return round($price);
     }
 
+    //Call sale price when get sale price
     public function getSalePriceAttribute(){
         if ($this->promotions()){
             $currentDate = date('Y-m-d');
@@ -35,7 +36,6 @@ class Product extends Model
             foreach ( $this->promotions as $promotion){
                 $startDate = date('Y-m-d', strtotime($promotion->start_at));
                 $endDate = date('Y-m-d', strtotime($promotion->end_at));
-                /*Carbon::parse($date, 'UTC')->isoFormat('dddd');*/
                 if (($currentDate >= $startDate) && ($currentDate <= $endDate) &&(in_array(Carbon::parse($currentDate, 'UTC')->isoFormat('dddd'), explode( ',',$promotion->days)))){
                     return  round($this->price - ($promotion->sale_percent *  $this->price));
                     break;
