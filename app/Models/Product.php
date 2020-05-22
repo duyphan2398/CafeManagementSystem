@@ -47,6 +47,24 @@ class Product extends Model
         }
 
     }
+
+    public function getPromotionTodayAttribute(){
+        if ($this->promotions()){
+            $currentDate = date('Y-m-d');
+            $currentDate = date('Y-m-d', strtotime($currentDate));
+            foreach ( $this->promotions as $promotion){
+                $startDate = date('Y-m-d', strtotime($promotion->start_at));
+                $endDate = date('Y-m-d', strtotime($promotion->end_at));
+                if (($currentDate >= $startDate) && ($currentDate <= $endDate) &&(in_array(Carbon::parse($currentDate, 'UTC')->isoFormat('dddd'), explode( ',',$promotion->days)))){
+                    return $promotion;
+                    break;
+                }
+            }
+            return null;
+        }else {
+            return null ;
+        }
+    }
     // ======================================================================
     // Relationships
     // ======================================================================

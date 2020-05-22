@@ -8,7 +8,12 @@ function addText(item){
                                 </td>
                                 <td>`+item.start_at+`</td>
                                 <td>`+item.end_at+`</td>
-                                <td>`+item.sale_percent * 100+`</td>
+                                <td>`+item.sale_percent * 100+`%</td>
+                                <td>
+                                    <button name='`+item.id+`'class="products ml-2 btn btn-outline-info">
+                                        <i class="ti-notepad"></i>
+                                    </button>
+                                </td>
                                 <td>
                                     <button  name="`+item.id+`" class="edit btn btn-primary mb-1" style="width: 75px">
                                         Edit
@@ -37,31 +42,6 @@ function loadList(){
 }
 
 function edit_modal(item){
-    /*let  modal = `
-                    <div class="form-group mt-2">
-                        <label for="name">Name</label>
-                        <input name="name" type="text" class="form-control" value="`+item.name+`" placeholder="Name">
-                    </div>
-                    <div class="form-group mt-2" >
-                        <label for="salePriceEdit">Description</label>
-                        <textarea name="note" class="form-control" rows="3">`+item.description+`</textarea>
-                    </div>
-                    <div class="form-group mt-2">
-                        <label for="start_at">Start At</label>
-                        <input  id="start_at_edit" name="start_at"  type="text" class="form-control" value="`+item.start_at+`">
-                    </div>
-                    <div class="form-group mt-2">
-                        <label for="end_at">End At</label>
-                        <input  id="end_at_edit" name="end_at"  type="text" class="form-control" value="`+item.end_at+`">
-                    </div>
-                    <div class="form-group mt-2">
-                        <label for="sale_percent">Sale percent</label>
-                        <input   min="1" max="100" name="sale_percent" type="number" class="sale_percent form-control" value="">
-                    </div>
-                 <div class="modal-footer mt-3">
-                    <button type="submit" class="btn btn-primary">Update</button>
-                </div>
-                 `;*/
     $('#name_edit').val(item.name);
     $('#description_edit').val(item.description);
     $('#start_at_edit').val(item.start_at);
@@ -71,7 +51,87 @@ function edit_modal(item){
     $('#loading_modal').removeAttr("style").hide();
 }
 
+function edit_products_modal(item, item_orther, promotion) {
+    let result = `
+                    <button name=`+promotion.id+` type="submit" class="save_product btn btn-primary w-50 mt-2 mb-3">Save</button>
+                    <table class="table table-bordered">
+                      <thead>
+                        <tr>
+                          <th scope="col">Product Name</th>
+                          <th scope="col">In Used</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+
+`;
+    item.forEach(function (product){
+        result += `<tr>
+                      <td>`+product.name+`</td>
+                      <td>
+                        <input name="`+product.id+`" type="checkbox" class="form-check-input"  checked>
+                      </td>
+                    </tr>`;
+    });
+
+    item_orther.forEach(function (product){
+        result += `<tr>
+                      <td>`+product.name+`</td>
+                      <td>
+                        <input name="`+product.id+`" type="checkbox" class="form-check-input">
+                      </td>
+                    </tr>`;
+    });
+
+    result+= `</table>
+              <button name=`+promotion.id+`  type="submit" class="save_product btn btn-primary w-50">Save</button>
+                `;
+    $('#insert_ingredient_form').append(result);
+
+}
+
 $(document).ready(function () {
+    /*Products List*/
+    jQuery(document).on('click',".products",function () {
+        let promotion_id = this.name;
+        $('#insert_ingredient_form').empty();
+        $('#loading_modal_product').show();
+        $('#modal_products').modal('show');
+        axios.get(location.origin + '/axios/promotions/showProducts/'+promotion_id
+        ).then(function (response) {
+            edit_products_modal(response.data.promotion.product_list, response.data.product_orther, response.data.promotion);
+            $('#loading_modal_product').removeAttr("style").hide();
+        });
+    })
+
+    /*Uppdate products*/
+
+    jQuery(document).on('click',".save_product",function () {
+        $('#insert_ingredient_form').submit(function(e) {
+            e.preventDefault();
+        });
+        let promotion_id = this.name;
+        let products = [];
+        $('.form-check-input:checked')
+            .each(function () {
+                products.push($(this).attr('name'));
+            });
+        const config = {
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+            }
+        };
+        axios.post(location.origin +'/axios/promotions/updateProducts/'+promotion_id , {
+            products
+        }, config)
+            .then(function (response) {
+            $('#insert_ingredient_form').empty();
+            $('#modal_products').modal('hide');
+            toastr.success("Saved Successfully");
+            })
+            .catch(function (error) {
+                toastr.error("Saved Fails");
+            })
+    })
     /*Delete Table*/
     jQuery(document).on('click',".delete",function () {
         let promotion_id = this.name;

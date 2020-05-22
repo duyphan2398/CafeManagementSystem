@@ -22,6 +22,10 @@
             display: none !important;
             }
         @endcannot
+
+        input.form-check-input {
+            transform : scale(3);
+        }
     </style>
 @endsection
 
@@ -147,26 +151,11 @@
                             <th>Start_at</th>
                             <th>End_at</th>
                             <th>Sale Percent (%)</th>
+                            <th class="action">Products approve</th>
                             <th class="action">Action</th>
                         </tr>
                         </thead>
                         <tbody  id="listPromotions">
-                        <tr id="`+item.id+`">
-                            <td>11</td>
-                            <td>fdsfsfdsfs</td>
-                            <td>1111</td>
-                            <td>
-                                <textarea name="" id="" cols="30" rows="10"></textarea>
-                            </td>
-                            <td>
-                                <button  name="`+item.id+`" class="edit btn btn-primary mb-1" style="width: 75px">
-                                    Edit
-                                </button>
-                                <button name="`+item.id+`"  class="delete btn btn-danger mb-1" style="width: 75px">
-                                    Delete
-                                </button>
-                            </td>
-                        </tr>
                         </tbody>
                     </table>
                     <div class="text-center mb-2"  id="loadingPromotions" style="display: none;">
@@ -246,5 +235,31 @@
                 </div>
             </div>
         </div>
+        {{--Show Products Approve--}}
+        <div class="modal fade" id="modal_products" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 id="product_id_modal" class="modal-title">Products Approve</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class=" mt-2 mb-1 text-center pl-5 pr-5">
+                        <form class="form-group" id="insert_ingredient_form">
+                                            dsadsadsadasdsa
+                            <button type="submit" class="btn btn-primary w-25">Add</button>
+                        </form>
+                    </div>
+                    <div class="text-center mb-2"  id="loading_modal_product" style="display: none;">
+                        <img src="{{asset("images/loading.gif")}}" alt="loading..." style="margin-bottom: 190px; margin-top: 187px">
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
+
+
+    {
 @endsection

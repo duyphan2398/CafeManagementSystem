@@ -10,6 +10,7 @@ use App\Http\Requests\UpdatePromotionRequest;
 use App\Models\Product;
 use App\Models\Promotion;
 use App\Models\User;
+use App\Transformers\PromotionTransformer;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -87,5 +88,27 @@ class PromotionController extends WebBaseController
         return response()->json([
             'status' => 'success'
         ], 200);
+    }
+
+    public function showProducts(Request $request, Promotion $promotion){
+        $product_other =  Product::whereDoesntHave('promotions',function($query) use ($promotion) {
+            $query->where('promotion_id', $promotion->id);
+        })->get();
+
+        return response()->json([
+            'promotion'         => (new PromotionTransformer)->transform($promotion),
+            'product_orther'    => $product_other
+        ], 200);
+    }
+
+    public function updateProducts(Request $request, Promotion $promotion){
+        $request->validate([
+            'products' => 'required|array',
+            'products.*' => 'required|integer|exists:products,id',
+        ]);
+        $promotion->products()->sync($request->products);
+        return response()->json([
+            'message' => 'success'
+        ],200);
     }
 }

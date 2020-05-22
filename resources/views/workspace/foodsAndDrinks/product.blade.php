@@ -134,7 +134,8 @@
                             <th>Name</th>
                             <th>Price</th>
                             <th>Sale_Price</th>
-                            <th>Promotion ID</th>
+                            <th>Promotions Adding</th>
+                            <th>Promotion Today</th>
                             <th>Image</th>
                             <th>Ingredients</th>
                             <th class="action">Action</th>
@@ -162,7 +163,8 @@
                             <th>Name</th>
                             <th>Price</th>
                             <th>Sale_Price</th>
-                            <th>Promotion ID</th>
+                            <th>Promotions Adding</th>
+                            <th>Promotion Today</th>
                             <th>Image</th>
                             <th>Ingredients</th>
                             <th class="action">Action</th>
