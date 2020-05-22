@@ -10,6 +10,9 @@ function addText(item){
                                 <td>`+item.end_at+`</td>
                                 <td>`+item.sale_percent * 100+`%</td>
                                 <td>
+                                    <textarea readonly class="form-control" rows="3">`+item.days+`</textarea>
+                                </td>
+                                <td>
                                     <button name='`+item.id+`'class="products ml-2 btn btn-outline-info">
                                         <i class="ti-notepad"></i>
                                     </button>
@@ -68,7 +71,7 @@ function edit_products_modal(item, item_orther, promotion) {
         result += `<tr>
                       <td>`+product.name+`</td>
                       <td>
-                        <input name="`+product.id+`" type="checkbox" class="form-check-input"  checked>
+                        <input name="`+product.id+`" type="checkbox" class="checkbox_product form-check-input"  checked>
                       </td>
                     </tr>`;
     });
@@ -202,7 +205,15 @@ $(document).ready(function () {
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
                 }
             };
-            axios.post(location.origin +'/axios/promotions' , formData, config)
+            let days = [];
+            $('.new_promotion_checkbox:checked')
+                .each(function () {
+                    days.push($(this).attr('value'));
+                });
+            formData.append('days', days);
+            axios.post(location.origin +'/axios/promotions' ,
+                formData
+                , config)
                 .then(function (response) {
                     loadList();
                     $('#newPromotionForm').trigger("reset");

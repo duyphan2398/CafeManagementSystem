@@ -17,7 +17,7 @@ class PromotionsTableSeeder extends Seeder
             'description'           => 'Discount 20% for the drinks from coffee bean in 2 - 4 - 6',
             'start_at'              => \Carbon\Carbon::today(),
             'end_at'                => Carbon\Carbon::today()->addMonth(),
-            'days'                  => 'Monday,Wenesday,Friday,',
+            'days'                  => '"Monday,Wenesday,Friday"',
             'sale_percent'          => 0.20
         ]);
 
@@ -26,7 +26,7 @@ class PromotionsTableSeeder extends Seeder
             'description'           => 'Discount 10% for the drinks best seller in 3 - 5 - 7',
             'start_at'              => \Carbon\Carbon::today(),
             'end_at'                =>\Carbon\Carbon::today()->addMonth(),
-            'days'                  => 'Tuesday,Thursday,Saturday,',
+            'days'                  => '"Tuesday,Thursday,Saturday"',
             'sale_percent'          => 0.15
         ]);
 
@@ -35,7 +35,7 @@ class PromotionsTableSeeder extends Seeder
             'description'           => 'Discount 50% for the some drink',
             'start_at'              => \Carbon\Carbon::yesterday()->subMonth(),
             'end_at'                =>\Carbon\Carbon::yesterday(),
-            'days'                  => 'Saturday,Sunday',
+            'days'                  => '"Saturday,Sunday"',
             'sale_percent'          => 0.5
         ]);
 
@@ -44,7 +44,7 @@ class PromotionsTableSeeder extends Seeder
             'description'           => 'Discount 20% for some drinks',
             'start_at'              => \Carbon\Carbon::yesterday()->subMonth(),
             'end_at'                =>\Carbon\Carbon::yesterday(),
-            'days'                  => 'Monday,Tuesday,Wenesday,Thursday,Friday,Saturday,Sunday',
+            'days'                  => '"Monday,Tuesday,Wenesday,Thursday,Friday,Saturday,Sunday"',
             'sale_percent'          => 0.2
         ]);
     }

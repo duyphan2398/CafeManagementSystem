@@ -54,10 +54,11 @@ class PromotionController extends WebBaseController
     public function create(CreatePromotionRequest $request){
         $this->authorize('create', Promotion::class);
         $promotion = new  Promotion();
-        $promotion->fill( $request->only(['name', 'description']));
+        $promotion->fill($request->only(['name', 'description']));
         $promotion->start_at = Carbon::parse($request->start_at);
         $promotion->end_at  = Carbon::parse($request->end_at);
         $promotion->sale_percent = $request->sale_percent / 100;
+        $promotion->days = json_encode($request->days);
         if ($promotion->save()){
             return response()->json([
                 'status' => 'success'
