@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 
 
 use App\Events\ChangeStateTableEvent;
+use App\Events\ExportOrderFormEvent;
 use App\Http\Controllers\ApiBaseController;
 use App\Http\Requests\TableUpdateProducts;
 use App\Models\Product;
@@ -131,9 +132,6 @@ class TableController extends ApiBaseController
         $url = '\order\\';
         Storage::disk('public')->delete($url.$receipt->id.'.pdf');
         Storage::disk('public')->put($url.$receipt->id.'.pdf', $pdf->output());
-        
-
-
         //Update Products
         $receipt->products()->detach();
         foreach ($request->product_list as $item){
@@ -152,6 +150,13 @@ class TableController extends ApiBaseController
         $receipt->sale_included_price;
         $result =  $this->result($request, $receipt, $table);
         $result['message'] = 'success';
+        //Realtime Event
+        event(new ExportOrderFormEvent(
+            $data,
+            $this->result($request, $receipt, $table),
+            $receipt->id.'.pdf',
+            $request->getHttpHost().'/export/pdf/order/'
+        ));
         event(new ChangeStateTableEvent('A table updated'));
         return response()->json(
             $result
