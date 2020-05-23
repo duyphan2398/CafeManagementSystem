@@ -144,7 +144,7 @@ class ReceiptController extends ApiBaseController
         }
     }
 
-    /*Method do not user*/
+
     public function billReceipt(Request $request,Receipt $receipt){
         if ($receipt->status == 1 || $receipt->status == 2){
             DB::beginTransaction();
@@ -179,7 +179,6 @@ class ReceiptController extends ApiBaseController
         }
     }
 
-    /*Method do not user*/
     public function paidReceipt(Request $request, Receipt $receipt){
         if ($receipt->status == 2 || $receipt->status == 3 ){
             DB::beginTransaction();
