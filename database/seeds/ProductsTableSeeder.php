@@ -6,7 +6,7 @@ use App\Models\Product;
 use App\Models\Material;
 class ProductsTableSeeder extends Seeder
 {
-    protected $total = 30;
+    protected $total = 50;
     /**
      * Run the database seeds.
      *
@@ -15,16 +15,33 @@ class ProductsTableSeeder extends Seeder
     public function run()
     {
         $faker = \Faker\Factory::create();
+        $faker->addProvider(new \FakerRestaurant\Provider\en_US\Restaurant($faker));
+
         for ($i = 0; $i < $this->total; $i++) {
-            $price = $faker->numberBetween(10000,50000);
-            //$sale_price = $price * Arr::random([ 0.9, 0.8, 0.5, 1 ,1 ,1 ]);
+            $price = Arr::random([50000,45000,65000,35000,20000,25000,40000,30000,55000,60000]);
+            $type = Arr::random(['Food','Drink']);
+            //Check unique of product name
+            $flag = true;
+
+
+
+            while ($flag)
+            {
+                $name = ($type == 'Food') ? Arr::random([$faker->foodName(),$faker->meatName(), $faker->dairyName()]) : Arr::random([$faker->beverageName(), $faker->fruitName(), $faker->vegetableName()]);
+                if (Product::where('name', $name)->exists()){
+                    $flag = true;
+                }
+                else {
+                    $flag = false;
+                }
+            }
+            //Create
             $product = new Product([
-                'name' => $faker->text(20),
-                'price' =>$price,
-                //'sale_price' => ( $sale_price == $price) ? null: round($sale_price),
-                'sale_price' => null,
-                'promotion_id' => Arr::random([null, null, 1, 1, 2, 2, 3]),
-                'type' => Arr::random(['Food','Drink']),
+                'name'          => $name,
+                'price'         => $price,
+                'sale_price'    => null,
+                'type'          => $type,
+                'description'   => $faker->paragraph($nbSentences = 1, $variableNbSentences = true)
             ]);
             $product->save();
 
@@ -40,6 +57,10 @@ class ProductsTableSeeder extends Seeder
                     'quantity' => $material->amount * 0.05,
                     'unit' => $material->unit
                 ]);
+            }
+
+            if (rand(0,1) == 0) {
+                $product->promotions()->save(\App\Models\Promotion::query()->inRandomOrder()->first());
             }
         }
     }

@@ -22,6 +22,13 @@
             display: none !important;
             }
         @endcannot
+
+        input.form-check-input {
+            transform : scale(2);
+        }
+        input.checkbox_product {
+            transform : scale(3);
+        }
     </style>
 @endsection
 
@@ -86,7 +93,7 @@
                                             <input name="name" type="text" class="form-control"  placeholder="">
                                         </div>
                                         <div class="form-group mt-2">
-                                            <label for="description">Note</label>
+                                            <label for="description">Description</label>
                                             <textarea class="form-control" name="description"rows="3"></textarea>
                                         </div>
                                         <div class="form-group mt-2">
@@ -101,6 +108,59 @@
                                             <label for="sale_percent">Sale percent</label>
                                             <input   min="1" max="100" name="sale_percent" type="number" class="sale_percent form-control" value="">
                                         </div>
+                                        <div>
+                                            <label for="sale_percent">Days Approve</label>
+                                            <br>
+                                            <table class="table">
+                                                <tr>
+                                                    <td>
+                                                        <div class="ml-2 form-check form-check-inline">
+                                                            <input class="new_promotion_checkbox form-check-input" type="checkbox" id="inlineCheckbox1" value="Monday">
+                                                            <label class="ml-1 form-check-label" for="inlineCheckbox1">Monday(2)</label>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="ml-2 form-check form-check-inline">
+                                                            <input class="new_promotion_checkbox form-check-input" type="checkbox" id="inlineCheckbox2" value="Tuesday">
+                                                            <label class="ml-1 form-check-label" for="inlineCheckbox2">Tuesday(3)</label>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="ml-2 form-check form-check-inline">
+                                                            <input class="new_promotion_checkbox form-check-input" type="checkbox" id="inlineCheckbox3" value="Wenesday">
+                                                            <label class=" ml-1 form-check-label" for="inlineCheckbox3">Wenesday(4)</label>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <div class="ml-2 form-check form-check-inline">
+                                                            <input class="new_promotion_checkbox form-check-input" type="checkbox" id="inlineCheckbox4" value="Thursday">
+                                                            <label class=" ml-1 form-check-label" for="inlineCheckbox4">Thursday(5)</label>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="ml-2 form-check form-check-inline">
+                                                            <input class="new_promotion_checkbox form-check-input" type="checkbox" id="inlineCheckbox5" value="Friday">
+                                                            <label class=" ml-1 form-check-label" for="inlineCheckbox5">Friday(6)</label>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="ml-2 form-check form-check-inline">
+                                                            <input class="new_promotion_checkbox form-check-input" type="checkbox" id="inlineCheckbox6" value="Saturday">
+                                                            <label class=" ml-1 form-check-label" for="inlineCheckbox6">Saturday(7)</label>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <td>
+                                                    <div class="ml-2 form-check form-check-inline">
+                                                        <input class="new_promotion_checkbox form-check-input" type="checkbox" id="inlineCheckbox7" value="Sunday">
+                                                        <label class=" ml-1 form-check-label" for="inlineCheckbox7">Sunday(CN)</label>
+                                                    </div>
+                                                </td>
+                                            </table>
+                                        </div>
+
                                         <div class="modal-footer mt-4">
                                             <button type="submit" class="btn btn-primary">Create</button>
                                         </div>
@@ -147,26 +207,12 @@
                             <th>Start_at</th>
                             <th>End_at</th>
                             <th>Sale Percent (%)</th>
+                            <th>Days</th>
+                            <th class="action">Products approve</th>
                             <th class="action">Action</th>
                         </tr>
                         </thead>
                         <tbody  id="listPromotions">
-                        <tr id="`+item.id+`">
-                            <td>11</td>
-                            <td>fdsfsfdsfs</td>
-                            <td>1111</td>
-                            <td>
-                                <textarea name="" id="" cols="30" rows="10"></textarea>
-                            </td>
-                            <td>
-                                <button  name="`+item.id+`" class="edit btn btn-primary mb-1" style="width: 75px">
-                                    Edit
-                                </button>
-                                <button name="`+item.id+`"  class="delete btn btn-danger mb-1" style="width: 75px">
-                                    Delete
-                                </button>
-                            </td>
-                        </tr>
                         </tbody>
                     </table>
                     <div class="text-center mb-2"  id="loadingPromotions" style="display: none;">
@@ -209,6 +255,59 @@
                                     <label for="sale_percent">Sale percent</label>
                                     <input   id="sale_percent_edit" min="1" max="100" name="sale_percent" type="number" class="sale_percent form-control" value="">
                                 </div>
+                                <div>
+                                    <label for="sale_percent">Days Approve</label>
+                                    <br>
+                                    <table class="table">
+                                        <tr>
+                                            <td>
+                                                <div class="ml-2 form-check form-check-inline">
+                                                    <input class="update_promotion_checkbox form-check-input" type="checkbox" id="inline_Checkbox1" value="Monday">
+                                                    <label class="ml-1 form-check-label" for="inline_Checkbox1">Monday(2)</label>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="ml-2 form-check form-check-inline">
+                                                    <input class="update_promotion_checkbox form-check-input" type="checkbox" id="inline_Checkbox2" value="Tuesday">
+                                                    <label class="ml-1 form-check-label" for="inline_Checkbox2">Tuesday(3)</label>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="ml-2 form-check form-check-inline">
+                                                    <input class="update_promotion_checkbox form-check-input" type="checkbox" id="inline_Checkbox3" value="Wenesday">
+                                                    <label class=" ml-1 form-check-label" for="inline_Checkbox3">Wenesday(4)</label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="ml-2 form-check form-check-inline">
+                                                    <input class="update_promotion_checkbox form-check-input" type="checkbox" id="inline_Checkbox4" value="Thursday">
+                                                    <label class=" ml-1 form-check-label" for="inline_Checkbox4">Thursday(5)</label>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="ml-2 form-check form-check-inline">
+                                                    <input class="update_promotion_checkbox form-check-input" type="checkbox" id="inline_Checkbox5" value="Friday">
+                                                    <label class=" ml-1 form-check-label" for="inline_Checkbox5">Friday(6)</label>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="ml-2 form-check form-check-inline">
+                                                    <input class="update_promotion_checkbox form-check-input" type="checkbox" id="inline_Checkbox6" value="Saturday">
+                                                    <label class=" ml-1 form-check-label" for="inline_Checkbox6">Saturday(7)</label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <td>
+                                            <div class="ml-2 form-check form-check-inline">
+                                                <input class="update_promotion_checkbox form-check-input" type="checkbox" id="inline_Checkbox7" value="Sunday">
+                                                <label class=" ml-1 form-check-label" for="inline_Checkbox7">Sunday(CN)</label>
+                                            </div>
+                                        </td>
+                                    </table>
+                                </div>
+
                                 <div class="modal-footer mt-3">
                                     <button type="submit" class="btn btn-primary">Update</button>
                                 </div>
@@ -246,5 +345,31 @@
                 </div>
             </div>
         </div>
+        {{--Show Products Approve--}}
+        <div class="modal fade" id="modal_products" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 id="product_id_modal" class="modal-title">Products Approve</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class=" mt-2 mb-1 text-center pl-5 pr-5">
+                        <form class="form-group" id="insert_ingredient_form">
+                                            dsadsadsadasdsa
+                            <button type="submit" class="btn btn-primary w-25">Add</button>
+                        </form>
+                    </div>
+                    <div class="text-center mb-2"  id="loading_modal_product" style="display: none;">
+                        <img src="{{asset("images/loading.gif")}}" alt="loading..." style="margin-bottom: 190px; margin-top: 187px">
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
+
+
+    {
 @endsection

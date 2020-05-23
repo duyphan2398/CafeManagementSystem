@@ -18,8 +18,7 @@ class PromotionGetProductsTranformer extends TransformerAbstract
                 'price'         => $product->price,
                 'sale_price'    => $product->sale_price,
                 'url'           => $product->url,
-                'type'          => $product->type,
-                'promotion_id'  => $product->promotion_id,
+                'type'          => $product->type
             ]);
         }
         return $data;

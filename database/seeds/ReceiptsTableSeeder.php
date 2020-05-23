@@ -17,7 +17,7 @@ class ReceiptsTableSeeder extends Seeder
     public function run()
     {
         /*Status 3 : Paid*/
-        for ($i = 1; $i <= 200; $i++){
+        for ($i = 1; $i <= 500; $i++){
             $user = User::query()
                 ->inRandomOrder()
                 ->first();

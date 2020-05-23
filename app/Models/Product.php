@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Traits\ParseTimeStamp;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
@@ -15,7 +16,7 @@ class Product extends Model
         'sale_price',
         'url',
         'type',
-        'promotion_id',
+        'description',
     ];
 
     protected $attributes = [
@@ -27,22 +28,42 @@ class Product extends Model
         return round($price);
     }
 
+    //Call sale price when get sale price
     public function getSalePriceAttribute(){
-        if ($this->promotion){
+        if ($this->promotions()){
             $currentDate = date('Y-m-d');
             $currentDate = date('Y-m-d', strtotime($currentDate));
-            $startDate = date('Y-m-d', strtotime($this->promotion->start_at));
-            $endDate = date('Y-m-d', strtotime($this->promotion->end_at));
-            if ($this->promotion->sale_percent && ($currentDate >= $startDate) && ($currentDate <= $endDate)){
-               return  round($this->price - ($this->promotion->sale_percent *  $this->price));
+            foreach ( $this->promotions as $promotion){
+                $startDate = date('Y-m-d', strtotime($promotion->start_at));
+                $endDate = date('Y-m-d', strtotime($promotion->end_at));
+                if (($currentDate >= $startDate) && ($currentDate <= $endDate) &&(in_array(Carbon::parse($currentDate, 'UTC')->isoFormat('dddd'), explode( ',',$promotion->days)))){
+                    return  round($this->price - ($promotion->sale_percent *  $this->price));
+                    break;
+                }
             }
-            else {
-                return null ;
-            }
+            return null;
         }else {
             return null ;
         }
 
+    }
+
+    public function getPromotionTodayAttribute(){
+        if ($this->promotions()){
+            $currentDate = date('Y-m-d');
+            $currentDate = date('Y-m-d', strtotime($currentDate));
+            foreach ( $this->promotions as $promotion){
+                $startDate = date('Y-m-d', strtotime($promotion->start_at));
+                $endDate = date('Y-m-d', strtotime($promotion->end_at));
+                if (($currentDate >= $startDate) && ($currentDate <= $endDate) &&(in_array(Carbon::parse($currentDate, 'UTC')->isoFormat('dddd'), explode( ',',$promotion->days)))){
+                    return $promotion;
+                    break;
+                }
+            }
+            return null;
+        }else {
+            return null ;
+        }
     }
     // ======================================================================
     // Relationships
@@ -59,7 +80,7 @@ class Product extends Model
             ->withPivot('receipt_id','product_name','quantity', 'note', 'product_name', 'product_price', 'product_sale_price');
     }
 
-    public function promotion(){
-        return $this->belongsTo(Promotion::class);
+    public function promotions(){
+        return $this->belongsToMany(Promotion::class, 'product_promotion', 'product_id', 'promotion_id')->withTimestamps();
     }
 }

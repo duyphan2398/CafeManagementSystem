@@ -10,6 +10,7 @@ use App\Http\Requests\UpdatePromotionRequest;
 use App\Models\Product;
 use App\Models\Promotion;
 use App\Models\User;
+use App\Transformers\PromotionTransformer;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -53,10 +54,11 @@ class PromotionController extends WebBaseController
     public function create(CreatePromotionRequest $request){
         $this->authorize('create', Promotion::class);
         $promotion = new  Promotion();
-        $promotion->fill( $request->only(['name', 'description']));
+        $promotion->fill($request->only(['name', 'description']));
         $promotion->start_at = Carbon::parse($request->start_at);
         $promotion->end_at  = Carbon::parse($request->end_at);
         $promotion->sale_percent = $request->sale_percent / 100;
+        $promotion->days = json_encode($request->days);
         if ($promotion->save()){
             return response()->json([
                 'status' => 'success'
@@ -82,10 +84,33 @@ class PromotionController extends WebBaseController
             'description'           => $request->description,
             'start_at'              => Carbon::parse($request->start_at),
             'end_at'                => Carbon::parse($request->end_at),
-            'sale_percent'          => ($request->sale_percent)/ 100
+            'sale_percent'          => ($request->sale_percent)/ 100,
+            'days'                  => json_encode($request->days)
         ]);
         return response()->json([
             'status' => 'success'
         ], 200);
+    }
+
+    public function showProducts(Request $request, Promotion $promotion){
+        $product_other =  Product::whereDoesntHave('promotions',function($query) use ($promotion) {
+            $query->where('promotion_id', $promotion->id);
+        })->get();
+
+        return response()->json([
+            'promotion'         => (new PromotionTransformer)->transform($promotion),
+            'product_orther'    => $product_other
+        ], 200);
+    }
+
+    public function updateProducts(Request $request, Promotion $promotion){
+        $request->validate([
+            'products' => 'required|array',
+            'products.*' => 'required|integer|exists:products,id',
+        ]);
+        $promotion->products()->sync($request->products);
+        return response()->json([
+            'message' => 'success'
+        ],200);
     }
 }

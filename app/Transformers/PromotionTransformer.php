@@ -9,6 +9,7 @@ use League\Fractal\TransformerAbstract;
 
 class PromotionTransformer extends TransformerAbstract
 {
+
     public function transform(Promotion $promotion)
     {
         return [
@@ -17,6 +18,7 @@ class PromotionTransformer extends TransformerAbstract
             'description'   => $promotion->description,
             'start_at'      => $promotion->start_at,
             'end_at'        => $promotion->end_at,
+            'days'          => $promotion->days,
             'sale_percent'  => $promotion->sale_percent,
             'product_list'  => (new PromotionGetProductsTranformer)->transform($promotion)
         ];

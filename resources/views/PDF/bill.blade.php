@@ -41,7 +41,7 @@
                     <td>{{$product['quantity']}}</td>
                     <td>{{$product['product_price']}}</td>
                     <td>{{$product['product_price'] * $product['quantity']}}</td>
-                    <td>{{($product['product_sale_price']) ? ($product['product_sale_price'] * $product['quantity']) : ('--')}}</td>
+                    <td>{{($product['product_sale_price'] && ($product['product_sale_price'] < $product['product_price'])) ? ($product['product_sale_price'] * $product['quantity']) : ('--')}}</td>
                 </tr>
             @endforeach
             </tbody>

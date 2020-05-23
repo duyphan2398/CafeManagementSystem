@@ -9,7 +9,6 @@ use App\Http\Requests\UpdateIngredientRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Models\Material;
 use App\Models\Product;
-use App\Models\Promotion;
 use App\Transformers\ProductTransformer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -53,7 +52,6 @@ class ProductController extends WebBaseController
         return response()->json([
             'product'               =>  (new ProductTransformer)->transform($product),
             'ingredient_orther'     => $ingredient_orther,
-            'promotions'            => Promotion::all()
         ], 200);
     }
 
@@ -70,18 +68,12 @@ class ProductController extends WebBaseController
                 $request->url->move($destinationPath, $profileImage);
                 $product->url = $profileImage;
             }
-            if ($request->promotion_id) {
-                $promotion = Promotion::find($request->promotion_id);
-                if ($promotion){
-                    $product->promotion_id = $promotion->id;
-                }
-            }
-            else{
-                $product->promotion_id = null;
-            }
-            $product->fill($request->except(['url','sale_price', 'promotion_id']));
+            $product->fill($request->except(['url','sale_price']));
             $product->save();
             DB::commit();
+            return response()->json([
+                'status' => 'sucess'
+            ],200);
         }
         catch (\Exception $exception){
             DB::rollBack();
@@ -137,7 +129,7 @@ class ProductController extends WebBaseController
         DB::beginTransaction();
         try {
             $product = new  Product();
-            $product->fill( $request->only(['name', 'price', 'type']));
+            $product->fill( $request->only(['name', 'price', 'type', 'description']));
             $product = Product::query()->create($request->except('url'));
             if ($request->url){
                 $destinationPath = 'images/products/';
@@ -145,16 +137,17 @@ class ProductController extends WebBaseController
                 $request->url->move($destinationPath, $profileImage);
                 $product->url = $profileImage;
             }
-            $product->save();
+           $product->save();
+            DB::commit();
             return response()->json([
                 'status' => 'success'
             ],201);
-            DB::commit();
         }
         catch (\Exception $exception){
             DB::rollBack();
             return response()->json([
-                'status' => 'fails'
+                'status'    => 'fails',
+                'message'   => $exception->getMessage()
             ],422);
         }
 
