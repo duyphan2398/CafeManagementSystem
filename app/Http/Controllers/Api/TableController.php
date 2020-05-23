@@ -11,9 +11,11 @@ use App\Models\Product;
 use App\Models\Receipt;
 use App\Models\Schedule;
 use App\Models\Table;
+use Barryvdh\DomPDF\Facade as PDF2;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class TableController extends ApiBaseController
 {
@@ -78,6 +80,61 @@ class TableController extends ApiBaseController
             $receipt->table_name = $receipt->table->name;
             $receipt->save();
         }
+        //Export Order PDF
+        $data = [];
+        for ($i = 0; $i< count($request->product_list); $i++){
+            $receipt_product = $receipt->products()
+                ->where('receipt_id', $receipt->id)
+                ->where('product_id', $request->product_list[$i]['id'])
+                ->first();
+            $product = Product::find($request->product_list[$i]['id']);
+            // New record
+            if (!$receipt_product) {
+                $tmp_data = $request->product_list[$i];
+                $tmp_data['type'] =  $product->type;
+                $tmp_data['product_name'] =  $product->name;
+                array_push($data, $tmp_data);
+            }
+            //Record existed
+            else{
+                $tmp_data = [];
+                //Check quantity
+                if ($receipt_product->pivot->quantity < $request->product_list[$i]['quantity']){
+                    $tmp_data = [
+                        'id'            => $request->product_list[$i]['id'],
+                        'quantity'      => $request->product_list[$i]['quantity'] -  $receipt_product->pivot->quantity,
+                        'note'          => $request->product_list[$i]['note'],
+                        'type'          => $receipt_product->type,
+                        'product_name'  =>  $product->name
+                    ];
+                    array_push($data, $tmp_data);
+                }
+                elseif ($receipt_product->pivot->quantity > $request->product_list[$i]['quantity']){
+                    $tmp_data = [
+                        'id'            => $request->product_list[$i]['id'],
+                        'quantity'      => 'Cancle '.($request->product_list[$i]['quantity'] - $receipt_product->pivot->quantity),
+                        'note'          => $request->product_list[$i]['note'],
+                        'type'          => $receipt_product->type,
+                        'product_name'  =>  $product->name
+                    ];
+                    array_push($data, $tmp_data);
+                }
+
+            }
+        }
+
+        $pdf = PDF2::loadView('PDF.order', [
+            'data'          => $data,
+            'table'         => $table,
+            'receipt'       => $receipt
+        ]);
+        $url = '\order\\';
+        Storage::disk('public')->delete($url.$receipt->id.'.pdf');
+        Storage::disk('public')->put($url.$receipt->id.'.pdf', $pdf->output());
+        
+
+
+        //Update Products
         $receipt->products()->detach();
         foreach ($request->product_list as $item){
             $product = Product::find($item['id']);
