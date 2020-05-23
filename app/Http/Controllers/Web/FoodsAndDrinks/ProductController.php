@@ -71,6 +71,9 @@ class ProductController extends WebBaseController
             $product->fill($request->except(['url','sale_price']));
             $product->save();
             DB::commit();
+            return response()->json([
+                'status' => 'sucess'
+            ],200);
         }
         catch (\Exception $exception){
             DB::rollBack();
@@ -126,7 +129,7 @@ class ProductController extends WebBaseController
         DB::beginTransaction();
         try {
             $product = new  Product();
-            $product->fill( $request->only(['name', 'price', 'type']));
+            $product->fill( $request->only(['name', 'price', 'type', 'description']));
             $product = Product::query()->create($request->except('url'));
             if ($request->url){
                 $destinationPath = 'images/products/';
@@ -134,16 +137,17 @@ class ProductController extends WebBaseController
                 $request->url->move($destinationPath, $profileImage);
                 $product->url = $profileImage;
             }
-            $product->save();
+           $product->save();
+            DB::commit();
             return response()->json([
                 'status' => 'success'
             ],201);
-            DB::commit();
         }
         catch (\Exception $exception){
             DB::rollBack();
             return response()->json([
-                'status' => 'fails'
+                'status'    => 'fails',
+                'message'   => $exception->getMessage()
             ],422);
         }
 

@@ -84,7 +84,8 @@ class PromotionController extends WebBaseController
             'description'           => $request->description,
             'start_at'              => Carbon::parse($request->start_at),
             'end_at'                => Carbon::parse($request->end_at),
-            'sale_percent'          => ($request->sale_percent)/ 100
+            'sale_percent'          => ($request->sale_percent)/ 100,
+            'days'                  => json_encode($request->days)
         ]);
         return response()->json([
             'status' => 'success'

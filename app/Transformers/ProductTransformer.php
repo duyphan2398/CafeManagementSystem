@@ -18,6 +18,7 @@ class ProductTransformer extends TransformerAbstract
             'sale_price'        => $product->sale_price,
             'url'               => $product->url,
             'type'              => $product->type,
+            'description'       => $product->description,
             'promotion_today'   => $product->promotion_today,
             'promotions'        => (new ProductGetPromotionsTransformer)->transform($product),
             'ingredients'       => (new ProductGetMaterialsTranformer)->transform($product)

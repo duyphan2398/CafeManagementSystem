@@ -5,6 +5,9 @@ function addText(item){
     result =        `      <tr id="`+item.id+`">
                                 <td>`+item.id+`</td>
                                 <td>`+item.name+`</td>
+                                <td>
+                                    <textarea readonly class="form-control" rows="3">`+item.description+`</textarea>
+                                </td>
                                 <td>`+item.price+`</td>
                                 <td>`+((item.sale_price) ? (item.sale_price) : ('--'))+`</td>
                                 <td>
@@ -68,6 +71,10 @@ function edit_modal(item){
                     <div class="form-group mt-2">
                         <label for="priceEdit">Price</label>
                         <input name="price" type="number" class="form-control" value="`+item.price+`" id="priceEdit">
+                    </div>
+                    <div class="form-group mt-2">
+                        <label for="descriptionEdit">Description</label>
+                        <textarea name="description" class="form-control" rows="3">`+item.description+`</textarea>
                     </div>
                     <div class="form-group mt-2" >
                         <label for="salePriceEdit">Sale Price</label>

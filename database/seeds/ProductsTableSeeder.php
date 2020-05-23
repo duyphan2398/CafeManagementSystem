@@ -6,7 +6,7 @@ use App\Models\Product;
 use App\Models\Material;
 class ProductsTableSeeder extends Seeder
 {
-    protected $total = 30;
+    protected $total = 50;
     /**
      * Run the database seeds.
      *
@@ -22,9 +22,12 @@ class ProductsTableSeeder extends Seeder
             $type = Arr::random(['Food','Drink']);
             //Check unique of product name
             $flag = true;
+
+
+
             while ($flag)
             {
-                $name = ($type == 'Food') ? ($faker->foodName()) : ($faker->beverageName());
+                $name = ($type == 'Food') ? Arr::random([$faker->foodName(),$faker->meatName(), $faker->dairyName()]) : Arr::random([$faker->beverageName(), $faker->fruitName(), $faker->vegetableName()]);
                 if (Product::where('name', $name)->exists()){
                     $flag = true;
                 }

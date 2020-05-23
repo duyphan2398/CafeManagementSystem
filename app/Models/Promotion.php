@@ -14,7 +14,8 @@ class Promotion extends Model
         'description',
         'start_at',
         'end_at',
-        'sale_percent'
+        'sale_percent',
+        'days'
     ];
 
     public function getStartAtAttribute($start_at){

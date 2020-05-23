@@ -45,6 +45,14 @@ function loadList(){
 }
 
 function edit_modal(item){
+    $('.update_promotion_checkbox').removeAttr('checked');
+    if (item.days){
+        console.log(item.days);
+        item.days.split(",").forEach(function (day) {
+             $('.update_promotion_checkbox[value="'+day.replace('"','')+'"]').prop('checked', true);
+            console.log(day.replace('"',''));
+        })
+    }
     $('#name_edit').val(item.name);
     $('#description_edit').val(item.description);
     $('#start_at_edit').val(item.start_at);
@@ -278,6 +286,13 @@ $(document).ready(function () {
                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
                     }
                 };
+                let  days = [];
+                $('.update_promotion_checkbox:checked')
+                    .each(function () {
+                        days.push($(this).attr('value'));
+                    });
+                formData.append('days', days);
+
                 axios.post(location.origin +'/axios/promotions/'+promotion_id_modal, formData, config)
                     .then(function (response) {
                         loadList();

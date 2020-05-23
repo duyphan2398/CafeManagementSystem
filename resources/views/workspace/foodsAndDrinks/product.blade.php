@@ -98,6 +98,10 @@
                                             <input name="name" type="text" class="form-control"  placeholder="Enter name's product">
                                         </div>
                                         <div class="form-group mt-2">
+                                            <label for="name">Description</label>
+                                            <textarea name="description" class="form-control" rows="3"></textarea>
+                                        </div>
+                                        <div class="form-group mt-2">
                                             <label for="price">Price</label>
                                             <input name="price" type="number" class="form-control"  placeholder="Enter price">
                                         </div>
@@ -132,6 +136,7 @@
                         <tr>
                             <th>ID</th>
                             <th>Name</th>
+                            <th>Description</th>
                             <th>Price</th>
                             <th>Sale_Price</th>
                             <th>Promotions Adding</th>
@@ -161,6 +166,7 @@
                         <tr>
                             <th>ID</th>
                             <th>Name</th>
+                            <th>Description</th>
                             <th>Price</th>
                             <th>Sale_Price</th>
                             <th>Promotions Adding</th>

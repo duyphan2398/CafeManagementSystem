@@ -28,7 +28,8 @@ class CreatePromotionRequest extends FormRequest
             'description'   => 'required',
             'start_at'      => 'required|before:end_at',
             'end_at'        => 'required|after:start_at',
-            'sale_percent'  => 'required|numeric|min:1|max:100'
+            'sale_percent'  => 'required|numeric|min:1|max:100',
+            'days'          => 'required'
         ];
     }
 }
