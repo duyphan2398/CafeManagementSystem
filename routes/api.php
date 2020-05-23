@@ -20,8 +20,10 @@ use Illuminate\Support\Facades\Route;
 Route::post('login', 'Auth\LoginController@login');
 
 /*Checkin - Checkout*/
-Route::post('check', 'ScheduleController@check');
 
+Route::post('check', 'ScheduleController@check'); // do not use
+Route::post('checkin', 'ScheduleController@checkin');
+Route::post('checkout', 'ScheduleController@checkout');
 /*Route::post('refresh', 'Auth\LoginController@refresh');*/
 Route::group(['middleware' => 'auth:api'], function (){
     Route::get('users', 'Auth\LoginController@user');

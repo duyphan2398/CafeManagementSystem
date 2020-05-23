@@ -86,8 +86,11 @@ class ScheduleController extends ApiBaseController
         ],200);
     }
 
-
+    //Do not use
     public function check(Request $request){
+        return response()->json([
+            'message' => '-------'
+        ],200);
         $request->validate([
             'username' => 'required|exists:users,username'
         ]);
@@ -110,6 +113,68 @@ class ScheduleController extends ApiBaseController
             }
         }
         return response()->json([
+            'message' => 'Could not find schedule today. !'
+        ],400);
+    }
+
+    public function checkin(Request $request){
+        $request->validate([
+            'username' => 'required|exists:users,username'
+        ]);
+        $user = User::whereUsername($request->username)->first();
+        $mineScheduleToday = Schedule::where('user_id', $user->id)
+            ->where('date', today()->format('Y-m-d'))->first();
+        if ($mineScheduleToday){
+            if ($mineScheduleToday->checkin_time) {
+                return response()->json([
+                    'status'        =>  2,
+                    'code'          => 200,
+                    'message'       => 'Already checked in !'
+                ],200);
+            }else{
+                $mineScheduleToday->checkin_time = now();
+                $mineScheduleToday->save();
+                return response()->json([
+                    'status'        =>  1,
+                    'code'          => 200,
+                    'message'       => 'Checkin Successfully. Have a nive working day!'
+                ],200);
+            }
+        }
+        return response()->json([
+            'status'        =>  3,
+            'code'          => 400,
+            'message' => 'Could not find schedule today. !'
+        ],400);
+    }
+
+    public function checkout(Request $request){
+        $request->validate([
+            'username' => 'required|exists:users,username'
+        ]);
+        $user = User::whereUsername($request->username)->first();
+        $mineScheduleToday = Schedule::where('user_id', $user->id)
+            ->where('date', today()->format('Y-m-d'))->first();
+        if ($mineScheduleToday){
+            if ($mineScheduleToday->checkin_time) {
+                $mineScheduleToday->checkout_time = now();
+                $mineScheduleToday->save();
+                return response()->json([
+                    'status'        => 1,
+                    'code'          => 200,
+                    'message'       => 'Checkout Successfully. Thanks for your help!'
+                ],200);
+            }else{
+                return response()->json([
+                    'status'        => 2,
+                    'code'          => 200,
+                    'message' => 'Please checkin before checkout !'
+                ],200);
+            }
+        }
+        return response()->json([
+            'status'        =>  3,
+            'code'          => 400,
             'message' => 'Could not find schedule today. !'
         ],400);
     }
