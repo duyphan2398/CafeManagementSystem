@@ -25,10 +25,10 @@ class ReceiptsTableSeeder extends Seeder
                 ->inRandomOrder()
                 ->first();
             /*Date format*/
-            $year = Carbon::now()->year;
-            $month = Carbon::now()->month;
-            $date  = Carbon::now()->day;
-            $date_time = Carbon::create($year, $month - Arr::random([0,1,2,3,4]), rand(1,$date), 12, 15, 00);
+            $year = Carbon::now()->subRealYear(Arr::random([0,1]))->year ;
+            $month = Carbon::now()->subMonth(rand(3,12))->month;
+            $date  = Carbon::now()->subDay(rand(1,30))->day;
+            $date_time = Carbon::create( $year, $month, $date, 12, 15, 00);
             /*-------------------------------------------*/
             $status = 3;
             $billing_at = $date_time->toDateTimeString();
@@ -65,7 +65,9 @@ class ReceiptsTableSeeder extends Seeder
             $array_products = [];
             $sale_excluded_price = 0;
             $sale_included_price = 0;
+
             foreach ($products as $product){
+                $sale_percent = Arr::random([ 0.9, 0.8, 0.6, 0.5, 1, 1, 1, 1, 1]);
                 $quantity = Arr::random([1,2,3]);
                 $array_products[$product->id] = [
                     'receipt_id'        => $receipt->id,
@@ -74,16 +76,86 @@ class ReceiptsTableSeeder extends Seeder
                     'note'              => null,
                     'product_name'      => $product->name,
                     'product_price'     => $product->price,
-                    'product_sale_price'=> $product->sale_price
+                    'product_sale_price'=> $product->price*$sale_percent
                 ];
                 $sale_excluded_price += $product->price * $quantity;
-                $sale_included_price += ($product->sale_price) ? ($product->sale_price*$quantity) : ($product->price * $quantity);
+                $sale_included_price += $product->price*$sale_percent*$quantity;
             }
             $receipt->products()->attach($array_products);
             $receipt->sale_excluded_price = $sale_excluded_price;
             $receipt->sale_included_price = $sale_included_price;
             $receipt->save();
         }
+
+
+        /*Status 3 with right price*/
+        for ($i = 1; $i <= 300; $i++){
+            $user = User::query()
+                ->inRandomOrder()
+                ->first();
+            $table = Table::query()
+                ->inRandomOrder()
+                ->first();
+            /*Date format*/
+            $year = Carbon::now()->year ;
+            $month = Carbon::now()->subMonth(rand(1,3))->month;
+            $date  = Carbon::now()->subDay(rand(1,30))->day;
+            $date_time = Carbon::create( $year, $month, $date, 12, 15, 00);
+            /*-------------------------------------------*/
+            $status = 3;
+            $billing_at = $date_time->toDateTimeString();
+            $date_time = $date_time->addMinutes(60)->toDateTimeString();
+            $receipt_at = $date_time;
+            $export_at = $receipt_at;
+            $table_id = $table->id;
+            $table_name = $table->name;
+            $user_id = $user->id;
+            $user_name = $user->name;
+
+            $receipt = new Receipt();
+            $receipt->fill([
+                'status'                => 2,
+                'billing_at'            => $billing_at,
+                'receipt_at'            => $receipt_at,
+                'export_at'             => $export_at,
+                'sale_excluded_price'   => null,
+                'sale_included_price'   => null,
+                'table_id'              => $table_id,
+                'table_name'            => $table_name,
+                'user_id'               => $user_id,
+                'user_name'             => $user_name,
+                'created_at'            => $billing_at
+            ]);
+            $receipt->save();
+            /*------------------------------*/
+            /*Product*/
+            $products = Product::query()
+                ->inRandomOrder()
+                ->take(3)
+                ->get();
+            /*Need Fix when have promotion*/
+            $array_products = [];
+
+            foreach ($products as $product){
+                $sale_percent = Arr::random([ 0.9, 0.8, 0.6, 0.5, 1, 1, 1, 1, 1]);
+                $quantity = Arr::random([1,2,3]);
+                $array_products[$product->id] = [
+                    'receipt_id'        => $receipt->id,
+                    'product_id'        => $product->id,
+                    'quantity'          => $quantity,
+                    'note'              => null,
+                    'product_name'      => $product->name,
+                    'product_price'     => $product->price,
+                    'product_sale_price'=> null
+                ];
+            }
+            $receipt->products()->attach($array_products);
+            $receipt->sale_excluded_price;
+            $receipt->sale_included_price;
+            $receipt->status = 3;
+            $receipt->save();
+        }
+
 
         /*Status 2 : Paid*/
         for ($i = 1; $i <= 3; $i++){
@@ -94,7 +166,7 @@ class ReceiptsTableSeeder extends Seeder
                 ->inRandomOrder()
                 ->first();
             $table->status = 'Using';
-            $table->user_id = Arr::random([$user->id, null]);;
+            $table->user_id = Arr::random([$user->id, null]);
             $table->save();
             /*Date format*/
             $year = Carbon::now()->year;
@@ -144,10 +216,10 @@ class ReceiptsTableSeeder extends Seeder
                     'note'              => null,
                     'product_name'      => $product->name,
                     'product_price'     => $product->price,
-                    'product_sale_price'=> $product->sale_price
+                    'product_sale_price'=> $product->sale_price ? $product->sale_price : $product->price
                 ];
                 $sale_excluded_price += $product->price * $quantity;
-                $sale_included_price += ($product->sale_price) ? ($product->sale_price*$quantity) : ($product->price * $quantity);
+                $sale_included_price += ($product->sale_price) ? ($product->sale_price* $quantity) : ($product->price * $quantity);
             }
             $receipt->products()->attach($array_products);
             $receipt->sale_excluded_price = $sale_excluded_price;
@@ -210,7 +282,7 @@ class ReceiptsTableSeeder extends Seeder
                     'note'              => null,
                     'product_name'      => $product->name,
                     'product_price'     => $product->price,
-                    'product_sale_price'=> $product->sale_price
+                    'product_sale_price'=> $product->sale_price ? $product->sale_price : $product->price
                 ];
                 $sale_excluded_price += $product->price * $quantity;
                 $sale_included_price += ($product->sale_price) ? ($product->sale_price*$quantity) : ($product->price * $quantity);

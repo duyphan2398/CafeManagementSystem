@@ -139,7 +139,7 @@ class ReceiptController extends ApiBaseController
         }
         else{
             return response()->json([
-                'message' => 'The receipt has not suitable status - only status 1 is accept to delete'
+                'message' => 'The receipt has not suitable status - only status 1 is accept to export'
             ],400);
         }
     }
@@ -174,7 +174,7 @@ class ReceiptController extends ApiBaseController
         }
         else{
             return response()->json([
-                'message' => 'The receipt has not suitable status - status 1 and 2 are accept to delete'
+                'message' => 'The receipt has not suitable status - status 1 and 2 are accept to export'
             ],400);
         }
     }
@@ -216,7 +216,7 @@ class ReceiptController extends ApiBaseController
         }
         else{
             return response()->json([
-                'message' => 'The receipt has not suitable status - status 2 and 3 are accept to delete'
+                'message' => 'The receipt has not suitable status - status 2 and 3 are accept to export'
             ],400);
         }
     }

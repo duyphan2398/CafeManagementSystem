@@ -51,7 +51,7 @@ class Receipt extends Model
                 $this_sale_excluded_price = $product->price * $product->pivot->quantity;
                 $sale_excluded_price += $this_sale_excluded_price;
                 //Save price for this product pivot table of this receipt
-                $product->pivot->product_price = $this_sale_excluded_price;
+                $product->pivot->product_price = $product->price;
                 $product->pivot->save();
             }
             //Save price for this receipt
@@ -68,7 +68,7 @@ class Receipt extends Model
                 $this_sale_included_price = ($product->sale_price ? $product->sale_price : $product->price) * $product->pivot->quantity;
                 $sale_included_price += $this_sale_included_price;
                 //Save sale price for this product pivot table of this receipt
-                $product->pivot->product_sale_price =  $this_sale_included_price;
+                $product->pivot->product_sale_price =  $product->sale_price ? $product->sale_price : $product->price;
                 $product->pivot->save();
             }
             //Save sale price for this receipt

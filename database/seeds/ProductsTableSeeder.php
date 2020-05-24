@@ -59,9 +59,9 @@ class ProductsTableSeeder extends Seeder
                 ]);
             }
 
-            if (rand(0,1) == 0) {
-                $product->promotions()->save(\App\Models\Promotion::query()->inRandomOrder()->first());
-            }
+
+            //Random promotion
+            $product->promotions()->saveMany(\App\Models\Promotion::all()->random(rand(0,2)));
         }
     }
 }
