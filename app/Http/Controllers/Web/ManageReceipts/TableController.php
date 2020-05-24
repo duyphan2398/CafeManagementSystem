@@ -4,6 +4,7 @@
 namespace App\Http\Controllers\Web\ManageReceipts;
 
 
+use App\Events\ChangeStateTableEvent;
 use App\Http\Controllers\WebBaseController;
 use App\Http\Requests\CreateTableRequest;
 use App\Http\Requests\UpdateTableRequest;
@@ -60,6 +61,7 @@ class TableController extends WebBaseController
     public function changeUserUsing(Table $table){
         $table->user_id = null;
         $table->save();
+        event(new ChangeStateTableEvent('Change state User_using to null'));
         return response()->json([
             'status' =>  'success',
         ], 200);
@@ -70,6 +72,7 @@ class TableController extends WebBaseController
         $receipt->delete();
         $table->status = 'Empty';
         $table->save();
+        event(new ChangeStateTableEvent('Change table status to Empty'));
         return response()->json([
             'status' =>  'success',
         ], 200);
