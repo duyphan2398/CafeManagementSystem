@@ -90,7 +90,7 @@ class StatisticController extends WebBaseController
 
         for ($i = 1; $i<=13; $i++){
             $schedules = Schedule::whereYear('date', '=', $countMonth->year)
-                ->whereMonth('created_at', '=', $countMonth->month)
+                ->whereMonth('date', '=', $countMonth->month)
                 ->get();
             $total_time = 0;
             foreach ($schedules as $schedule){
