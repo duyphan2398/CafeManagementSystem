@@ -16,6 +16,8 @@ class ReceiptsTableSeeder extends Seeder
      */
     public function run()
     {
+        $faker = \Faker\Factory::create();
+        //$faker->addProvider(new \Faker\Provider\DateTime());
         /*Status 3 : Paid*/
         for ($i = 1; $i <= 500; $i++){
             $user = User::query()
@@ -25,9 +27,10 @@ class ReceiptsTableSeeder extends Seeder
                 ->inRandomOrder()
                 ->first();
             /*Date format*/
-            $year = Carbon::now()->subRealYear(Arr::random([0,1]))->year ;
-            $month = Carbon::now()->subMonth(rand(3,12))->month;
-            $date  = Carbon::now()->subDay(rand(1,30))->day;
+            $date =  $faker->dateTimeBetween(Carbon::now()->subYear(1), Carbon::now()->subMonth(3));
+            $year = Carbon::parse($date)->year ;
+            $month = Carbon::parse($date)->month;
+            $date  = Carbon::parse($date)->day;
             $date_time = Carbon::create( $year, $month, $date, 12, 15, 00);
             /*-------------------------------------------*/
             $status = 3;
@@ -89,7 +92,7 @@ class ReceiptsTableSeeder extends Seeder
 
 
         /*Status 3 with right price*/
-        for ($i = 1; $i <= 300; $i++){
+        for ($i = 1; $i <= 100; $i++){
             $user = User::query()
                 ->inRandomOrder()
                 ->first();
@@ -97,9 +100,10 @@ class ReceiptsTableSeeder extends Seeder
                 ->inRandomOrder()
                 ->first();
             /*Date format*/
-            $year = Carbon::now()->year ;
-            $month = Carbon::now()->subMonth(rand(1,3))->month;
-            $date  = Carbon::now()->subDay(rand(1,30))->day;
+            $date =  $faker->dateTimeBetween(Carbon::now()->subMonth(3), Carbon::now());
+            $year = Carbon::parse($date)->year ;
+            $month = Carbon::parse($date)->month;
+            $date  = Carbon::parse($date)->day;
             $date_time = Carbon::create( $year, $month, $date, 12, 15, 00);
             /*-------------------------------------------*/
             $status = 3;
@@ -137,7 +141,6 @@ class ReceiptsTableSeeder extends Seeder
             $array_products = [];
 
             foreach ($products as $product){
-                $sale_percent = Arr::random([ 0.9, 0.8, 0.6, 0.5, 1, 1, 1, 1, 1]);
                 $quantity = Arr::random([1,2,3]);
                 $array_products[$product->id] = [
                     'receipt_id'        => $receipt->id,
