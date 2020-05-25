@@ -7,7 +7,39 @@ function addText(item){
                                 <td>
                                     <textarea readonly class="form-control" rows="3">`+item.note+`</textarea>
                                 </td>
-                                <td>`+item.status+`</td>
+                                <td>`;
+ if (item.status == 'Using'){
+    result+=                    `<select name='`+item.id+`'class="changeStatus form-control w-50">
+                                    <option active>Using</option>
+                                    <option>Empty</option>
+                                 </select>
+                                  <div name="`+item.id+`" class="text-center mb-2 loadingChangeStatus"  style="display: none;">
+                                    <img src="`+location.origin+`/images/loading.gif" alt="loading...">
+                                  </div>`;
+ }
+ else {
+     result += `Empty`;
+ }
+
+
+     result+=       `        </td>
+                                <td>`;
+    if (item.user_id){
+                    result +=  `<select name='`+item.id+`'class="changeUserUsing form-control w-50">
+                                    <option active>`+item.user_id+`</option>
+                                    <option value="null">Empty</option>
+                                 </select>
+                                  <div name="`+item.id+`" class="text-center mb-2 loadingChangeUserUsing"  style="display: none;">
+                                    <img src="`+location.origin+`/images/loading.gif" alt="loading...">
+                                  </div>`;
+    }
+    else {
+                    result += `Empty`;
+    }
+
+
+     result+=                       `</select>
+                                </td>
 
                                 <td>
                                     <button  name="`+item.id+`" class="edit btn btn-primary mb-1" style="width: 75px">
@@ -68,7 +100,17 @@ function edit_modal(item){
     $('#form_modal').append(modal);
 }
 
+/*Pusher*/
+var pusher = new Pusher('625e6f2e093b6e564050', {
+    cluster: 'ap1'
+});
+var channel = pusher.subscribe('mobile');
+
 $(document).ready(function () {
+    /*Pusher*/
+    channel.bind('changeStateTable-event', function(data) {
+        loadList();
+    });
     /*Edit*/
     jQuery(document).on('click',".edit",function () {
         table_id_modal = this.name;
@@ -81,6 +123,40 @@ $(document).ready(function () {
             edit_modal(response.data.table);
         })
     });
+
+
+    /*ChangeState*/
+    jQuery(document).on('change','.changeUserUsing',function () {
+        table_id = this.name;
+        $('.changeUserUsing[name="'+table_id+'"]').removeAttr("style").hide();
+        $('.loadingChangeUserUsing[name="'+table_id+'"]').show();
+        axios.get(location.origin +'/axios/tables/changeUserUsing/'+table_id)
+            .then(function (response) {
+                loadList();
+                toastr.success("Change Sucsessfully");
+            })
+            .catch(function (error) {
+                loadList();
+                toastr.error("Change Fails");
+            });
+    });
+
+    /*ChangeStatus*/
+    jQuery(document).on('change','.changeStatus',function () {
+        table_id = this.name;
+        $('.changeStatus[name="'+table_id+'"]').removeAttr("style").hide();
+        $('.loadingChangeStatus[name="'+table_id+'"]').show();
+        axios.get(location.origin +'/axios/tables/changeStatus/'+table_id)
+            .then(function (response) {
+                loadList();
+                toastr.success("Change Sucsessfully");
+            })
+            .catch(function (error) {
+                loadList();
+                toastr.error("Change Fails");
+            });
+    });
+
 
     /*Form Edit Submit*/
     $("#form_modal")
@@ -199,6 +275,9 @@ $(document).ready(function () {
             }
         });
     });
+
+
+
 
 });
 

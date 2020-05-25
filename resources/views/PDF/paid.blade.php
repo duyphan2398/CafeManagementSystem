@@ -23,7 +23,7 @@
         <h4 class="content">Contact: 0936221326</h4>
         <h5 class="content">Date: {{$receipt['export_at']}}</h5>
         <hr class="w-50">
-        <h3>Thank you</h3>
+        <h3>Table: {{$receipt['table_name']}}    -    ID: {{$receipt['id']}}</h3>
         <table class="table w-75 center">
             <thead>
             <tr>
@@ -41,7 +41,7 @@
                     <td>{{$product['quantity']}}</td>
                     <td>{{$product['product_price']}}</td>
                     <td>{{$product['product_price'] * $product['quantity']}}</td>
-                    <td>{{($product['product_sale_price']) ? $product['product_sale_price'] * $product['quantity'] : '--'}}</td>
+                    <td>{{($product['product_sale_price'] && ($product['product_sale_price'] < $product['product_price'])) ? $product['product_sale_price'] * $product['quantity'] : '--'}}</td>
                 </tr>
             @endforeach
             </tbody>
@@ -54,7 +54,7 @@
         @endif
         <hr>
         <h4>
-            Customer Service : mycafe@cafemail.com
+            Thank you - Customer Service : mycafe@cafemail.com
         </h4>
     </body>
 </html>

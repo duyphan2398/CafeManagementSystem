@@ -33,14 +33,13 @@ function addText(item){
                             </div>
                             <button  name='`+item.id+`'class="receipt btn btn-outline-success mr-1">
                                 <ti class ='ti-receipt'></ti>
-                             </button>`+
-                            ((item.receipt_at) ? (item.receipt_at) : ('')) +`
+                             </button>`+ ((item.receipt_at) ? (item.receipt_at) : ('')) +`
                         </td>
                         <td class="pt-3">
                             `+
                             ((item.export_at) ? (item.export_at) : ('--'))+`</td>
                         <td>`+item.sale_excluded_price+`</td>
-                        <td>`+item.sale_included_price+`</td>
+                        <td>`+ ((item.sale_included_price == item.sale_excluded_price) ? ('--') : (item.sale_included_price)) +`</td>
                         <td>
                             <button name="`+item.id+`"  class="delete btn btn-danger mb-1" style="width: 75px">
                                 Delete

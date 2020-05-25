@@ -47,7 +47,7 @@ class User extends Authenticatable implements JWTSubject
     }
 
     public function isAdmin(){
-        return ($this->role == 'Admin')? true :false;
+        return ($this->role == 'Admin') ? true : false;
     }
 
     public function isManager(){

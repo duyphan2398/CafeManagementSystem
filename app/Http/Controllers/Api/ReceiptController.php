@@ -4,6 +4,7 @@
 namespace App\Http\Controllers\Api;
 
 
+use App\Events\ChangeStateTableEvent;
 use App\Http\Controllers\ApiBaseController;
 use App\Http\Requests\CreateProductReceiptRequest;
 use App\Http\Requests\CreateReceiptRequest;
@@ -36,12 +37,13 @@ class ReceiptController extends ApiBaseController
         ],200);
     }
 
+    /*Method do not user*/
     public function create(CreateReceiptRequest $request){
         $table = Table::find($request->table_id);
         if ($table->status == 'Empty'){
             $table->status = 'Using';
             $table->save();
-//---------------------- //Real time
+            //--------- //Real time
             $receipt = new Receipt();
             $receipt->fill($request->only(['table_id', 'user_id']));
             $receipt->status = 1;
@@ -58,7 +60,7 @@ class ReceiptController extends ApiBaseController
         ],400);
     }
 
-    //Tam thoi khong dung Da co thay the update bang table
+    /*Method do not user*/
     public function createProductReceipt(CreateProductReceiptRequest $request, Receipt $receipt, Product $product){
         if ($receipt->status == 1 || $receipt->status == 2){
             $receipt->products()->syncWithoutDetaching($product->id, [
@@ -68,7 +70,7 @@ class ReceiptController extends ApiBaseController
                 'quantity'              => $request->quantity,
                 'note'                  => $request->note,
             ]);
-//---------------------- //Real time  Change price
+            //------------- //Real time  Change price
             return response()->json([
                 'receipt' => (new ReceiptTranformer)->transform($receipt),
                 'message'  => 'success'
@@ -85,6 +87,7 @@ class ReceiptController extends ApiBaseController
         ],200);
     }
 
+    /*Method do not user*/
     public function destroy(Receipt $receipt){
         if ($receipt->status == 1){
             DB::beginTransaction();
@@ -93,7 +96,7 @@ class ReceiptController extends ApiBaseController
                 $table = $receipt->table;
                 $table->status = 'Empty';
                 $table->save();
-//---------------------- //Real time
+                //-------------- //Real time
                 $receipt->delete();
                 DB::commit();
                 return response()->json([
@@ -114,12 +117,13 @@ class ReceiptController extends ApiBaseController
         }
     }
 
+    /*Method do not user*/
     public function destroyProductReceipt(Receipt $receipt, Product $product){
         if ($receipt->status == 1 || $receipt->status == 2){
             DB::beginTransaction();
             try {
                 $receipt->products()->detach($product->id);
-//------------------------------------   // Real time
+                //-----------------------------   // Real time
                 DB::commit();
                 return response()->json([
                     'receipt' => (new ReceiptTranformer)->transform($receipt),
@@ -135,12 +139,12 @@ class ReceiptController extends ApiBaseController
         }
         else{
             return response()->json([
-                'message' => 'The receipt has not suitable status - only status 1 is accept to delete'
+                'message' => 'The receipt has not suitable status - only status 1 is accept to export'
             ],400);
         }
     }
 
-    //get billing_at
+
     public function billReceipt(Request $request,Receipt $receipt){
         if ($receipt->status == 1 || $receipt->status == 2){
             DB::beginTransaction();
@@ -149,16 +153,15 @@ class ReceiptController extends ApiBaseController
                 $receipt->status = 2;
                 //in PDF kèm theo
                 $pdf = PDF2::loadView('PDF.bill', ['receipt'=>(new \App\Transformers\ReceiptTranformer)->transform($receipt)]);
-                $url = 'public\export\pdf\bill\\';
-                Storage::delete($url.$receipt->id.'.pdf');
-                Storage::put($url.$receipt->id.'.pdf', $pdf->output());
-//------------------------------------   // Real time
+                $url = '\bill\\';
+                Storage::disk('public')->delete($url.$receipt->id.'.pdf');
+                Storage::disk('public')->put($url.$receipt->id.'.pdf', $pdf->output());
                 $receipt->save();
                 DB::commit();
                 return response()->json([
                     'receipt' => (new ReceiptTranformer)->transform($receipt),
                     'bill'    => $receipt->id.'.pdf',
-                    'host'    => $request->getHttpHost().'/storage/export/pdf/bill/',
+                    'host'    => $request->getHttpHost().'/export/pdf/bill/',
                     'message' => 'success'
                 ],200);
 
@@ -171,12 +174,11 @@ class ReceiptController extends ApiBaseController
         }
         else{
             return response()->json([
-                'message' => 'The receipt has not suitable status - status 1 and 2 are accept to delete'
+                'message' => 'The receipt has not suitable status - status 1 and 2 are accept to export'
             ],400);
         }
     }
 
-    //get receipt_at
     public function paidReceipt(Request $request, Receipt $receipt){
         if ($receipt->status == 2 || $receipt->status == 3 ){
             DB::beginTransaction();
@@ -188,19 +190,20 @@ class ReceiptController extends ApiBaseController
                 $receipt->status = 3;
                 //in PDF kèm theo
                 $pdf = PDF2::loadView('PDF.paid', ['receipt'=>(new \App\Transformers\ReceiptTranformer)->transform($receipt)]);
-                $url = 'public\export\pdf\paid\\';
-                Storage::delete($url.$receipt->id.'.pdf');
-                Storage::put($url.$receipt->id.'.pdf', $pdf->output());
-//------------------------------------   // Real time
+                $url = '\paid\\';
+                Storage::disk('public')->delete($url.$receipt->id.'.pdf');
+                Storage::disk('public')->put($url.$receipt->id.'.pdf', $pdf->output());
                 $table = $receipt->table;
                 $table->status = 'Empty';
+                $table->user_id = null;
                 $receipt->save();
                 $table->save();
                 DB::commit();
+                event(new ChangeStateTableEvent('A table is receipted'));
                 return response()->json([
                     'receipt' => (new ReceiptTranformer)->transform($receipt),
                     'paid'    => $receipt->id.'.pdf',
-                    'host'    => $request->getHttpHost().'/storage/export/pdf/paid/',
+                    'host'    => $request->getHttpHost().'/export/pdf/paid/',
                     'message' => 'success'
                 ],200);
 
@@ -213,7 +216,7 @@ class ReceiptController extends ApiBaseController
         }
         else{
             return response()->json([
-                'message' => 'The receipt has not suitable status - status 2 and 3 are accept to delete'
+                'message' => 'The receipt has not suitable status - status 2 and 3 are accept to export'
             ],400);
         }
     }

@@ -12,14 +12,16 @@ class ProductTransformer extends TransformerAbstract
      public function transform(Product $product)
     {
         return [
-            'id'            => $product->id,
-            'name'          => $product->name,
-            'price'         => $product->price,
-            'sale_price'    => $product->sale_price,
-            'url'           => $product->url,
-            'type'          => $product->type,
-            'promotion_id'  => $product->promotion_id,
-            'ingredients'   => (new ProductGetMaterialsTranformer)->transform($product)
+            'id'                => $product->id,
+            'name'              => $product->name,
+            'price'             => $product->price,
+            'sale_price'        => $product->sale_price,
+            'url'               => $product->url,
+            'type'              => $product->type,
+            'description'       => $product->description,
+            'promotion_today'   => $product->promotion_today,
+            'promotions'        => (new ProductGetPromotionsTransformer)->transform($product),
+            'ingredients'       => (new ProductGetMaterialsTranformer)->transform($product)
         ];
     }
 }

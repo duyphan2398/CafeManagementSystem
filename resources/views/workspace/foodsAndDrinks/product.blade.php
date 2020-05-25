@@ -6,6 +6,28 @@
 
 @section('links')
     <script src="{{asset('js/foodsAndDrinks/product.js')}}"></script>
+    <style>
+        @if(!\Illuminate\Support\Facades\Auth::user()->isAdmin())
+            .action {
+                display: none !important;
+            }
+            .edit{
+                display: none !important;
+            }
+            .delete{
+                display: none !important;
+            }
+            #insert_ingredient_form{
+                display: none !important;
+            }
+            #newProductButton{
+                display: none !important;
+            }
+            .ingredient_delete{
+                display: none !important;
+            }
+        @endif
+    </style>
 @endsection
 
 @section('content')
@@ -76,6 +98,10 @@
                                             <input name="name" type="text" class="form-control"  placeholder="Enter name's product">
                                         </div>
                                         <div class="form-group mt-2">
+                                            <label for="name">Description</label>
+                                            <textarea name="description" class="form-control" rows="3"></textarea>
+                                        </div>
+                                        <div class="form-group mt-2">
                                             <label for="price">Price</label>
                                             <input name="price" type="number" class="form-control"  placeholder="Enter price">
                                         </div>
@@ -110,38 +136,17 @@
                         <tr>
                             <th>ID</th>
                             <th>Name</th>
+                            <th>Description</th>
                             <th>Price</th>
                             <th>Sale_Price</th>
-                            <th>Promotion ID</th>
+                            <th>Promotions Adding</th>
+                            <th>Promotion Today</th>
                             <th>Image</th>
                             <th>Ingredients</th>
-                            <th>Action</th>
+                            <th class="action">Action</th>
                         </tr>
                         </thead>
                         <tbody  id="listDrinks">
-                            <tr id="`+item.id+`">
-                                <td>11</td>
-                                <td>fdsfsfdsfs</td>
-                                <td>1111</td>
-                                <th>1212</th>
-                                <td>11</td>
-                                <td>
-                                    <img style="width: 60px; height: 60px" src="{{asset('images/products/default_url_product.png')}}" alt="image_product">
-                                </td>
-                                <td>
-                                    <button class="ml-2 btn btn-outline-info">
-                                        <i class="ti-notepad"></i>
-                                    </button>
-                                </td>
-                                <td>
-                                    <button  name="`+item.id+`" class="edit btn btn-primary mb-1" style="width: 75px">
-                                        Edit
-                                    </button>
-                                    <button name="`+item.id+`"  class="delete btn btn-danger mb-1" style="width: 75px">
-                                        Delete
-                                    </button>
-                                </td>
-                            </tr>
                         </tbody>
                     </table>
                     <div class="text-center mb-2"  id="loadingDrinks" style="display: none;">
@@ -161,12 +166,14 @@
                         <tr>
                             <th>ID</th>
                             <th>Name</th>
+                            <th>Description</th>
                             <th>Price</th>
                             <th>Sale_Price</th>
-                            <th>Promotion ID</th>
+                            <th>Promotions Adding</th>
+                            <th>Promotion Today</th>
                             <th>Image</th>
                             <th>Ingredients</th>
-                            <th>Action</th>
+                            <th class="action">Action</th>
                         </tr>
                         </thead>
                         <tbody  id="listFoods">

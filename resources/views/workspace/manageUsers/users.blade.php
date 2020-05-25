@@ -6,6 +6,19 @@
 
 @section('links')
     <script src="{{asset('js/manageUsers/user.js')}}"></script>
+    <style>
+        @cannot('forceDelete', \App\Models\User::class)
+        .delete{
+            display: none !important;
+        }
+        @endcannot
+        @cannot('create', \App\Models\User::class)
+        #newUserButton{
+            display: none !important;
+        }
+        @endcannot
+    </style>
+
 @endsection
 
 @section('content')

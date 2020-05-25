@@ -14,10 +14,12 @@
         "fruitcake/laravel-cors": "^1.0",
         "fzaninotto/faker": "^1.9.1",
         "guzzlehttp/guzzle": "^6.3",
+        "jzonta/faker-restaurant": "^1.1",
         "laravel/framework": "^7.0",
         "laravel/tinker": "^2.0",
         "league/fractal": "^0.19.2",
         "maatwebsite/excel": "^3.1",
+        "pusher/pusher-php-server": "^4.1",
         "tymon/jwt-auth": "^1.0"
     },
     "require-dev": {

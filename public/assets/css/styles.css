@@ -82,6 +82,7 @@
 .card-body {
     padding: 25.6px;
     padding: 1.6rem;
+    text-align: center;
 }
 
 .h-full {
@@ -1398,7 +1399,7 @@ ul.breadcrumbs {
 #amlinechart3,
 #amlinechart4,
 #amlinechart5 {
-    height: 400px;
+    height: 50%;
 }
 
 

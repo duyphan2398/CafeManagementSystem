@@ -2,14 +2,46 @@ let material_id = null;
 var product_id_modal = null;
 function addText(item){
     var result= ``;
-    result =  `      <tr id="`+item.id+`">
+    result =        `      <tr id="`+item.id+`">
                                 <td>`+item.id+`</td>
                                 <td>`+item.name+`</td>
+                                <td>
+                                    <textarea readonly class="form-control" rows="3">`+item.description+`</textarea>
+                                </td>
                                 <td>`+item.price+`</td>
                                 <td>`+((item.sale_price) ? (item.sale_price) : ('--'))+`</td>
-                                <td>`+((item.promotion_id) ? (item.promotion_id): ('--'))+`</td>
                                 <td>
-                                    <img style="width: 60px; height: 60px" src="`+location.origin+`/images/products/`+item.url+`" alt="image_product">
+                                `;
+
+        if (item.promotions){
+            item.promotions.forEach(function (promotion) {
+                result += `-`+promotion.id +` : `+ promotion.name+` </br>`;
+            })
+        }
+        else{
+            result += `--`;
+        }
+        result += `</td> <td>`;
+
+        if (item.promotion_today){
+            result += `-`+item.promotion_today.id +` : `+ item.promotion_today.name+` </br>`;
+        }
+        else{
+            result += `--`;
+        }
+     result+=        ` </td> <td>
+                                    <img data-toggle="modal" data-target="#img_product_`+item.id+`" style="width: 60px; height: 60px" src="`+location.origin+`/images/products/`+item.url+`" alt="image_product">
+
+                                    <div id="img_product_`+item.id+`" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                      <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-body">
+                                                <img  style="width: 100%; height: 100%" class="img-responsive" src="`+location.origin+`/images/products/`+item.url+`" alt="image_product">
+                                            </div>
+                                        </div>
+                                      </div>
+                                    </div>
+
                                 </td>
                                 <td>
                                     <button name='`+item.id+`'class="ingredient ml-2 btn btn-outline-info">
@@ -30,7 +62,7 @@ function addText(item){
     return result;
 }
 
-function edit_modal(item, promotions){
+function edit_modal(item){
     let  modal = `
                     <div class="form-group mt-2">
                         <label for="nameEdit">Name</label>
@@ -40,28 +72,13 @@ function edit_modal(item, promotions){
                         <label for="priceEdit">Price</label>
                         <input name="price" type="number" class="form-control" value="`+item.price+`" id="priceEdit">
                     </div>
+                    <div class="form-group mt-2">
+                        <label for="descriptionEdit">Description</label>
+                        <textarea name="description" class="form-control" rows="3">`+item.description+`</textarea>
+                    </div>
                     <div class="form-group mt-2" >
                         <label for="salePriceEdit">Sale Price</label>
                         <input name="sale_price" class="form-control" type="number" id="salePriceEdit" value="`+item.sale_price+`" readonly>
-                    </div>
-                    <div class="form-group mt-2" >
-                        <label for="promotionEdit">Promotion</label>
-                         <select class="form-control" name="promotion_id" id="">
-                             <option value="" selected>Not Setting</option>
-                                `;
-
-    promotions.forEach(function (promotion) {
-
-
-        if (promotion.id == item.promotion_id){
-            modal+= `<option value="`+promotion.id+`" selected>`+promotion.id+` : `+promotion.name+`</option>`
-        }
-        else {
-            modal+= `<option value="`+promotion.id+`">`+promotion.id+` : `+promotion.name+`</option>`
-        }
-    });
-          modal+=      `
-                        </select>
                     </div>
                     <div class="form-group mt-2">
                         <label for="sale_price">Type</label>
@@ -104,7 +121,7 @@ function editIngredient(ingredient, item) {
                                         <th>Material Name</th>
                                         <th>Quantity</th>
                                         <th>Unit</th>
-                                        <th>Action</th>
+                                        <th class="action">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>`;
@@ -190,7 +207,7 @@ $(document).ready(function () {
         axios.get(location.origin + '/axios/products/'+ product_id_modal
         ).then(function (response) {
             $('#loading_modal').removeAttr("style").hide();
-            edit_modal(response.data.product, response.data.promotions);
+            edit_modal(response.data.product);
         })
 
     });

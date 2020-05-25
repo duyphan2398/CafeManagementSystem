@@ -1,13 +1,6 @@
 <nav>
     <ul class="metismenu" id="menu">
-        {{--<li class="active">
-            <a href="javascript:void(0)" aria-expanded="true"><i class="ti-dashboard"></i><span>dashboard</span></a>
-            <ul class="collapse">
-                <li class="active"><a href="index.html">ICO dashboard</a></li>
-                <li><a href="index2.html">Ecommerce dashboard</a></li>
-                <li><a href="index3.html">SEO dashboard</a></li>
-            </ul>
-        </li>--}}
+        @can('viewAny', \App\Models\User::class)
         <li>
             <a href="" aria-expanded="true">
                 <i class="ti-face-smile"></i>
@@ -22,11 +15,10 @@
                 <li>
                     <a href="{{url('schedules')}}">Schedules</a>
                 </li>
-                {{--<li>
-                    <a href="index3-horizontalmenu.html">Horizontal Sidebar</a>
-                </li>--}}
             </ul>
         </li>
+        @endcan
+        @can('index', \App\Models\Product::class)
         <li>
             <a href="" aria-expanded="true">
                 <i class="ti-cup"></i>
@@ -40,6 +32,7 @@
                 </li>
             </ul>
         </li>
+        @endcan
         <li>
             <a href="" aria-expanded="true">
                 <i class="ti-pencil-alt"></i>
@@ -54,11 +47,14 @@
                 <li>
                     <a href="{{url('tables')}}">List Of Tables</a>
                 </li>
+                @can('index', \App\Models\Promotion::class)
                 <li>
                     <a href="{{url('promotions')}}">List Of Promotions</a>
                 </li>
+                @endcan
             </ul>
         </li>
+        @if(\Illuminate\Support\Facades\Auth::user()->isAdmin() || \Illuminate\Support\Facades\Auth::user()->isManager())
         <li>
             <a href="" aria-expanded="true">
                 <i class="ti-home"></i>
@@ -70,8 +66,12 @@
                 <li>
                     <a href="{{url('materials')}}">List Of Materials</a>
                 </li>
+                <li>
+                    <a href="{{url('statistics')}}">Statistics</a>
+                </li>
             </ul>
         </li>
+         @endif
         <li>
             <a href="{{url('logout')}}" aria-expanded="true">
                 <i class="ti-shift-left"></i>

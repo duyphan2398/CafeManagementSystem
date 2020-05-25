@@ -25,7 +25,7 @@ class UserController extends WebBaseController
         ],200);
     }
 
-    public function delete(Request $request){
+    public function destroy(Request $request){
         $user = User::find($request->user_id);
         if ($user){
             if ($user->delete()){
@@ -94,7 +94,7 @@ class UserController extends WebBaseController
         }
     }
 
-    public function update(Request $request) {
+    public function edit(Request $request) {
         $user = User::withTrashed()->find($request->user_id_modal);
         if ($request->name){
             $user->name = $request->name;

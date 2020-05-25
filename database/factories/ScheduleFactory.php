@@ -12,7 +12,7 @@ $factory->define(Schedule::class, function (Faker $faker) {
     $total_time =Carbon::parse($end_time)->floatDiffInHours($start_time);
     $checkin_time = Carbon::parse($start_time)->subMinutes(15);
     $checkout_time = Carbon::parse($end_time)->addMinutes(15);
-    $date =  $faker->dateTimeBetween(Carbon::now()->subDays(30), Carbon::now()->addDays(30));
+    $date =  $faker->dateTimeBetween(Carbon::now()->subYear(1), Carbon::now()->addDays(15));
     return [
         'user_id'           =>  User::all()->random(1)->first()->id,
         'start_time'        => $start_time,

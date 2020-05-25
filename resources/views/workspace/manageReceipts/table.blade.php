@@ -5,6 +5,7 @@
 @endsection
 
 @section('links')
+    <script src="https://js.pusher.com/6.0/pusher.min.js"></script>
     <script src="{{asset('js/manageReceipts/table.js')}}"></script>
 @endsection
 
@@ -91,6 +92,7 @@
                             <th>Name</th>
                             <th>Note</th>
                             <th>Status</th>
+                            <th>User Using</th>
                             <th>Action</th>
                         </tr>
                         </thead>
@@ -101,6 +103,12 @@
                             <td>1111</td>
                             <td>
                                 <textarea name="" id="" cols="30" rows="10"></textarea>
+                            </td>
+                            <td>
+                                <select>
+                                    <option>User_id</option>
+                                    <option>Empty</option>
+                                </select>
                             </td>
                             <td>
                                 <button  name="`+item.id+`" class="edit btn btn-primary mb-1" style="width: 75px">
