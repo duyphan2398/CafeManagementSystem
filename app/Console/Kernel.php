@@ -5,6 +5,7 @@ namespace App\Console;
 use App\Console\Commands\ClearBills;
 use App\Console\Commands\ClearImageProducts;
 use App\Console\Commands\ClearReceipts;
+use App\Console\Commands\ClearStorage;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -18,7 +19,8 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         ClearBills::class,
         ClearImageProducts::class,
-        ClearReceipts::class
+        ClearReceipts::class,
+        ClearStorage::class
     ];
 
     /**
