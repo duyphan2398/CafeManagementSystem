@@ -186,6 +186,7 @@ $(document).ready(function () {
     /*Edit Ingredient*/
     jQuery(document).on('click',".ingredient",function () {
          product_id = this.name;
+         $('#insert_ingredient_form').removeAttr("style").hide();
          $('#modal_edit_ingredient').empty();
          $('#loading_modal_ingredient').show();
          $('#modal_ingredient').modal('show');
@@ -195,6 +196,7 @@ $(document).ready(function () {
         ).then(function (response) {
             $('#product_id_modal').attr('name', product_id);
             $('#loading_modal_ingredient').removeAttr("style").hide();
+            $('#insert_ingredient_form').show();
             response.data.ingredient_orther.forEach(function (ingredient){
               $('#nameIngredient').append('<option class="ingredient_item" name="'+ingredient.id+'" value="'+ingredient.id+'">'+ingredient.name+'</option>')
             });

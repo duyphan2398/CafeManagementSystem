@@ -7,7 +7,9 @@ namespace App\Http\Controllers\Web\ManageReceipts;
 use App\Events\ChangeStateTableEvent;
 use App\Exports\ReceiptExport;
 use App\Http\Controllers\WebBaseController;
+use App\Models\Product;
 use App\Models\Receipt;
+use App\Transformers\ProductTransformer;
 use App\Transformers\ReceiptTranformer;
 use Barryvdh\DomPDF\Facade as PDF2;
 use Carbon\Carbon;
@@ -29,6 +31,23 @@ class ReceiptController extends WebBaseController
             ], 200);
         }
         return view('workspace.manageReceipts.receipt');
+    }
+
+
+    public function show(Request $request, Receipt $receipt){
+        $drinks = $receipt->products()->where('type', 'Drink')->orderBy('name')->get();
+        $drinks_orther = Product::whereDoesntHave('receipts',function($query) use ($receipt) {
+            $query->where('receipt_id', $receipt->id);
+        })->where('type', 'Drink')->orderBy('name')->get();
+        $foods = $receipt->products()->where('type', 'Food')->orderBy('name')->get();
+        $foods_orther = Product::whereDoesntHave('receipts',function($query) use ($receipt) {
+            $query->where('receipt_id', $receipt->id);
+        })->where('type', 'Food')->orderBy('name')->get();
+        return response()->json([
+            'drinks'    => $drinks->union($drinks_orther),
+            'foods'     => $foods->union($foods_orther),
+            'receipt'   => $receipt
+        ], 200);
     }
 
     public function getListReceiptFillter(Request $request){

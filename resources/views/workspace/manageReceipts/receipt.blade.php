@@ -263,4 +263,27 @@
             </div>
         </div>
     </div>
+
+    {{--Products--}}
+    <div class="modal fade" id="modal_products" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 id="product_id_modal" class="modal-title">Product List</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class=" mt-2 mb-1 text-center pl-5 pr-5">
+                    <form class="form-group" id="insert_product_form">
+
+                    </form>
+                </div>
+                <div class="text-center mb-2"  id="loading_modal_product" style="display: none;">
+                    <img src="{{asset("images/loading.gif")}}" alt="loading..." style="margin-bottom: 190px; margin-top: 187px">
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
 @endsection

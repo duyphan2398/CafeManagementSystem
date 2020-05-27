@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class Product extends Model
 {
     use ParseTimeStamp;
-
+    protected $appends =['promotion_today'];
     protected $fillable = [
         'name',
         'price',

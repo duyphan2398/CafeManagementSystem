@@ -96,7 +96,7 @@ function edit_products_modal(item, item_orther, promotion) {
     result+= `</table>
               <button name=`+promotion.id+`  type="submit" class="save_product btn btn-primary w-50">Save</button>
                 `;
-    $('#insert_ingredient_form').append(result);
+    $('#insert_product_form').append(result);
 
 }
 
@@ -104,7 +104,7 @@ $(document).ready(function () {
     /*Products List*/
     jQuery(document).on('click',".products",function () {
         let promotion_id = this.name;
-        $('#insert_ingredient_form').empty();
+        $('#insert_product_form').empty();
         $('#loading_modal_product').show();
         $('#modal_products').modal('show');
         axios.get(location.origin + '/axios/promotions/showProducts/'+promotion_id
@@ -117,7 +117,7 @@ $(document).ready(function () {
     /*Uppdate products*/
 
     jQuery(document).on('click',".save_product",function () {
-        $('#insert_ingredient_form').submit(function(e) {
+        $('#insert_product_form').submit(function(e) {
             e.preventDefault();
         });
         let promotion_id = this.name;
@@ -135,7 +135,7 @@ $(document).ready(function () {
             products
         }, config)
             .then(function (response) {
-            $('#insert_ingredient_form').empty();
+            $('#insert_product_form').empty();
             $('#modal_products').modal('hide');
             toastr.success("Saved Successfully");
             })

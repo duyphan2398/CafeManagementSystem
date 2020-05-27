@@ -46,6 +46,9 @@ function addText(item){
                         <td>`+formatNumber(item.sale_excluded_price)+`</td>
                         <td>`+ ((item.sale_included_price == item.sale_excluded_price) ? ('--') : (formatNumber(item.sale_included_price))) +`</td>
                         <td>
+                            <button name="`+item.id+`"  class="manage_products btn btn-info mb-1">
+                                Products
+                            </button>
                             <button name="`+item.id+`"  class="delete btn btn-danger mb-1" style="width: 75px">
                                 Delete
                             </button>
@@ -127,7 +130,68 @@ function edit_modal(item){
     $('#form_modal').append(modal);
 }
 
+
+function edit_products_modal(foods, drinks, receipt) {
+    let result = `
+                    <button name=`+receipt.id+` type="submit" class="save_product btn btn-primary w-50 mt-2 mb-3">Save</button>
+                    <table class="table table-bordered">
+                      <thead>
+                        <tr>
+                          <th scope="col">Product Name</th>
+                          `+((receipt.status == 3) ? ('<th scope="col">Price (Old)</th>') : ('<th scope="col">Price</th>'))+`
+                          `+((receipt.status == 3) ? ('<th scope="col">Sale_price (Old)</th>') : ('<th scope="col">Sale_price</th>'))
+                          +`<th scope="col">Promotion Adding</th>
+                          <th scope="col">Quantity</th>
+                          <th scope="col">Note</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+
+`;
+    drinks.forEach(function (drink){
+        result += `<tr>
+                      <td>`+drink.name+`</td>
+                      <td>
+                      `+((receipt.status == 3) ? (drink.pivot.product_price) : (drink.price))+`
+                      </td>
+                      <td>
+                      `+(((receipt.status == 3) && (drink.sale_price)) ? ((drink.pivot.product_sale_price) ? (drink.pivot.product_sale_price) : ('--')) : ((drink.sale_price) ? (drink.sale_price) : ('--')))+`
+                      </td>
+                      <td>
+                      `+((drink.promotion_today) && (receipt.status != 3) ? (drink.promotion_today.id+'. '+drink.promotion_today.name) : ('--'))+`
+                      </td>
+                    </tr>`;
+    });
+
+   /* item_orther.forEach(function (product){
+        result += `<tr>
+                      <td>`+product.name+`</td>
+                      <td>
+                        <input name="`+product.id+`" type="checkbox" class="form-check-input">
+                      </td>
+                    </tr>`;
+    });
+*/
+    result+= `</table>
+              <button name=`+receipt.id+`  type="submit" class="save_product btn btn-primary w-50">Save</button>
+                `;
+    $('#insert_product_form').append(result);
+
+}
+
 $(document).ready(function () {
+    /*Show All Products*/
+    jQuery(document).on('click',".manage_products",function () {
+        let receipt_id = this.name;
+        $('#insert_product_form').empty();
+        $('#loading_modal_product').show();
+        $('#modal_products').modal('show');
+        axios.get(location.origin + '/axios/receipts/'+receipt_id
+        ).then(function (response) {
+            edit_products_modal(response.data.foods, response.data.drinks, response.data.receipt);
+            $('#loading_modal_product').removeAttr("style").hide();
+        })
+    })
     /*Delete*/
     jQuery(document).on('click',".delete",function () {
         let receipt_id = this.name;
