@@ -36,7 +36,7 @@ class Product extends Model
             foreach ( $this->promotions as $promotion){
                 $startDate = date('Y-m-d', strtotime($promotion->start_at));
                 $endDate = date('Y-m-d', strtotime($promotion->end_at));
-                if (($currentDate >= $startDate) && ($currentDate <= $endDate) &&(in_array(Carbon::parse($currentDate, 'UTC')->isoFormat('dddd'), explode( ',',$promotion->days)))){
+                if (($currentDate >= $startDate) && ($currentDate <= $endDate) &&(in_array(Carbon::parse($currentDate, 'UTC')->isoFormat('dddd'), explode( ',',str_replace('"','',$promotion->days))))){
                     return  round($this->price - ($promotion->sale_percent *  $this->price));
                     break;
                 }
@@ -55,7 +55,7 @@ class Product extends Model
             foreach ( $this->promotions as $promotion){
                 $startDate = date('Y-m-d', strtotime($promotion->start_at));
                 $endDate = date('Y-m-d', strtotime($promotion->end_at));
-                if (($currentDate >= $startDate) && ($currentDate <= $endDate) &&(in_array(Carbon::parse($currentDate, 'UTC')->isoFormat('dddd'), explode( ',',$promotion->days)))){
+                if (($currentDate >= $startDate) && ($currentDate <= $endDate) &&(in_array(Carbon::parse($currentDate, 'UTC')->isoFormat('dddd'), explode( ',',str_replace('"','',$promotion->days))))){
                     return $promotion;
                     break;
                 }
