@@ -127,8 +127,8 @@
                                                     </td>
                                                     <td>
                                                         <div class="ml-2 form-check form-check-inline">
-                                                            <input class="new_promotion_checkbox form-check-input" type="checkbox" id="inlineCheckbox3" value="Wenesday">
-                                                            <label class=" ml-1 form-check-label" for="inlineCheckbox3">Wenesday(4)</label>
+                                                            <input class="new_promotion_checkbox form-check-input" type="checkbox" id="inlineCheckbox3" value="Wednesday">
+                                                            <label class=" ml-1 form-check-label" for="inlineCheckbox3">Wednesday(4)</label>
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -274,8 +274,8 @@
                                             </td>
                                             <td>
                                                 <div class="ml-2 form-check form-check-inline">
-                                                    <input class="update_promotion_checkbox form-check-input" type="checkbox" id="inline_Checkbox3" value="Wenesday">
-                                                    <label class=" ml-1 form-check-label" for="inline_Checkbox3">Wenesday(4)</label>
+                                                    <input class="update_promotion_checkbox form-check-input" type="checkbox" id="inline_Checkbox3" value="Wednesday">
+                                                    <label class=" ml-1 form-check-label" for="inline_Checkbox3">Wednesday(4)</label>
                                                 </div>
                                             </td>
                                         </tr>
