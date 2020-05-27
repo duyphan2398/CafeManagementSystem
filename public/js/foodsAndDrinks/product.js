@@ -1,5 +1,9 @@
 let material_id = null;
 var product_id_modal = null;
+function formatNumber(num) {
+    return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')+ 'đ';
+}
+
 function addText(item){
     var result= ``;
     result =        `      <tr id="`+item.id+`">
@@ -8,8 +12,8 @@ function addText(item){
                                 <td>
                                     <textarea readonly class="form-control" rows="3">`+item.description+`</textarea>
                                 </td>
-                                <td>`+item.price+`</td>
-                                <td>`+((item.sale_price) ? (item.sale_price) : ('--'))+`</td>
+                                <td>`+formatNumber(item.price)+`</td>
+                                <td>`+((item.sale_price) ? (formatNumber(item.sale_price)) : ('--'))+`</td>
                                 <td>
                                 `;
 

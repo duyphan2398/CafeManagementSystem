@@ -6,12 +6,16 @@ let output_current = ``;
 /*Flag for search*/
 let last_find=``;
 /*--------------*/
+function formatNumber(num) {
+    return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+}
+
 function addText(item){
     let result= ``;
     result =  `     <tr id="`+item.id+`">
                     <td>`+item.id+`</td>
                     <td>`+item.name+`</td>
-                    <td>`+item.amount+`</td>
+                    <td>`+formatNumber(item.amount)+`</td>
                     <td>`+item.unit+`</td>
                     <td>
                     `;
