@@ -138,40 +138,78 @@ function edit_products_modal(foods, drinks, receipt) {
                       <thead>
                         <tr>
                           <th scope="col">Product Name</th>
+                          <th scope="col">Type</th>
                           `+((receipt.status == 3) ? ('<th scope="col">Price (Old)</th>') : ('<th scope="col">Price</th>'))+`
                           `+((receipt.status == 3) ? ('<th scope="col">Sale_price (Old)</th>') : ('<th scope="col">Sale_price</th>'))
                           +`<th scope="col">Promotion Adding</th>
                           <th scope="col">Quantity</th>
                           <th scope="col">Note</th>
+                          <th scope="col">Choice</th>
                         </tr>
                       </thead>
                       <tbody>
 
 `;
+    result+= `
+            <tr>
+                <td colspan="8" style="background-color:#8b17ea; color: white; font-size: 20px">Drink</td>
+            </tr>
+    `;
     drinks.forEach(function (drink){
         result += `<tr>
                       <td>`+drink.name+`</td>
+                      <td>`+drink.type+`</td>
                       <td>
-                      `+((receipt.status == 3) ? (drink.pivot.product_price) : (drink.price))+`
+                      `+((receipt.status == 3) ? ((drink.pivot) ? (drink.pivot.product_price) : (drink.price)) : (drink.price))+`
                       </td>
                       <td>
-                      `+(((receipt.status == 3) && (drink.sale_price)) ? ((drink.pivot.product_sale_price) ? (drink.pivot.product_sale_price) : ('--')) : ((drink.sale_price) ? (drink.sale_price) : ('--')))+`
+                      `+((receipt.status == 3)  ? ((drink.pivot) ? (((drink.pivot.product_sale_price) && (drink.pivot.product_sale_price != drink.pivot.product_price)) ? (drink.pivot.product_sale_price) : ('--')) : ('--')) : ((drink.sale_price) ? (drink.sale_price) : ('--')))+`
                       </td>
                       <td>
                       `+((drink.promotion_today) && (receipt.status != 3) ? (drink.promotion_today.id+'. '+drink.promotion_today.name) : ('--'))+`
                       </td>
-                    </tr>`;
-    });
-
-   /* item_orther.forEach(function (product){
-        result += `<tr>
-                      <td>`+product.name+`</td>
                       <td>
-                        <input name="`+product.id+`" type="checkbox" class="form-check-input">
+                            <input type="number" class="form-control" min="1" value="`+((drink.pivot) ? ((drink.pivot.quantity) ? (drink.pivot.quantity) : (0)) : (0))+`"`+((drink.pivot) ? ('readonly') : (''))+`>
+                      </td>
+                      <td>
+                            <input style="width: 100px" type="text" class="form-control" maxlength="255" value="`+((drink.pivot) ? ((drink.pivot.note) ? (drink.pivot.note) : ('')) : (''))+`"`+((drink.pivot) ? ('readonly') : (''))+`>
+                      </td>
+                      <td>
+                         <input class="checkbox_product" name="`+drink.id+`" type="checkbox" class="form-check-input"  `+(((drink.pivot) &&(drink.pivot.quantity > 0)) ? ('checked') : (''))+`>
                       </td>
                     </tr>`;
     });
-*/
+    result+= `
+            <tr>
+                <td colspan="8" style="background-color:#8b17ea; color: white; font-size: 20px">Food</td>
+            </tr>
+    `;
+
+    foods.forEach(function (food){
+        result += `<tr>
+                      <td>`+food.name+`</td>
+                      <td>`+food.type+`</td>
+                      <td>
+                      `+((receipt.status == 3) ? ((food.pivot) ? (food.pivot.product_price) : (food.price)) : (food.price))+`
+                      </td>
+                      <td>
+                      `+((receipt.status == 3)  ? ((food.pivot) ? (((food.pivot.product_sale_price) && (food.pivot.product_sale_price != food.pivot.product_price)) ? (food.pivot.product_sale_price) : ('--')) : ('--')) : ((food.sale_price) ? (food.sale_price) : ('--')))+`
+                      </td>
+                      <td>
+                      `+((food.promotion_today) && (receipt.status != 3) ? (food.promotion_today.id+'. '+food.promotion_today.name) : ('--'))+`
+                      </td>
+                      <td>
+                      `+((food.pivot) ? ((food.pivot.quantity) ? (food.pivot.quantity) : ('--')) : ('--'))+`
+                      </td>
+                      <td>
+                      `+((food.pivot) ? ((food.pivot.note) ? (food.pivot.note) : ('--')) : ('--'))+`
+                      </td>
+                      <td>
+                        <input class="checkbox_product"  name="`+food.id+`" type="checkbox" class="form-check-input"  `+( ((food.pivot) && (food.pivot.quantity > 0)) ? ('checked') : (''))+`>
+                      </td>
+
+                    </tr>`;
+    });
     result+= `</table>
               <button name=`+receipt.id+`  type="submit" class="save_product btn btn-primary w-50">Save</button>
                 `;

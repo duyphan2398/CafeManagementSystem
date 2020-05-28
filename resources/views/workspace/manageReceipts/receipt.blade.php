@@ -15,6 +15,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
     <script src="https://printjs-4de6.kxcdn.com/print.min.js"></script>
     <link type="text/css" rel="stylesheet" href="https://printjs-4de6.kxcdn.com/print.min.css">
+    <style>
+        input.checkbox_product {
+            transform : scale(3);
+        }
+    </style>
 @endsection
 
 @section('content')
@@ -266,8 +271,8 @@
 
     {{--Products--}}
     <div class="modal fade" id="modal_products" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content text-center">
                 <div class="modal-header">
                     <h5 id="product_id_modal" class="modal-title">Product List</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
