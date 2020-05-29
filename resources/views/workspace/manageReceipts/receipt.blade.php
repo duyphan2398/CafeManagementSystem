@@ -15,6 +15,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
     <script src="https://printjs-4de6.kxcdn.com/print.min.js"></script>
     <link type="text/css" rel="stylesheet" href="https://printjs-4de6.kxcdn.com/print.min.css">
+    <style>
+        input.checkbox_product {
+            transform : scale(3);
+        }
+    </style>
 @endsection
 
 @section('content')
@@ -262,5 +267,28 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    {{--Products--}}
+    <div class="modal fade m-2" id="modal_products" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content text-center">
+                <div class="modal-header">
+                    <h5 id="product_id_modal" class="modal-title">Product List</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class=" mt-2 mb-1 text-center pl-5 pr-5">
+                    <form class="form-group" id="insert_product_form">
+
+                    </form>
+                </div>
+                <div class="text-center mb-2"  id="loading_modal_product" style="display: none;">
+                    <img src="{{asset("images/loading.gif")}}" alt="loading..." style="margin-bottom: 190px; margin-top: 187px">
+                </div>
+            </div>
+        </div>
+    </div>
     </div>
 @endsection

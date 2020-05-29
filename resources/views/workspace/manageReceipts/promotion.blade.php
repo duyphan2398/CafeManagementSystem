@@ -356,9 +356,8 @@
                         </button>
                     </div>
                     <div class=" mt-2 mb-1 text-center pl-5 pr-5">
-                        <form class="form-group" id="insert_ingredient_form">
-                                            dsadsadsadasdsa
-                            <button type="submit" class="btn btn-primary w-25">Add</button>
+                        <form class="form-group" id="insert_product_form">
+
                         </form>
                     </div>
                     <div class="text-center mb-2"  id="loading_modal_product" style="display: none;">
@@ -368,8 +367,4 @@
             </div>
         </div>
     </div>
-
-
-
-    {
 @endsection

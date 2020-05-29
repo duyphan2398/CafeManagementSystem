@@ -46,6 +46,9 @@ function addText(item){
                         <td>`+formatNumber(item.sale_excluded_price)+`</td>
                         <td>`+ ((item.sale_included_price == item.sale_excluded_price) ? ('--') : (formatNumber(item.sale_included_price))) +`</td>
                         <td>
+                            <button name="`+item.id+`"  class="manage_products btn btn-info mb-1">
+                                Products
+                            </button>
                             <button name="`+item.id+`"  class="delete btn btn-danger mb-1" style="width: 75px">
                                 Delete
                             </button>
@@ -127,7 +130,164 @@ function edit_modal(item){
     $('#form_modal').append(modal);
 }
 
+
+function edit_products_modal(foods, drinks, receipt) {
+    let result = ((receipt.status != 3) ? ('<button name='+receipt.id+'  type="submit" class="save_product btn btn-primary w-50 mb-2">Save</button>') : (''))+`
+                    <table class="table table-bordered">
+                      <thead>
+                        <tr>
+                          <th scope="col">Product Name</th>
+                          <th scope="col">Type</th>
+                          `+((receipt.status == 3) ? ('<th scope="col">Price (Old)</th>') : ('<th scope="col">Price</th>'))+`
+                          `+((receipt.status == 3) ? ('<th scope="col">Sale_price (Old)</th>') : ('<th scope="col">Sale_price</th>'))
+                          +`<th scope="col">Promotion Adding</th>
+                          <th scope="col">Quantity</th>
+                          <th scope="col">Note</th>
+                          `+((receipt.status != 3) ? ('<th scope="col">Choice</th>') : (''))+`
+                        </tr>
+                      </thead>
+                      <tbody>
+
+`;
+    result+= `
+            <tr>
+                <td colspan="8" style="background-color:#8b17ea; color: white; font-size: 20px">Drink</td>
+            </tr>
+    `;
+    drinks.forEach(function (drink){
+        result += `<tr>
+                      <td>`+drink.name+`</td>
+                      <td>`+drink.type+`</td>
+                      <td>
+                      `+((receipt.status == 3) ? ((drink.pivot) ? (drink.pivot.product_price) : (drink.price)) : (drink.price))+`
+                      </td>
+                      <td>
+                      `+((receipt.status == 3)  ? ((drink.pivot) ? (((drink.pivot.product_sale_price) && (drink.pivot.product_sale_price != drink.pivot.product_price)) ? (drink.pivot.product_sale_price) : ('--')) : ('--')) : ((drink.sale_price) ? (drink.sale_price) : ('--')))+`
+                      </td>
+                      <td>
+                      `+((drink.promotion_today) && (receipt.status != 3) ? (drink.promotion_today.id+'. '+drink.promotion_today.name) : ('--'))+`
+                      </td>
+                      <td>
+                            <input id="quantity_`+drink.id+`" style="width: 50px" type="number" class="form-control" value="`+((drink.pivot) ? ((drink.pivot.quantity) ? (drink.pivot.quantity) : (0)) : (0))+`"`+((drink.pivot) ? ('readonly') : (''))+`>
+                      </td>
+                      <td>
+                            <input id="note_`+drink.id+`" style="width: 100%"  type="text" class="form-control" maxlength="255" value="`+((drink.pivot) ? ((drink.pivot.note) ? (drink.pivot.note) : ('')) : (''))+`"`+((drink.pivot) ? ('readonly') : (''))+`>
+                      </td>
+                         `+((receipt.status != 3) ? (' <td> <input  class="checkbox_product" name="'+drink.id+'" type="checkbox" class="form-check-input"  '+(((drink.pivot) &&(drink.pivot.quantity > 0)) ? ('checked') : (''))+' > </td>')  : (''))+`
+                    </tr>`;
+    });
+    result+= `
+            <tr>
+                <td colspan="8" style="background-color:#8b17ea; color: white; font-size: 20px">Food</td>
+            </tr>
+    `;
+
+    foods.forEach(function (food){
+        result += `<tr>
+                      <td>`+food.name+`</td>
+                      <td>`+food.type+`</td>
+                      <td>
+                      `+((receipt.status == 3) ? ((food.pivot) ? (food.pivot.product_price) : (food.price)) : (food.price))+`
+                      </td>
+                      <td>
+                      `+((receipt.status == 3)  ? ((food.pivot) ? (((food.pivot.product_sale_price) && (food.pivot.product_sale_price != food.pivot.product_price)) ? (food.pivot.product_sale_price) : ('--')) : ('--')) : ((food.sale_price) ? (food.sale_price) : ('--')))+`
+                      </td>
+                      <td>
+                      `+((food.promotion_today) && (receipt.status != 3) ? (food.promotion_today.id+'. '+food.promotion_today.name) : ('--'))+`
+                      </td>
+                      <td>
+                            <input id="quantity_`+food.id+`" style="width: 50px" type="number" class="form-control" value="`+((food.pivot) ? ((food.pivot.quantity) ? (food.pivot.quantity) : (0)) : (0))+`"`+((food.pivot) ? ('readonly') : (''))+`>
+                      </td>
+                      <td>
+                            <input id="note_`+food.id+`" style="width: 100%"  type="text" class="form-control" maxlength="255" value="`+((food.pivot) ? ((food.pivot.note) ? (food.pivot.note) : ('')) : (''))+`"`+((food.pivot) ? ('readonly') : (''))+`>
+                      </td>
+                          `+((receipt.status != 3) ? ('<td> <input  class="checkbox_product" name="'+food.id+'" type="checkbox" class="form-check-input"  '+(((food.pivot) &&(food.pivot.quantity > 0)) ? ('checked') : (''))+' > </td>')  : (''))+`
+                    </tr>`;
+    });
+    result+= `</table>
+                `+((receipt.status != 3) ? ('<button name='+receipt.id+'  type="submit" class="save_product btn btn-primary w-50">Save</button>') : (''));
+    $('#insert_product_form').append(result);
+
+}
+
 $(document).ready(function () {
+    /*Action edit product*/
+    jQuery(document).on('click',".checkbox_product",function () {
+        let product_id = this.name;
+        if ($('#quantity_'+product_id).val() > 0){
+            if (this.checked) {
+                $('#quantity_'+product_id).prop('readonly', true);
+                $('#note_'+product_id).prop('readonly', true);
+            }
+            else {
+                $('#quantity_'+product_id).prop('readonly', false);
+                $('#note_'+product_id).prop('readonly', false);
+            }
+        }else {
+            $(this).attr('checked', false);
+        }
+
+    })
+    /*Save product list*/
+    jQuery(document).on('click',".save_product",function () {
+        $('#insert_product_form').submit(function(e) {
+            e.preventDefault();
+        });
+        let receipt_id = this.name;
+        let products = [];
+        let product = {
+            id : null,
+            quantity : null,
+            note : null
+        };
+        $('.checkbox_product:checked')
+
+            .each(function () {
+                product = {
+                    id : null,
+                    quantity : null,
+                    note : null
+                };
+
+                product.id = this.name;
+                product.quantity = $('#quantity_'+product.id).val();
+                product.note = $('#note_'+product.id).val();
+                products.push(product);
+            });
+
+        window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content;
+        axios.post(location.origin + '/axios/receipts/updateProductInReceipt/'+receipt_id,{
+            products
+        }).then(function (response) {
+            $('#modal_products').modal('hide');
+            loadListReceiptFillter();
+            loadList();
+            toastr.success("Update Successfully !");
+            let link = document.createElement('a');
+            link.href = response.data.host+response.data.url;
+            link.setAttribute("download",  'Order-'+response.data.url);
+            link.click();
+            link.remove();
+            printJS(response.data.host+response.data.url);
+        }).catch(function (error) {
+            $('#modal_products').modal('hide');
+            toastr.error("Update Fails !");
+        })
+        ;
+
+    })
+    /*Show All Products*/
+    jQuery(document).on('click',".manage_products",function () {
+        let receipt_id = this.name;
+        $('#insert_product_form').empty();
+        $('#loading_modal_product').show();
+        $('#modal_products').modal('show');
+        axios.get(location.origin + '/axios/receipts/'+receipt_id
+        ).then(function (response) {
+            edit_products_modal(response.data.foods, response.data.drinks, response.data.receipt);
+            $('#loading_modal_product').removeAttr("style").hide();
+        })
+    })
     /*Delete*/
     jQuery(document).on('click',".delete",function () {
         let receipt_id = this.name;

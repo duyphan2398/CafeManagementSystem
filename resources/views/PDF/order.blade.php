@@ -42,7 +42,7 @@
             </tr>
             @if($product['note'] != '')
             <tr>
-                <td colspan="3" style="text-align: left !important;">Note: <b>{{$product['note']}}</b></td>
+                <td colspan="3" style="margin-left: 30px !important;">Note: <b>{{$product['note']}}</b></td>
             </tr>
             @endif
         @endif
@@ -61,16 +61,11 @@
             </tr>
             @if($product['note'] != '')
                 <tr>
-                    <td colspan="3" style="text-align: left !important;">Note: <b>{{$product['note']}}</b></td>
+                    <td colspan="3" style="margin-left: 30px !important;">Note: <b>{{$product['note']}}</b></td>
                 </tr>
             @endif
         @endif
     @endforeach
-        <tr>
-            <td colspan="3">
-                - - - - - - - - - - - - - - - - - - - - * - - - - - - - - - - - - - - - - - - - -
-            </td>
-        </tr>
     </tbody>
 </table>
 </body>
