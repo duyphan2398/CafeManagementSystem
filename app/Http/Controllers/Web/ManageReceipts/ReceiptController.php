@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Web\ManageReceipts;
 
 
 use App\Events\ChangeStateTableEvent;
+use App\Events\ExportOrderFormEvent;
 use App\Exports\ReceiptExport;
 use App\Http\Controllers\WebBaseController;
 use App\Models\Product;
@@ -177,5 +178,109 @@ class ReceiptController extends WebBaseController
                 'message' => 'The receipt has not suitable status - status 2 and 3 are accept to delete'
             ],400);
         }
+    }
+
+    public function updateProductInReceipt(Request $request, Receipt $receipt){
+        //Export Order PDF
+        $data = [];
+        for ($i = 0; $i < count($request->products); $i++){
+            $receipt_product = $receipt->products()
+                ->where('receipt_id', $receipt->id)
+                ->where('product_id', $request->products[$i]['id'])
+                ->first();
+            $product = Product::find($request->products[$i]['id']);
+            // New record
+            if (!$receipt_product) {
+                $tmp_data = $request->products[$i];
+                $tmp_data['type'] =  $product->type;
+                $tmp_data['product_name'] =  $product->name;
+                array_push($data, $tmp_data);
+            }
+            //Record existed
+            else{
+                $tmp_data = [];
+                //Check quantity
+                if ($receipt_product->pivot->quantity < $request->products[$i]['quantity']){
+                    $tmp_data = [
+                        'id'            => $request->products[$i]['id'],
+                        'quantity'      => $request->products[$i]['quantity'] -  $receipt_product->pivot->quantity,
+                        'note'          => $request->product_list[$i]['note'],
+                        'type'          => $receipt_product->type,
+                        'product_name'  =>  $product->name
+                    ];
+                    array_push($data, $tmp_data);
+                }
+                elseif ($receipt_product->pivot->quantity > $request->products[$i]['quantity']){
+                    $tmp_data = [
+                        'id'            => $request->products[$i]['id'],
+                        'quantity'      => 'Cancle '.($request->products[$i]['quantity'] - $receipt_product->pivot->quantity),
+                        'note'          => $request->products[$i]['note'],
+                        'type'          => $receipt_product->type,
+                        'product_name'  =>  $product->name
+                    ];
+                    array_push($data, $tmp_data);
+                }
+
+            }
+        }
+
+        /*Case Romove a product to 0*/
+        foreach ($receipt->products as $product) {
+            $proucts_id = array_column($request->products, 'id');
+            $flag = in_array($product->id, $proucts_id);
+            if (!$flag) {
+                $tmp_data = [
+                    'id'            => $product->id,
+                    'quantity'      => 'Cancle All ( -'.($product->pivot->quantity).' )',
+                    'note'          => '---Cancle All---'.$product->name,
+                    'type'          => $product->type,
+                    'product_name'  => $product->name
+                ];
+                array_push($data, $tmp_data);
+            }
+        }
+
+
+        $pdf = PDF2::loadView('PDF.order', [
+            'data'          => $data,
+            'table'         => $receipt->table,
+            'receipt'       => $receipt
+        ]);
+        $url = '\order\\';
+        Storage::disk('public')->delete($url.$receipt->id.'.pdf');
+        Storage::disk('public')->put($url.$receipt->id.'.pdf', $pdf->output());
+        //Update Products
+        $receipt->products()->detach();
+        foreach ($request->products as $item){
+            $product = Product::find($item['id']);
+            DB::table('receipt_product')->insert([
+                'receipt_id'            => $receipt->id,
+                'product_id'            => $product->id,
+                'quantity'              => $item['quantity'],
+                'note'                  => $item['note'],
+                'product_name'          => $product->name,
+                'product_price'         => $product->price,
+                'product_sale_price'    => $product->sale_price,
+            ]);
+        }
+        $receipt->sale_excluded_price;
+        $receipt->sale_included_price;
+        $result =  $this->result($request, $receipt, $receipt->table);
+        $result['message'] = 'success';
+        //Realtime Event
+        event(new ExportOrderFormEvent(
+            $data,
+            $this->result($request, $receipt, $receipt->table),
+            $receipt->id.'.pdf',
+            $request->getHttpHost().'/export/pdf/order/'
+        ));
+        event(new ChangeStateTableEvent('A table updated'));
+        return response()->json([
+            'data'          => $data,
+            'result'        => $this->result($request, $receipt, $receipt->table),
+            'url'           => $receipt->id.'.pdf',
+            'host'          => '/export/pdf/order/',
+            'receipt_id'    => $receipt->id,
+        ],201);
     }
 }

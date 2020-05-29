@@ -270,7 +270,7 @@
     </div>
 
     {{--Products--}}
-    <div class="modal fade" id="modal_products" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal fade m-2" id="modal_products" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content text-center">
                 <div class="modal-header">

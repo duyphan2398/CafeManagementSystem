@@ -104,6 +104,7 @@ Route::group(['middleware' => 'checkloggedin', 'prefix' => 'axios'], function ()
     Route::post('receipts/export', 'ManageReceipts\ReceiptController@exportReceiptCsv');
     Route::get('receipts/billing/{receipt}', 'ManageReceipts\ReceiptController@billing');
     Route::get('receipts/receipt/{receipt}', 'ManageReceipts\ReceiptController@receipt');
+    Route::post('receipts/updateProductInReceipt/{receipt}', 'ManageReceipts\ReceiptController@updateProductInReceipt');  //author
     /*----------promotion---------*/
     Route::delete('promotions/{promotion}', 'ManageReceipts\PromotionController@destroy');
     Route::post('promotions', 'ManageReceipts\PromotionController@create');

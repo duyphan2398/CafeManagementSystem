@@ -124,6 +124,23 @@ class TableController extends ApiBaseController
             }
         }
 
+        /*Case Romove a product to 0*/
+        foreach ($receipt->products as $product) {
+            $proucts_id = array_column($request->products, 'id');
+            $flag = in_array($product->id, $proucts_id);
+            if (!$flag) {
+                $tmp_data = [
+                    'id'            => $product->id,
+                    'quantity'      => 'Cancle All ( -'.($product->pivot->quantity).' )',
+                    'note'          => '---Cancle All---'.$product->name,
+                    'type'          => $product->type,
+                    'product_name'  => $product->name
+                ];
+                array_push($data, $tmp_data);
+            }
+        }
+
+
         $pdf = PDF2::loadView('PDF.order', [
             'data'          => $data,
             'table'         => $table,
