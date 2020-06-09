@@ -85,6 +85,7 @@ Route::group(['middleware' => 'checkloggedin', 'prefix' => 'axios'], function ()
     Route::get('statistics/diagram1','Warehouse\StatisticController@dataDiagram1');
     Route::get('statistics/diagram2','Warehouse\StatisticController@dataDiagram2');
     Route::get('statistics/diagram3','Warehouse\StatisticController@dataDiagram3');
+    Route::get('statistics/diagram4','Warehouse\StatisticController@dataDiagram4'); //author
     /*FoodsAndDrink*/
     /*----------product---------*/
     Route::resource('products', FoodsAndDrinks\ProductController::class)->except(['index', 'update']);
@@ -114,3 +115,8 @@ Route::group(['middleware' => 'checkloggedin', 'prefix' => 'axios'], function ()
     Route::post('promotions/updateProducts/{promotion}', 'ManageReceipts\PromotionController@updateProducts');//author
 });
 
+
+Route::get('statistics/diagram4/test','Warehouse\StatisticController@dataDiagram4');
+Route::get('statistics/diagram4/test_3','Warehouse\StatisticController@dataDiagram4_3');
+Route::get('statistics/diagram4/test_2','Warehouse\StatisticController@dataDiagram4_2');
+Route::get('statistics/diagram4/test_1','Warehouse\StatisticController@dataDiagram4_1');
