@@ -30,5 +30,7 @@ class MaterialPolicy extends BasePolicy
     public function search(User $user){
        return $user->isManager();
     }
-
+    public function export(User $user){
+        return $user->isManager();
+    }
 }

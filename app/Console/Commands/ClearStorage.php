@@ -56,6 +56,7 @@ class ClearStorage extends Command
             $file->cleanDirectory('public/export/pdf/bill');
             $file->cleanDirectory('public/export/pdf/paid');
             $file->cleanDirectory('public/export/pdf/order');
+            $file->cleanDirectory('public/export/pdf/material');
             $this->info('Cleared pdf files.....');
         }
         //Done

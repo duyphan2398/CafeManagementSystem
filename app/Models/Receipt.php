@@ -5,7 +5,7 @@ namespace App\Models;
 
 
 use App\Traits\AddUser;
-use App\Traits\ParseTimeStamp;
+use App\Traits\ParseDateToRightFormat;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Maatwebsite\Excel\Concerns\Exportable;
@@ -13,7 +13,7 @@ use Maatwebsite\Excel\Concerns\Exportable;
 class Receipt extends Model
 {
     use AddUser;
-    use ParseTimeStamp;
+    use ParseDateToRightFormat;
     use Exportable;
     /*Status is [
 

@@ -81,6 +81,7 @@ Route::group(['middleware' => 'checkloggedin', 'prefix' => 'axios'], function ()
     Route::patch('material/update', 'Warehouse\MaterialController@update');
     Route::delete('material/delete', 'Warehouse\MaterialController@delete');
     Route::get('material/search','Warehouse\MaterialController@search');
+    Route::get('material/export', 'Warehouse\MaterialController@exportCsv');
     /*----------statistic---------*/
     Route::get('statistics/diagram1','Warehouse\StatisticController@dataDiagram1');
     Route::get('statistics/diagram2','Warehouse\StatisticController@dataDiagram2');

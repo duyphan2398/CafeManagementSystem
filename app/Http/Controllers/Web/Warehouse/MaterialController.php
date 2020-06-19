@@ -4,6 +4,7 @@
 namespace App\Http\Controllers\Web\Warehouse;
 
 
+use App\Exports\MaterialExport;
 use App\Http\Controllers\WebBaseController;
 use App\Http\Requests\NewMaterialRequest;
 use App\Http\Requests\UpdateMaterialRequest;
@@ -140,5 +141,10 @@ class MaterialController extends WebBaseController
         return response()->json([
             'status' => 'fails'
         ],404);
+    }
+
+    public function exportCsv(){
+        $this->authorize('export', Material::class);
+        return (new MaterialExport)->download('MaterialList('.now()->format('d-m-Y').').csv', \Maatwebsite\Excel\Excel::CSV,  ['Content-Type' => 'text/csv']);
     }
 }

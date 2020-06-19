@@ -366,6 +366,21 @@ $(document).ready(function () {
         }
         $('#searchMaterial').val('');
     })
+
+    $("#exportListButton").click(function () {
+        window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content;
+        axios.get(location.origin + '/axios/material/export')
+            .then(function (response) {
+            let blob = new Blob(["\ufeff", response.data], { type: 'application/csv' });
+            let link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            moment.locale('vi');
+            link.download = 'MaterialList('+moment().format('L')+').csv';
+            link.click();
+            link.remove();
+        });
+    });
+
 })
 
 $(window).on('load', function () {
