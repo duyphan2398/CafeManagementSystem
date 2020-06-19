@@ -19,7 +19,7 @@ class ScheduleController extends WebBaseController
 
     public function createSchedule(NewScheduleRequest $request){
         if ( $request->validated()) {
-            $user = User::where('username', '=', $request->username)->first();
+            $user = User::where('username', '=', $request->username)->where('role', '<>', 'Admin')->first();
             $schedule = new Schedule();
             $schedule->fill($request->all());
             $schedule->start_time = Carbon::make($request->start_time)->format('H:i');
@@ -45,7 +45,7 @@ class ScheduleController extends WebBaseController
     }
 
     public function getAllUsersWithoutTrashed(){
-        $users = User::all();
+        $users = User::query()->where('role', '<>', 'Admin')->get();
         return response()->json([
             'users' => $users
         ],200);

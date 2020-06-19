@@ -24,7 +24,7 @@ class NewScheduleRequest extends FormRequest
     public function rules()
     {
         return [
-            "username" => "required",
+            "username" => "required|exists:users,username",
             "start_time" => "required",
             "end_time" => "required",
             "date" => "required",

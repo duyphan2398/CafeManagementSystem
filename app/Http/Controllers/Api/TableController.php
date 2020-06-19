@@ -32,9 +32,10 @@ class TableController extends ApiBaseController
     }
 
     public function show(Request $request, Table $table){
-        $mineScheduleToday = Schedule::where('user_id', Auth::guard('api')->id())
-            ->where('date', today()->format('Y-m-d'))->first();
-        if ( $mineScheduleToday && $mineScheduleToday->checkin_time) {
+        $mineScheduleToday = Schedule::
+                                where('user_id', Auth::guard('api')->id())
+                                ->where('date', today()->format('Y-m-d'))->first();
+        if ( ($mineScheduleToday && $mineScheduleToday->checkin_time) || Auth::guard('api')->isAdmin()) {
             $receipt = Receipt::
             where('table_id', $table->id)
                 ->whereIn('status', [1, 2])

@@ -14,7 +14,7 @@ $factory->define(Schedule::class, function (Faker $faker) {
     $checkout_time = Carbon::parse($end_time)->addMinutes(15);
     $date =  $faker->dateTimeBetween(Carbon::now()->subYear(1), Carbon::now()->addDays(15));
     return [
-        'user_id'           =>  User::all()->random(1)->first()->id,
+        'user_id'           =>  User::where('role', '<>', 'Admin')->random(1)->first()->id,
         'start_time'        => $start_time,
         'end_time'          => $end_time,
         'checkin_time'      =>($date < Carbon::today()) ? $checkin_time : null,
