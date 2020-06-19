@@ -6,6 +6,9 @@
 
 @section('links')
     <script src="{{asset('js/warehouse/material.js')}}"></script>
+    <script src="https://printjs-4de6.kxcdn.com/print.min.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://printjs-4de6.kxcdn.com/print.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
 @endsection
 
 @section('content')
@@ -54,10 +57,17 @@
             <main role="main" class="mt-1"><div class="chartjs-size-monitor" style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;"><div class="chartjs-size-monitor-expand" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:1000000px;height:1000000px;left:0;top:0"></div></div><div class="chartjs-size-monitor-shrink" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:200%;height:200%;left:0; top:0"></div></div></div>
                 <div class=" mt-2 d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
                     <h1 class="h2">Manage Material</h1>
-                    <button  id="newMaterialButton"  class="btn btn-outline-primary">
-                        <i class="ti-plus"></i>
-                    </button>
+                    <div>
+                        <button  id="newMaterialButton"  class="btn btn-outline-primary">
+                            <i class="ti-plus"></i>
+                        </button>
+                        <button  id="exportListButton"  class="btn btn-outline-primary">
+                            Export
+                            <i class="ti-notepad"></i>
+                        </button>
+                    </div>
                 </div>
+
                 <div class="table-responsive ">
                     <div class="modal fade" id="newMaterialModal" tabindex="-1" role="dialog" aria-hidden="true">
                         <div class="modal-dialog" role="document">
@@ -99,6 +109,7 @@
                                         <div class="modal-footer mt-4">
                                             <button type="submit" class="btn btn-primary">Create</button>
                                         </div>
+
                                     </form>
                                 </div>
                             </div>

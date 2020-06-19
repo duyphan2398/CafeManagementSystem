@@ -3,8 +3,7 @@
 
 namespace App\Models;
 
-use App\Models\Product;
-use App\Traits\ParseTimeStamp;
+use App\Traits\ParseDateToRightFormat;
 use Illuminate\Database\Eloquent\Model;
 use Maatwebsite\Excel\Concerns\Exportable;
 
@@ -12,8 +11,7 @@ use Maatwebsite\Excel\Concerns\Exportable;
 class Material extends Model
 {
     use Exportable;
-    use ParseTimeStamp;
-
+    use ParseDateToRightFormat;
     protected $fillable = [
         'name',
         'amount',

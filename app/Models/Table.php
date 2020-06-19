@@ -3,13 +3,12 @@
 
 namespace App\Models;
 
-use App\Traits\AddUser;
-use App\Traits\ParseTimeStamp;
+use App\Traits\ParseDateToRightFormat;
 use Illuminate\Database\Eloquent\Model;
 
 class Table extends Model
 {
-    use ParseTimeStamp;
+    use ParseDateToRightFormat;
 
     protected $fillable = [
         'name',

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Order</title>
+    <title>{{($diff > 0) ? ('Import Receipt') : ('Export Receipt')}} </title>
     <meta charset="utf-8">
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
@@ -19,55 +19,39 @@
 </head>
 <body class="text-center">
 <img src="{!! asset('images/logo.png') !!}" style="width: 100px; height: 100px" alt="logo">
-<h1 class="content">My Cafe Order</h1>
+<h1 class="content">My Cafe</h1>
 <h4 class="content">Address: 2/12A Tan Thuan Tay District 7 HCM city</h4>
 <h4 class="content">Contact: 0936221326</h4>
-<h5 class="content">Date: {{now()->format('H:i d-m-Y')}}</h5>
+<h5 class="content">Date: {{$material['updated_at']}}</h5>
 <hr class="w-50">
-<h3>Table: {{$table['name']}}    -    ID: {{$receipt['id']}}</h3>
+<h3>{{($diff > 0) ? ('Import Receipt') : ('Export Receipt')}}</h3>
 <table class="table w-75 center">
     <thead>
     <tr>
-        <th>Product</th>
-        <th>Quantity</th>
-        <th>Type</th>
+        <th>Material ID</th>
+        <th>Name</th>
+        <th>Unit</th>
+        @if($diff > 0)
+            <th>Import Amount</th>
+        @else
+            <th>Export Receipt</th>
+        @endif
+        <th>Note</th>
     </tr>
     </thead>
     <tbody>
-    @foreach($data as $product)
-        @if($product['type'] == 'Drink')
-            <tr>
-                <td>{{$product['product_name']}}</td>
-                <td>{{$product['quantity']}}</td>
-                <td>{{$product['type']}}</td>
-            </tr>
-            @if($product['note'] != '')
-            <tr>
-                <td colspan="3" style="margin-left: 30px !important;">Note: <b>{{$product['note']}}</b></td>
-            </tr>
-            @endif
-        @endif
-    @endforeach
         <tr>
-            <td colspan="3">
-                - - - - - - - - - - - - - - - - - - - - * - - - - - - - - - - - - - - - - - - - -
-            </td>
+            <td>{{$material['id']}}</td>
+            <td>{{$material['name']}}</td>
+            <td>{{$material['unit']}}</td>
+            <td>{{$diff}}</td>
+            <td>{{$material['note']}}</td>
         </tr>
-    @foreach($data as $product)
-        @if($product['type'] == 'Food')
-            <tr>
-                <td>{{$product['product_name']}}</td>
-                <td>{{$product['quantity']}}</td>
-                <td>{{$product['type']}}</td>
-            </tr>
-            @if($product['note'] != '')
-                <tr>
-                    <td colspan="3" style="margin-left: 30px !important;">Note: <b>{{$product['note']}}</b></td>
-                </tr>
-            @endif
-        @endif
-    @endforeach
     </tbody>
 </table>
+<hr>
+<h4>
+    By {{$user_name}}
+</h4>
 </body>
 </html>

@@ -4,11 +4,13 @@
 namespace App\Models;
 
 
+use App\Traits\ParseDateToRightFormat;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class Promotion extends Model
 {
+    use ParseDateToRightFormat;
     protected $fillable = [
         'name',
         'description',

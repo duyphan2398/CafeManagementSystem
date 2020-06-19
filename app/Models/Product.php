@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
-use App\Traits\ParseTimeStamp;
+use App\Traits\ParseDateToRightFormat;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
-    use ParseTimeStamp;
+    use ParseDateToRightFormat;
     protected $appends =['promotion_today'];
     protected $fillable = [
         'name',
