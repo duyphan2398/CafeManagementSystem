@@ -24,8 +24,8 @@ class NewMaterialRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'      => 'required|string',
-            'amount'    => 'required|numeric',
+            'name'      => 'required|string|unique:materials,name',
+            'amount'    => 'required|numeric|gt:0',
             'unit'      => 'required|string',
             'note'      => 'string'
         ];

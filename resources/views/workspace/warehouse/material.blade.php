@@ -6,6 +6,8 @@
 
 @section('links')
     <script src="{{asset('js/warehouse/material.js')}}"></script>
+    <script src="https://printjs-4de6.kxcdn.com/print.min.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://printjs-4de6.kxcdn.com/print.min.css">
 @endsection
 
 @section('content')
@@ -58,6 +60,10 @@
                         <i class="ti-plus"></i>
                     </button>
                 </div>
+                <button  id="exportListButton"  class="btn btn-outline-primary">
+                    Export
+                    <i class="ti-notepad"></i>
+                </button>
                 <div class="table-responsive ">
                     <div class="modal fade" id="newMaterialModal" tabindex="-1" role="dialog" aria-hidden="true">
                         <div class="modal-dialog" role="document">
@@ -99,6 +105,7 @@
                                         <div class="modal-footer mt-4">
                                             <button type="submit" class="btn btn-primary">Create</button>
                                         </div>
+
                                     </form>
                                 </div>
                             </div>

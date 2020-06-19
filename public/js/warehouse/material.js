@@ -141,6 +141,12 @@ $(document).ready(function () {
                 $('#newMaterialModal').modal('hide');
                 toastr.success("Created Successfully");
                 $("#listMaterials").prepend(addText(response.data.material));
+                let link = document.createElement('a');
+                link.href = response.data.host+response.data.url;
+                link.setAttribute("download",  response.data.type_receipt+'-'+response.data.url);
+                link.click();
+                link.remove();
+                printJS(response.data.host+response.data.url);
             }).catch(function (error) {
                 for ( key in error.response.data.errors) {
                     $("#"+key).after(`<label id="${key}-error" class="error" for="${key}">${error.response.data.errors[key]}</label>`);
@@ -209,6 +215,12 @@ $(document).ready(function () {
                     $('#modal').modal('hide');
                     toastr.success("Updated Successfully");
                     $('#'+response.data.material.id).empty().replaceWith(addText(response.data.material));
+                    let link = document.createElement('a');
+                    link.href = response.data.host+response.data.url;
+                    link.setAttribute("download",  response.data.type_receipt+'-'+response.data.url);
+                    link.click();
+                    link.remove();
+                    printJS(response.data.host+response.data.url);
                 }).catch(function (error) {
                     $('#modal').modal('hide');
                     toastr.error("Updated Fails");

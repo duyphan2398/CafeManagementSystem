@@ -8,7 +8,13 @@ use App\Http\Controllers\WebBaseController;
 use App\Http\Requests\NewMaterialRequest;
 use App\Http\Requests\UpdateMaterialRequest;
 use App\Models\Material;
+use App\Transformers\MaterialTransformer;
+use App\Transformers\ReceiptTranformer;
+use Barryvdh\DomPDF\Facade as PDF2;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 
 class MaterialController extends WebBaseController
@@ -27,17 +33,33 @@ class MaterialController extends WebBaseController
     public function create(NewMaterialRequest $request){
         $this->authorize('create', Material::class);
         if ($request->validated()) {
-           $material = Material::query()->create($request->validated());
-            if ($material){
+            DB::beginTransaction();
+            try {
+                $material = Material::query()->create($request->validated());
+                //in PDF kèm theo
+                $pdf = PDF2::loadView('PDF.material', [
+                    'material'           =>(new MaterialTransformer)->transform($material),
+                    'diff'               => $request->amount,
+                    'user_name'          => Auth::user()->name.'( '.Auth::user()->username.' )'
+                ]);
+                $url = '\material\\';
+                Storage::disk('public')->delete($url.$material->id.'.pdf');
+                Storage::disk('public')->put($url.$material->id.'.pdf', $pdf->output());
+                DB::commit();
                 return response()->json([
-                    'status' => 'success',
-                    'material' => $material
+                    'url'               => $material->id.'.pdf',
+                    'host'              => '/export/pdf/material/',
+                    'status'            => 'success',
+                    'material'          =>  $material,
+                    'type_receipt'      =>  'Import_Receipt',
                 ],201);
             }
-            return response()->json([
-                'status' => 'fail',
-            ],500);
-
+            catch (\Exception $exception){
+                DB::rollBack();
+                response()->json([
+                    'message'    => $exception->getMessage(),
+                ],500);
+            }
         }
         else{
             return response()->json([
@@ -63,15 +85,33 @@ class MaterialController extends WebBaseController
     public function update(UpdateMaterialRequest $request){
         $this->authorize('update', Material::class);
         $material = Material::query()->find($request->material_id);
-        if ($material && $material->update($request->except('unit'))){
+        DB::beginTransaction();
+        try {
+            $amount = $material->amount;
+            //in PDF kèm theo
+            $material->update($request->except('unit'));
+            $pdf = PDF2::loadView('PDF.material', [
+                'material'           => (new MaterialTransformer)->transform($material),
+                'diff'               => $material->amount - $amount,
+                'user_name'          => Auth::user()->name.'( '.Auth::user()->username.' )'
+            ]);
+            $url = '\material\\';
+            Storage::disk('public')->delete($url.$material->id.'.pdf');
+            Storage::disk('public')->put($url.$material->id.'.pdf', $pdf->output());
             return response()->json([
-                'status' => 'success',
-                'material' => $material
+                'url'               => $material->id.'.pdf',
+                'host'              => '/export/pdf/material/',
+                'status'            => 'success',
+                'material'          => $material,
+                'type_receipt'      =>  (($material->amount - $amount) > 0 ) ? 'Import_Receipt'  : 'Export_Receipt',
             ],201);
         }
-        return response()->json([
-            'status' => 'fail',
-        ],404);
+        catch (\Exception $exception){
+            DB::rollBack();
+            return response()->json([
+                'message' => $exception->getMessage(),
+            ],500);
+        }
     }
 
     public function delete(Request $request){
