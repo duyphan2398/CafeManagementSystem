@@ -5,24 +5,25 @@ namespace App\Http\Controllers\Web\Warehouse;
 
 
 use App\Http\Controllers\WebBaseController;
-use App\Models\Product;
 use App\Models\Receipt;
 use App\Models\Schedule;
 use Carbon\Carbon;
-use Illuminate\Auth\Access\Gate;
+use Illuminate\Support\Facades\Gate;
 
 class StatisticController extends WebBaseController
 {
+    public function __construct()
+    {
+        if (Gate::denies('')) {
+            return response()->json(['error' => 'Not authorized.'], 403);
+        }
+    }
 
     public function index(){
-        if (\Illuminate\Support\Facades\Gate::allows('statistics')){
-            return view('workspace.warehouse.statistic');
-        }
-        return response()->json(['error' => 'Not authorized.'],403);
+        return view('workspace.warehouse.statistic');
     }
 
     public function dataDiagram1(){
-        if (\Illuminate\Support\Facades\Gate::allows('statistics')){
         $data = [];
         $countMonth = Carbon::today()->subMonths(12);
 
@@ -46,12 +47,9 @@ class StatisticController extends WebBaseController
         }
 
         return $data;
-        }
-        return response()->json(['error' => 'Not authorized.'],403);
     }
 
     public function dataDiagram2(){
-        if (\Illuminate\Support\Facades\Gate::allows('statistics')){
         $data = [];
         $total = 0;
         $receipts = Receipt::query()->whereMonth('created_at', '=', Carbon::now()->subMonth()->month)->get();
@@ -79,12 +77,9 @@ class StatisticController extends WebBaseController
             'data'  => $result,
             'total' => $total
         ],200);
-        }
-        return response()->json(['error' => 'Not authorized.'],403);
     }
 
     public function dataDiagram3(){
-        if (\Illuminate\Support\Facades\Gate::allows('statistics')){
         $data = [];
         $countMonth = Carbon::today()->subMonths(12);
 
@@ -105,7 +100,5 @@ class StatisticController extends WebBaseController
             $countMonth->addMonth();
         }
         return $data;
-    }
-    return response()->json(['error' => 'Not authorized.'],403);
     }
 }

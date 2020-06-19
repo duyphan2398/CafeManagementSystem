@@ -113,4 +113,3 @@ Route::group(['middleware' => 'checkloggedin', 'prefix' => 'axios'], function ()
     Route::get('promotions/showProducts/{promotion}', 'ManageReceipts\PromotionController@showProducts');//author
     Route::post('promotions/updateProducts/{promotion}', 'ManageReceipts\PromotionController@updateProducts');//author
 });
-
