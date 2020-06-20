@@ -107,7 +107,7 @@
                                             <textarea class="form-control" name="noteNew" id="noteNew"  rows="3"></textarea>
                                         </div>
                                         <div class="modal-footer mt-4">
-                                            <button type="submit" class="btn btn-primary">Create</button>
+                                            <button id="materialCreateSusmit"type="submit" class="btn btn-primary">Create</button>
                                         </div>
 
                                     </form>
