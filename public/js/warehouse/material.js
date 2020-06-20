@@ -135,9 +135,12 @@ $(document).ready(function () {
             let amount = $("#amountNew").val();
             let note = $("#noteNew").val();
             window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content;
+            $('#materialCreateSusmit').attr('disabled',true);
             axios.post(location.origin + '/axios/material/new', {
                name, unit, amount, note
             }).then(function (response) {
+                $('#materialCreateSusmit').attr('disabled',false);
+                $('#newMaterialForm').trigger("reset");
                 $('#newMaterialModal').modal('hide');
                 toastr.success("Created Successfully");
                 $("#listMaterials").prepend(addText(response.data.material));
@@ -148,6 +151,7 @@ $(document).ready(function () {
                 link.remove();
                 printJS(response.data.host+response.data.url);
             }).catch(function (error) {
+                $('#materialCreateSusmit').attr('disabled',false);
                 for ( key in error.response.data.errors) {
                     $("#"+key).after(`<label id="${key}-error" class="error" for="${key}">${error.response.data.errors[key]}</label>`);
                 }
