@@ -141,12 +141,11 @@ axios.get(location.origin + '/axios/statistics/diagram2')
             data.push(response.data.data[i].total_product_percent);
             color.push(getRandomColor());
         }
-       /* response.data.data.forEach(function (item) {
+        /*response.data.data.forEach(function (item) {
             label.push(item.name);
             data.push(item.total_product_percent);
             color.push(getRandomColor());
-        });
-        */
+        });*/
         var ctx = document.getElementById('amlinechart2').getContext('2d');
         var myChart = new Chart(document.getElementById('amlinechart2'), {
             type: 'pie',
@@ -188,7 +187,6 @@ function getRandomColor() {
 
 axios.get(location.origin + '/axios/statistics/diagram3')
     .then(function (response) {
-        console.log(response);
         var label = [];
         var dataTotal = [];
         var totalSchedules = [];

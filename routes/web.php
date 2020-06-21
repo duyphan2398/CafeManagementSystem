@@ -52,7 +52,7 @@ Route::group(['middleware' => 'checkloggedin'], function (){
 
 /* Route API for Web Call */
 Route::group(['middleware' => 'checkloggedin', 'prefix' => 'axios'], function (){
-
+      Route::get('info', 'HomeController@info');
     /*Manage Users*/
     /*----------users---------*/
     Route::get('users', 'ManageUsers\UserController@show')->middleware('can:view, App\Models\User');

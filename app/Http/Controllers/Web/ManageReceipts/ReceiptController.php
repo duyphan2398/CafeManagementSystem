@@ -10,7 +10,6 @@ use App\Exports\ReceiptExport;
 use App\Http\Controllers\WebBaseController;
 use App\Models\Product;
 use App\Models\Receipt;
-use App\Transformers\ProductTransformer;
 use App\Transformers\ReceiptTranformer;
 use Barryvdh\DomPDF\Facade as PDF2;
 use Carbon\Carbon;

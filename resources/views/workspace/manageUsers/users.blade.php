@@ -5,6 +5,7 @@
 @endsection
 
 @section('links')
+    <script src="{{asset('js/main.js')}}"></script>
     <script src="{{asset('js/manageUsers/user.js')}}"></script>
     <style>
         @cannot('forceDelete', \App\Models\User::class)
@@ -95,7 +96,7 @@
                                         <div class="form-group mt-2" >
                                             <label for="role">Role</label>
                                             <select class="form-control" id="role" name="role">
-                                                <option  value="Employee" selected>Employee</option>
+                                                <option value="Employee" selected>Employee</option>
                                                 <option value="Manager">Manager</option>
                                                 <option value="Admin">Admin</option>
                                             </select>

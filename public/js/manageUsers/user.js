@@ -2,10 +2,9 @@ let currentPage = 0;
 let lastPage = 1;
 let output = ``;
 let user_id_modal = null;
-let output_current = ``;
 let last_find = '';
 
-function addText(insert, auth_id= ''){
+function addText(insert){
     outputAddText = `
                     <tr id="`+insert.id+`">
                         <td>`+insert.id+`</td>
@@ -14,15 +13,15 @@ function addText(insert, auth_id= ''){
                         <td>`+insert.role+`</td>
                         <td>`+insert.created_at+`</td>
                         <td>`;
-    if (auth_id && auth_id == insert.id){
+    if (auth_user && auth_user.id == insert.id){
         outputAddText +=
             `    <button class="btn btn-success state" style="display: block" disabled>Actived</button>
              </td>
               <td>
-                    <button  class="edit btn btn-primary mb-1" style="width: 75px" disabled>
+                    <button   name="`+insert.id+`"  class="edit btn btn-primary mb-1" style="width: 75px">
                              Edit
                      </button>
-                     <button  class="delete btn btn-danger mb-1" style="width: 75px" disabled>
+                     <button class="delete btn btn-danger mb-1" style="width: 75px" disabled>
                              Delete
                      </button>
               </td>
@@ -30,29 +29,27 @@ function addText(insert, auth_id= ''){
             `;
     }else
     {
-        if(insert.deleted_at == null){
+        if(insert.deleted_at == ''){
             outputAddText +=
-                `<button name="`+insert.id+`" id="actived`+insert.id+`" class="btn btn-success state" style="display: block">Actived</button>
+                `<button name="`+insert.id+`" id="actived`+insert.id+`" class="btn btn-success state" style="display: block" `+(checkRole(insert)?'':'disabled')+`>Actived</button>
              <button name="`+insert.id+`"  id="blocked`+insert.id+`"class="btn btn-warning state text-white" style="display: none">Blocked</button>`;
         }
         else {
             outputAddText +=
                 `<button name="`+insert.id+`" id="actived`+insert.id+`" class="btn btn-success state" style="display: none">Actived</button>
-             <button name="`+insert.id+`" id="blocked`+insert.id+`"class="btn btn-warning state text-white" style="display: block">Blocked</button>`;;
+             <button name="`+insert.id+`" id="blocked`+insert.id+`"class="btn btn-warning state text-white" style="display: block" `+(checkRole(insert)?'':'disabled')+`>Blocked</button>`;;
         }
-
         outputAddText +=` </td>
                           <td>
-                            <button  name="`+insert.id+`" class="edit btn btn-primary mb-1" style="width: 75px">
+                            <button  name="`+insert.id+`" class="edit btn btn-primary mb-1" style="width: 75px" `+(checkRole(insert)?'':'disabled')+`>
                                      Edit
                              </button>
-                             <button name="`+insert.id+`"  class="delete btn btn-danger mb-1" style="width: 75px">
+                             <button name="`+insert.id+`"  class="delete btn btn-danger mb-1" style="width: 75px" `+(checkRole(insert)?'':'disabled')+`>
                                      Delete
                              </button>
                           </td>
                      </tr> `;
     }
-
     return outputAddText;
 }
 
@@ -82,15 +79,16 @@ function edit_modal(insert){
                                 break;
                             case "Manager":
                                 modal += `
-                                      <option>Admin</option>
-                                      <option selected>Manager</option>
-                                      <option>Employee</option>`;
+                                    <option  id="option_employee" value="Employee" >Employee</option>
+                                    <option id="option_manager" value="Manager" selected>Manager</option>
+                                    <option id="option_admin" value="Admin">Admin</option>
+                                    `;
                                 break;
                             case "Employee":
                                 modal += `
-                                      <option>Admin</option>
-                                      <option>Manager</option>
-                                      <option selected>Employee</option>`;
+                                    <option  id="option_employee" value="Employee" selected>Employee</option>
+                                    <option id="option_manager" value="Manager">Manager</option>
+                                    <option id="option_admin" value="Admin">Admin</option>`;
                                 break;
                         }
 
@@ -115,6 +113,10 @@ function edit_modal(insert){
     $('#form_modal').append(modal);
 
 }
+
+
+
+
 $(document).ready(function () {
     $('#seeMore').click(function () {
         currentPage++;
@@ -125,7 +127,7 @@ $(document).ready(function () {
             output = ``;
             lastPage = response.data.users.last_page;
             response.data.users.data.forEach(function (user) {
-                output+= addText(user, response.data.auth_id);
+                output+= addText(user);
             });
 
             $('#listUser').append(output);
@@ -133,14 +135,14 @@ $(document).ready(function () {
             if (lastPage > currentPage){
                 $('#seeMore').show();
             }
-        }).catch(function (error) {
+        })/*.catch(function (error) {
             currentPage--;
             toastr.error("Load Users Fails");
             $('#loading').removeAttr("style").hide();
             if (lastPage > currentPage){
                 $('#seeMore').show();
             }
-        });
+        });*/
     });
 
 
@@ -206,6 +208,9 @@ $(document).ready(function () {
         }).then(function (response) {
             $('#loading_modal').removeAttr("style").hide();
             edit_modal(response.data.user);
+            if (auth_user.role == 'Manager') {
+                $('#option_admin').remove();
+            }
         })
 
     });
@@ -256,7 +261,7 @@ $(document).ready(function () {
             }).then(function (response) {
                 $('#modal').modal('hide');
                 toastr.success("Updated Successfully");
-                $('#'+response.data.user.id).empty().replaceWith(addText(response.data.user, response.data.auth_id));
+                $('#'+response.data.user.id).empty().replaceWith(addText(response.data.user));
             }).catch(function (error) {
                 $('#modal').modal('hide');
                 toastr.error("Updated Fails");
@@ -315,7 +320,7 @@ $(document).ready(function () {
             }).then(function (response) {
                 $('#newUserModal').modal('hide');
                 toastr.success("Created Successfully");
-                $("#listUser").prepend(addText(response.data.user, response.data.auth_id));
+                $("#listUser").prepend(addText(response.data.user));
             }).catch(function (error) {
                 for ( key in error.response.data.errors) {
                     $("#"+key).after(`<label id="${key}-error" class="error" for="${key}">${error.response.data.errors[key]}</label>`);
@@ -346,7 +351,7 @@ $(document).ready(function () {
             }).then(function (response) {
                 let result = ``;
                 response.data.users.forEach(function (user) {
-                    result+=addText(user, response.data.auth_id);
+                    result+=addText(user);
                 });
                 $('#loading').removeAttr("style").hide();
                 last_find = search;
@@ -362,7 +367,7 @@ $(document).ready(function () {
                     }).then(function (response) {
                         let result = ``;
                         response.data.users.forEach(function (user) {
-                            result+=addText(user, response.data.auth_id);
+                            result+=addText(user);
                         });
                         $('#loading').removeAttr("style").hide();
                         $('#listUser').append(result);
@@ -385,7 +390,7 @@ $(document).ready(function () {
                                 lastPage = data.users.last_page;
                                 result = ``;
                                 data.users.data.forEach(function (user) {
-                                    result += addText(user, data.auth_id);
+                                    result += addText(user);
                                 });
                                 $('#listUser').append(result);
                             }
@@ -419,7 +424,7 @@ $(document).ready(function () {
                         lastPage = data.users.last_page;
                         result = ``;
                         data.users.data.forEach(function (user){
-                            result += addText(user, data.auth_id);
+                            result += addText(user);
                         });
                         $('#listUser').append(result);
                     }

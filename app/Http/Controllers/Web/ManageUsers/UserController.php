@@ -7,7 +7,6 @@ use App\Http\Controllers\WebBaseController;
 use App\Http\Requests\NewUserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class UserController extends WebBaseController
@@ -20,8 +19,7 @@ class UserController extends WebBaseController
     public function show(){
         $users = User::withTrashed()->orderBy('created_at','desc')->paginate(10);
         return response()->json([
-            'users' => $users,
-            'auth_id' => Auth::id()
+            'users' => $users
         ],200);
     }
 
@@ -30,7 +28,7 @@ class UserController extends WebBaseController
         if ($user){
             if ($user->delete()){
                 return response()->json([
-                    'status' => 'success',
+                    'status' => 'success'
                 ],200);
             }
         }
@@ -39,7 +37,7 @@ class UserController extends WebBaseController
             if ($user){
                 if ($user->restore()){
                     return response()->json([
-                        'status' => 'success',
+                        'status' => 'success'
                     ],200);
                 }
             }
@@ -54,7 +52,7 @@ class UserController extends WebBaseController
         $user->schedules()->delete();
         if ($user->forceDelete()){
             return response()->json([
-                'status' => 'success',
+                'status' => 'success'
             ],200);
         }
     }
@@ -135,8 +133,7 @@ class UserController extends WebBaseController
         if (count($users) > 0){
             return response()->json([
                 'status' => 'success',
-                'users' => $users,
-                'auth_id' => Auth::id()
+                'users' => $users
             ],200);
         }
         return response()->json([
