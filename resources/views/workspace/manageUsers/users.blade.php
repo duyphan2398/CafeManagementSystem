@@ -122,11 +122,13 @@
                         <tr>
                             <th>ID</th>
                             <th>Name</th>
+                            <th>Mail</th>
                             <th>Username</th>
                             <th>Role</th>
                             <th>Created_at</th>
                             <th>Active</th>
                             <th>Action</th>
+                            <th>Send Mail</th>
                         </tr>
                         </thead>
                         <tbody  id="listUser">

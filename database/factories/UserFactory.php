@@ -26,8 +26,8 @@ $factory->define(User::class, function (Faker $faker) {
         'name' => $faker->firstName,
         'username' => $faker->userName,
         'password' => '123456789',
-        //'role' => Arr::random($role),
         'role' =>  'Employee',
+        'email' => 'phannhatduy2398@gmail.com',
         'deleted_at' => Arr::random($arr),
         'remember_token' => Str::random(10),
     ];

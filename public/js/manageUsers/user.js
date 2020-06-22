@@ -9,6 +9,7 @@ function addText(insert){
                     <tr id="`+insert.id+`">
                         <td>`+insert.id+`</td>
                         <td>`+insert.name+`</td>
+                        <td>`+insert.email+`</td>
                         <td>`+insert.username+`</td>
                         <td>`+insert.role+`</td>
                         <td>`+insert.created_at+`</td>
@@ -25,6 +26,11 @@ function addText(insert){
                              Delete
                      </button>
               </td>
+              <td>
+                     <button  class="send_mail btn btn-outline-info mb-1" disabled>
+                             <i class="ti-email"></i>
+                     </button>
+              </td>
               </tr>
             `;
     }else
@@ -37,7 +43,7 @@ function addText(insert){
         else {
             outputAddText +=
                 `<button name="`+insert.id+`" id="actived`+insert.id+`" class="btn btn-success state" style="display: none">Actived</button>
-             <button name="`+insert.id+`" id="blocked`+insert.id+`"class="btn btn-warning state text-white" style="display: block" `+(checkRole(insert)?'':'disabled')+`>Blocked</button>`;;
+                 <button name="`+insert.id+`" id="blocked`+insert.id+`"class="btn btn-warning state text-white" style="display: block" `+(checkRole(insert)?'':'disabled')+`>Blocked</button>`;;
         }
         outputAddText +=` </td>
                           <td>
@@ -47,6 +53,15 @@ function addText(insert){
                              <button name="`+insert.id+`"  class="delete btn btn-danger mb-1" style="width: 75px" `+(checkRole(insert)?'':'disabled')+`>
                                      Delete
                              </button>
+                          </td>
+
+                          <td>
+                                 <button name="`+insert.id+`" class="send_mail btn btn-outline-info mb-1" `+(checkRole(insert)?'':'disabled')+`>
+                                         <i class="ti-email"></i>
+                                 </button>
+                                 <div name="`+insert.id+`" class="send_mail_loading text-center mb-2 loadingCheckout"  style="display: none;" >
+                                    <img src="`+location.origin+`/images/loading.gif" alt="loading..." >
+                                </div>
                           </td>
                      </tr> `;
     }
@@ -440,6 +455,28 @@ $(document).ready(function () {
             loadUsersList();
         }
         $('#searchUser').val('');
+    })
+
+
+
+
+    /*send_mail*/
+    jQuery(document).on('click',".send_mail",function () {
+        let user_id = this.name;
+        $('.send_mail[name='+user_id+']').removeAttr("style").hide();
+        $('.send_mail_loading[name='+user_id+']').show();
+        axios.post(location.origin + '/send_mail/'+user_id)
+            .then(function (response) {
+                $('.send_mail_loading[name='+user_id+']').removeAttr("style").hide();
+                $('.send_mail[name='+user_id+']').show();
+                toastr.success(response.data.message);
+            })
+            .catch(function (error) {
+                console.log(error);
+                $('.send_mail_loading[name='+user_id+']').removeAttr("style").hide();
+                $('.send_mail[name='+user_id+']').show();
+                toastr.warning('Too Much Request For This User Please Check Mail or Waiting 180 Minutes and Try Again');
+            })
     })
 });
 
