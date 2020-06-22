@@ -32,13 +32,16 @@ function addText(item){
                     <td>
                         <button  name="`+item.id+`" class="edit btn btn-primary mb-1" style="width: 75px">
                               Edit
-                         </button>
-                        <button name="`+item.id+`"  class="delete btn btn-danger mb-1" style="width: 75px">
+                         </button>`;
+
+    if(auth_user.role == 'Admin'){
+        result += ` <button name="`+item.id+`"  class="delete btn btn-danger mb-1" style="width: 75px">
                             Delete
-                        </button>
-                    </td>
-                    </tr>
-                   `;
+                        </button>`;
+    }
+    result += ` </td>
+        </tr>
+       `;
     return result;
 }
 

@@ -18,13 +18,15 @@ use Illuminate\Support\Facades\Route;
 Route::group(['middleware' => 'checklogin'], function (){
     Route::get('login', 'Auth\LoginController@index')->name('login');
     Route::post('login', 'Auth\LoginController@create');
-
 });
 
 /*Routes Dashboard*/
 Route::group(['middleware' => 'checkloggedin'], function (){
     Route::get('logout', 'Auth\LoginController@logout');
     Route::get('', 'HomeController@index')->name('dashboard');
+
+    /*Send email to User*/
+    Route::post('send_mail/{user}','ManageUsers\UserController@sendResetLinkEmail');
 
     /*Manage Users*/
     /*--------------users----------------*/
@@ -52,7 +54,7 @@ Route::group(['middleware' => 'checkloggedin'], function (){
 
 /* Route API for Web Call */
 Route::group(['middleware' => 'checkloggedin', 'prefix' => 'axios'], function (){
-
+      Route::get('info', 'HomeController@info');
     /*Manage Users*/
     /*----------users---------*/
     Route::get('users', 'ManageUsers\UserController@show')->middleware('can:view, App\Models\User');
@@ -114,3 +116,8 @@ Route::group(['middleware' => 'checkloggedin', 'prefix' => 'axios'], function ()
     Route::get('promotions/showProducts/{promotion}', 'ManageReceipts\PromotionController@showProducts');//author
     Route::post('promotions/updateProducts/{promotion}', 'ManageReceipts\PromotionController@updateProducts');//author
 });
+
+/*Change Info Form*/
+Route::post('change_info/post/{token}/{email}', 'ManageUsers\UserController@resetInfo');
+Route::get('change_info/{token}/{email}', 'ManageUsers\UserController@resetInfoForm');
+

@@ -25,11 +25,12 @@ class NewUserRequest extends FormRequest
     public function rules()
     {
         return [
-            "name" => "required",
-            "username" => "required|unique:users",
-            "role" => "required",
-            "password" => "required|min:5",
-            "passwordConfirm" => "required|min:5|same:password"
+            "name"                  => "required",
+            "username"              => "required|unique:users|min:1",
+            "role"                  => "required|in:Manager,Admin,Employee",
+            "email"                 => "required|email",
+            "password"              => "required|min:5",
+            "passwordConfirm"       => "required|min:5|same:password"
         ];
     }
 }

@@ -17,7 +17,7 @@ function addText(item){
                                 Checkin
                              </button>
                              <div name="`+item.id+`" class="text-center mb-2 loadingCheckin"  style="display: none;">
-                                <img src="`+location.origin+`/images/loading.gif" alt="loading..." style="margin-bottom: 70px">
+                                <img src="`+location.origin+`/images/loading.gif" alt="loading...">
                             </div>
                       </td>`;
         }
@@ -29,7 +29,7 @@ function addText(item){
                                 Checkout
                              </button>
                              <div name="`+item.id+`" class="text-center mb-2 loadingCheckout"  style="display: none;" >
-                                <img src="`+location.origin+`/images/loading.gif" alt="loading..." style="margin-bottom: 70px">
+                                <img src="`+location.origin+`/images/loading.gif" alt="loading..." >
                             </div>
                       </td>`;
         }

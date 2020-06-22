@@ -5,6 +5,7 @@
 @endsection
 
 @section('links')
+    <script src="{{asset('js/main.js')}}"></script>
     <script src="{{asset('js/manageUsers/user.js')}}"></script>
     <style>
         @cannot('forceDelete', \App\Models\User::class)
@@ -90,12 +91,16 @@
                                         </div>
                                         <div class="form-group mt-2">
                                             <label for="username">Username</label>
-                                            <input name="username" type="text" class="form-control" id="username" placeholder=Username>
+                                            <input name="username" type="text" class="form-control" id="username" placeholder="Username">
+                                        </div>
+                                        <div class="form-group mt-2">
+                                            <label for="email">Email</label>
+                                            <input name="email" type="email" class="form-control" id="email" placeholder="Email">
                                         </div>
                                         <div class="form-group mt-2" >
                                             <label for="role">Role</label>
                                             <select class="form-control" id="role" name="role">
-                                                <option  value="Employee" selected>Employee</option>
+                                                <option value="Employee" selected>Employee</option>
                                                 <option value="Manager">Manager</option>
                                                 <option value="Admin">Admin</option>
                                             </select>
@@ -121,11 +126,13 @@
                         <tr>
                             <th>ID</th>
                             <th>Name</th>
+                            <th>Mail</th>
                             <th>Username</th>
                             <th>Role</th>
                             <th>Created_at</th>
                             <th>Active</th>
                             <th>Action</th>
+                            <th>Send Mail</th>
                         </tr>
                         </thead>
                         <tbody  id="listUser">

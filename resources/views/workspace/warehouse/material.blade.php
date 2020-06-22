@@ -5,6 +5,7 @@
 @endsection
 
 @section('links')
+    <script src="{{asset('js/main.js')}}"></script>
     <script src="{{asset('js/warehouse/material.js')}}"></script>
     <script src="https://printjs-4de6.kxcdn.com/print.min.js"></script>
     <link type="text/css" rel="stylesheet" href="https://printjs-4de6.kxcdn.com/print.min.css">

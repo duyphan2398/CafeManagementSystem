@@ -48,12 +48,14 @@ function addText(item){
                         <td>
                             <button name="`+item.id+`"  class="manage_products btn btn-info mb-1">
                                 Products
-                            </button>
-                            <button name="`+item.id+`"  class="delete btn btn-danger mb-1" style="width: 75px">
-                                Delete
-                            </button>
-                        </td>
-                    </tr>`;
+                            </button>`;
+
+    if(auth_user.role == 'Admin' || item.status == 1 ){
+        result += ` <button name="`+item.id+`"  class="delete btn btn-danger mb-1" style="width: 75px">Delete</button>`;
+    }
+
+   result += `</td>
+        </tr>`;
 
     return result;
 }

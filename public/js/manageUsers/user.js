@@ -2,57 +2,72 @@ let currentPage = 0;
 let lastPage = 1;
 let output = ``;
 let user_id_modal = null;
-let output_current = ``;
 let last_find = '';
 
-function addText(insert, auth_id= ''){
+function addText(insert){
+    console.log(insert);
     outputAddText = `
                     <tr id="`+insert.id+`">
                         <td>`+insert.id+`</td>
                         <td>`+insert.name+`</td>
+                        <td>`+insert.email+`</td>
                         <td>`+insert.username+`</td>
                         <td>`+insert.role+`</td>
                         <td>`+insert.created_at+`</td>
                         <td>`;
-    if (auth_id && auth_id == insert.id){
+    if (auth_user && auth_user.id == insert.id){
         outputAddText +=
             `    <button class="btn btn-success state" style="display: block" disabled>Actived</button>
              </td>
               <td>
-                    <button  class="edit btn btn-primary mb-1" style="width: 75px" disabled>
+                    <button   name="`+insert.id+`"  class="edit btn btn-primary mb-1" style="width: 75px">
                              Edit
                      </button>
-                     <button  class="delete btn btn-danger mb-1" style="width: 75px" disabled>
+                     <button class="delete btn btn-danger mb-1" style="width: 75px" disabled>
                              Delete
+                     </button>
+              </td>
+              <td>
+                     <button  class="send_mail btn btn-outline-info mb-1" disabled>
+                             <i class="ti-email"></i>
                      </button>
               </td>
               </tr>
             `;
     }else
     {
-        if(insert.deleted_at == null){
+        if(insert.deleted_at == ''){
+            console.log(insert.deleted_at == '');
             outputAddText +=
-                `<button name="`+insert.id+`" id="actived`+insert.id+`" class="btn btn-success state" style="display: block">Actived</button>
+                `<button name="`+insert.id+`" id="actived`+insert.id+`" class="btn btn-success state" style="display: block" `+(checkRole(insert)?'':'disabled')+`>Actived</button>
              <button name="`+insert.id+`"  id="blocked`+insert.id+`"class="btn btn-warning state text-white" style="display: none">Blocked</button>`;
         }
         else {
+            console.log(insert.deleted_at == '');
             outputAddText +=
                 `<button name="`+insert.id+`" id="actived`+insert.id+`" class="btn btn-success state" style="display: none">Actived</button>
-             <button name="`+insert.id+`" id="blocked`+insert.id+`"class="btn btn-warning state text-white" style="display: block">Blocked</button>`;;
+                 <button name="`+insert.id+`" id="blocked`+insert.id+`"class="btn btn-warning state text-white" style="display: block" `+(checkRole(insert)?'':'disabled')+`>Blocked</button>`;;
         }
-
         outputAddText +=` </td>
                           <td>
-                            <button  name="`+insert.id+`" class="edit btn btn-primary mb-1" style="width: 75px">
+                            <button  name="`+insert.id+`" class="edit btn btn-primary mb-1" style="width: 75px" `+(checkRole(insert)?'':'disabled')+`>
                                      Edit
                              </button>
-                             <button name="`+insert.id+`"  class="delete btn btn-danger mb-1" style="width: 75px">
+                             <button name="`+insert.id+`"  class="delete btn btn-danger mb-1" style="width: 75px" `+(checkRole(insert)?'':'disabled')+`>
                                      Delete
                              </button>
                           </td>
+
+                          <td>
+                                 <button name="`+insert.id+`" class="send_mail btn btn-outline-info mb-1" `+(checkRole(insert)?'':'disabled')+`>
+                                         <i class="ti-email"></i>
+                                 </button>
+                                 <div name="`+insert.id+`" class="send_mail_loading text-center mb-2 loadingCheckout"  style="display: none;" >
+                                    <img src="`+location.origin+`/images/loading.gif" alt="loading..." >
+                                </div>
+                          </td>
                      </tr> `;
     }
-
     return outputAddText;
 }
 
@@ -82,15 +97,16 @@ function edit_modal(insert){
                                 break;
                             case "Manager":
                                 modal += `
-                                      <option>Admin</option>
-                                      <option selected>Manager</option>
-                                      <option>Employee</option>`;
+                                    <option  id="option_employee" value="Employee" >Employee</option>
+                                    <option id="option_manager" value="Manager" selected>Manager</option>
+                                    <option id="option_admin" value="Admin">Admin</option>
+                                    `;
                                 break;
                             case "Employee":
                                 modal += `
-                                      <option>Admin</option>
-                                      <option>Manager</option>
-                                      <option selected>Employee</option>`;
+                                    <option  id="option_employee" value="Employee" selected>Employee</option>
+                                    <option id="option_manager" value="Manager">Manager</option>
+                                    <option id="option_admin" value="Admin">Admin</option>`;
                                 break;
                         }
 
@@ -99,6 +115,11 @@ function edit_modal(insert){
                      modal +=`
                             </select>
                           </div>
+
+                        <div class="form-group">
+                            <label  for="emailModal" class="col-form-label">Email:</label>
+                            <input  value="`+ insert.email +`" name="emailModal" class="form-control" type="email" id="emailModal">
+                        </div>
                         <div class="form-group">
                             <label for="passwordModal" class="col-form-label">Password:</label>
                             <input name="passwordModal" class="form-control" type="password" id="passwordModal">
@@ -115,6 +136,10 @@ function edit_modal(insert){
     $('#form_modal').append(modal);
 
 }
+
+
+
+
 $(document).ready(function () {
     $('#seeMore').click(function () {
         currentPage++;
@@ -125,7 +150,7 @@ $(document).ready(function () {
             output = ``;
             lastPage = response.data.users.last_page;
             response.data.users.data.forEach(function (user) {
-                output+= addText(user, response.data.auth_id);
+                output+= addText(user);
             });
 
             $('#listUser').append(output);
@@ -206,6 +231,9 @@ $(document).ready(function () {
         }).then(function (response) {
             $('#loading_modal').removeAttr("style").hide();
             edit_modal(response.data.user);
+            if (auth_user.role == 'Manager') {
+                $('#option_admin').remove();
+            }
         })
 
     });
@@ -219,6 +247,10 @@ $(document).ready(function () {
         .validate({
         rules: {
             nameModal: "required",
+            emailModal: {
+                required: true,
+                email: true
+            },
             passwordModal: {
                 required: false,
                 minlength : 5
@@ -233,6 +265,10 @@ $(document).ready(function () {
             nameModal: {
                 required: "Please enter the name"
             },
+            emailModal: {
+                required: "Please enter the email",
+                email: "Must be email format"
+            },
             passwordModal: {
                 minlength : "At least 5 characters"
             },
@@ -244,19 +280,21 @@ $(document).ready(function () {
         submitHandler:  function(form) {
             let  name = $("#nameModal").val();
             let role =  $("#roleModal").val();
+            let email =  $("#emailModal").val();
             let  password =  $("#passwordModal").val();
             let passwordConfirm = $("#passwordConfirmModal").val();
             axios.patch(location.origin +'/axios/user/update',{
                 user_id_modal,
                 name,
                 role,
+                email,
                 password,
                 passwordConfirm
 
             }).then(function (response) {
                 $('#modal').modal('hide');
                 toastr.success("Updated Successfully");
-                $('#'+response.data.user.id).empty().replaceWith(addText(response.data.user, response.data.auth_id));
+                $('#'+response.data.user.id).empty().replaceWith(addText(response.data.user));
             }).catch(function (error) {
                 $('#modal').modal('hide');
                 toastr.error("Updated Fails");
@@ -304,23 +342,27 @@ $(document).ready(function () {
             let name = $("#name").val();
             let username = $("#username").val();
             let role = $("#role").val();
+            let email = $("#email").val();
             let password = $("#password").val();
             let passwordConfirm = $("#passwordConfirm").val();
             axios.post(location.origin + '/axios/user/new', {
                 name,
                 username,
                 role,
+                email,
                 password,
                 passwordConfirm
             }).then(function (response) {
                 $('#newUserModal').modal('hide');
+                $('#newUserForm').trigger("reset");
                 toastr.success("Created Successfully");
-                $("#listUser").prepend(addText(response.data.user, response.data.auth_id));
+                $("#listUser").prepend(addText(response.data.user));
             }).catch(function (error) {
+                $('#newUserForm').trigger("reset");
                 for ( key in error.response.data.errors) {
                     $("#"+key).after(`<label id="${key}-error" class="error" for="${key}">${error.response.data.errors[key]}</label>`);
                 }
-                toastr.error("Updated Fails");
+                toastr.error("Created Fails");
             })
         }
     });
@@ -346,7 +388,7 @@ $(document).ready(function () {
             }).then(function (response) {
                 let result = ``;
                 response.data.users.forEach(function (user) {
-                    result+=addText(user, response.data.auth_id);
+                    result+=addText(user);
                 });
                 $('#loading').removeAttr("style").hide();
                 last_find = search;
@@ -362,7 +404,7 @@ $(document).ready(function () {
                     }).then(function (response) {
                         let result = ``;
                         response.data.users.forEach(function (user) {
-                            result+=addText(user, response.data.auth_id);
+                            result+=addText(user);
                         });
                         $('#loading').removeAttr("style").hide();
                         $('#listUser').append(result);
@@ -385,7 +427,7 @@ $(document).ready(function () {
                                 lastPage = data.users.last_page;
                                 result = ``;
                                 data.users.data.forEach(function (user) {
-                                    result += addText(user, data.auth_id);
+                                    result += addText(user);
                                 });
                                 $('#listUser').append(result);
                             }
@@ -419,7 +461,7 @@ $(document).ready(function () {
                         lastPage = data.users.last_page;
                         result = ``;
                         data.users.data.forEach(function (user){
-                            result += addText(user, data.auth_id);
+                            result += addText(user);
                         });
                         $('#listUser').append(result);
                     }
@@ -435,6 +477,28 @@ $(document).ready(function () {
             loadUsersList();
         }
         $('#searchUser').val('');
+    })
+
+
+
+
+    /*send_mail*/
+    jQuery(document).on('click',".send_mail",function () {
+        let user_id = this.name;
+        $('.send_mail[name='+user_id+']').removeAttr("style").hide();
+        $('.send_mail_loading[name='+user_id+']').show();
+        axios.post(location.origin + '/send_mail/'+user_id)
+            .then(function (response) {
+                $('.send_mail_loading[name='+user_id+']').removeAttr("style").hide();
+                $('.send_mail[name='+user_id+']').show();
+                toastr.success(response.data.message);
+            })
+            .catch(function (error) {
+                console.log(error);
+                $('.send_mail_loading[name='+user_id+']').removeAttr("style").hide();
+                $('.send_mail[name='+user_id+']').show();
+                toastr.warning('Too Much Request For This User Please Check Mail or Waiting 180 Minutes and Try Again');
+            })
     })
 });
 
