@@ -5,6 +5,7 @@ let user_id_modal = null;
 let last_find = '';
 
 function addText(insert){
+    console.log(insert);
     outputAddText = `
                     <tr id="`+insert.id+`">
                         <td>`+insert.id+`</td>
@@ -36,11 +37,13 @@ function addText(insert){
     }else
     {
         if(insert.deleted_at == ''){
+            console.log(insert.deleted_at == '');
             outputAddText +=
                 `<button name="`+insert.id+`" id="actived`+insert.id+`" class="btn btn-success state" style="display: block" `+(checkRole(insert)?'':'disabled')+`>Actived</button>
              <button name="`+insert.id+`"  id="blocked`+insert.id+`"class="btn btn-warning state text-white" style="display: none">Blocked</button>`;
         }
         else {
+            console.log(insert.deleted_at == '');
             outputAddText +=
                 `<button name="`+insert.id+`" id="actived`+insert.id+`" class="btn btn-success state" style="display: none">Actived</button>
                  <button name="`+insert.id+`" id="blocked`+insert.id+`"class="btn btn-warning state text-white" style="display: block" `+(checkRole(insert)?'':'disabled')+`>Blocked</button>`;;
@@ -112,6 +115,11 @@ function edit_modal(insert){
                      modal +=`
                             </select>
                           </div>
+
+                        <div class="form-group">
+                            <label  for="emailModal" class="col-form-label">Email:</label>
+                            <input  value="`+ insert.email +`" name="emailModal" class="form-control" type="email" id="emailModal">
+                        </div>
                         <div class="form-group">
                             <label for="passwordModal" class="col-form-label">Password:</label>
                             <input name="passwordModal" class="form-control" type="password" id="passwordModal">
@@ -150,14 +158,14 @@ $(document).ready(function () {
             if (lastPage > currentPage){
                 $('#seeMore').show();
             }
-        })/*.catch(function (error) {
+        }).catch(function (error) {
             currentPage--;
             toastr.error("Load Users Fails");
             $('#loading').removeAttr("style").hide();
             if (lastPage > currentPage){
                 $('#seeMore').show();
             }
-        });*/
+        });
     });
 
 
@@ -239,6 +247,10 @@ $(document).ready(function () {
         .validate({
         rules: {
             nameModal: "required",
+            emailModal: {
+                required: true,
+                email: true
+            },
             passwordModal: {
                 required: false,
                 minlength : 5
@@ -253,6 +265,10 @@ $(document).ready(function () {
             nameModal: {
                 required: "Please enter the name"
             },
+            emailModal: {
+                required: "Please enter the email",
+                email: "Must be email format"
+            },
             passwordModal: {
                 minlength : "At least 5 characters"
             },
@@ -264,12 +280,14 @@ $(document).ready(function () {
         submitHandler:  function(form) {
             let  name = $("#nameModal").val();
             let role =  $("#roleModal").val();
+            let email =  $("#emailModal").val();
             let  password =  $("#passwordModal").val();
             let passwordConfirm = $("#passwordConfirmModal").val();
             axios.patch(location.origin +'/axios/user/update',{
                 user_id_modal,
                 name,
                 role,
+                email,
                 password,
                 passwordConfirm
 
@@ -324,23 +342,27 @@ $(document).ready(function () {
             let name = $("#name").val();
             let username = $("#username").val();
             let role = $("#role").val();
+            let email = $("#email").val();
             let password = $("#password").val();
             let passwordConfirm = $("#passwordConfirm").val();
             axios.post(location.origin + '/axios/user/new', {
                 name,
                 username,
                 role,
+                email,
                 password,
                 passwordConfirm
             }).then(function (response) {
                 $('#newUserModal').modal('hide');
+                $('#newUserForm').trigger("reset");
                 toastr.success("Created Successfully");
                 $("#listUser").prepend(addText(response.data.user));
             }).catch(function (error) {
+                $('#newUserForm').trigger("reset");
                 for ( key in error.response.data.errors) {
                     $("#"+key).after(`<label id="${key}-error" class="error" for="${key}">${error.response.data.errors[key]}</label>`);
                 }
-                toastr.error("Updated Fails");
+                toastr.error("Created Fails");
             })
         }
     });

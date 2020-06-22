@@ -91,7 +91,11 @@
                                         </div>
                                         <div class="form-group mt-2">
                                             <label for="username">Username</label>
-                                            <input name="username" type="text" class="form-control" id="username" placeholder=Username>
+                                            <input name="username" type="text" class="form-control" id="username" placeholder="Username">
+                                        </div>
+                                        <div class="form-group mt-2">
+                                            <label for="email">Email</label>
+                                            <input name="email" type="email" class="form-control" id="email" placeholder="Email">
                                         </div>
                                         <div class="form-group mt-2" >
                                             <label for="role">Role</label>

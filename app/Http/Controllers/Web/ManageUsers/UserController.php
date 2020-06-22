@@ -84,13 +84,12 @@ class UserController extends WebBaseController
             if ($user){
                 return response()->json([
                     'status' => 'success',
-                    'user' => $user
+                    'user' => User::find($user->id)
                 ],201);
             }
             return response()->json([
                 'status' => 'fail',
             ],500);
-
         }
         else{
             return response()->json([
@@ -105,6 +104,12 @@ class UserController extends WebBaseController
         if ($user) {
             if ($request->name && $request->name != ''){
                 $user->name = $request->name;
+            }
+            if ($request->email && $request->email != ''){
+                $request->validate([
+                    'email' => 'required|email'
+                ]);
+                $user->email = $request->email;
             }
             if ($request->role && $request->role != ''){
                 $request->validate([
@@ -127,8 +132,6 @@ class UserController extends WebBaseController
                 }
                 $user->password = $request->password;
             }
-
-
 
             if ($user->save()){
                 return response()->json([
