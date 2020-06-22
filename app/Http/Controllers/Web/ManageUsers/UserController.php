@@ -190,7 +190,7 @@ class UserController extends WebBaseController
                 'created_at'    => Carbon::now()
             ]
         );
-        $tokenData = DB::table('password_resets')->whereEmail($user->email)->first();
+        $tokenData = DB::table('password_resets')->where('user_id', $user->id)->whereEmail($user->email)->first();
 
         /*Action for sending email*/
 

@@ -127,7 +127,7 @@ class TableController extends ApiBaseController
 
         /*Case Romove a product to 0*/
         foreach ($receipt->products as $product) {
-            $proucts_id = array_column($request->products, 'id');
+            $proucts_id = array_column($request->product_list, 'id');
             $flag = in_array($product->id, $proucts_id);
             if (!$flag) {
                 $tmp_data = [
@@ -166,7 +166,10 @@ class TableController extends ApiBaseController
         }
         $receipt->sale_excluded_price;
         $receipt->sale_included_price;
-        $result =  $this->result($request, $receipt, $table);
+        $receipt->save();
+        $result =  $this->result($request, Receipt::find($receipt->id), $table);
+        $result['host'] = $request->getHttpHost().'/export/pdf/order/';
+        $result['url'] = $receipt->id.'.pdf';
         $result['message'] = 'success';
         //Realtime Event
         event(new ExportOrderFormEvent(
@@ -200,4 +203,5 @@ class TableController extends ApiBaseController
             'messages'  =>'fail to save the using user  to null'
         ],400);
     }
+
 }

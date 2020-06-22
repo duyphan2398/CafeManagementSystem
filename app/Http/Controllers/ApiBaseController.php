@@ -18,7 +18,6 @@ class ApiBaseController extends Controller
             'created_at'            =>null,
             'created_by_name'       =>null,
             'current_user_using'    => null,
-            'host'                  => $request->getHttpHost().'/images/products/',
             'product_list'          => [],
         ];
 
@@ -31,6 +30,7 @@ class ApiBaseController extends Controller
             'quantity'      => null,
             'note'          => null,
             'type'          => null,
+            'host'          => $request->getHttpHost().'/images/products/',
             'url'           => null,
 
         ];
