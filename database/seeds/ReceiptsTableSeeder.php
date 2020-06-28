@@ -19,7 +19,7 @@ class ReceiptsTableSeeder extends Seeder
         $faker = \Faker\Factory::create();
         //$faker->addProvider(new \Faker\Provider\DateTime());
         /*Status 3 : Paid*/
-        for ($i = 1; $i <= 500; $i++){
+        for ($i = 1; $i <= 1000; $i++){
             $user = User::query()
                 ->inRandomOrder()
                 ->first();
@@ -92,7 +92,7 @@ class ReceiptsTableSeeder extends Seeder
 
 
         /*Status 3 with right price*/
-        for ($i = 1; $i <= 100; $i++){
+        for ($i = 1; $i <= 200; $i++){
             $user = User::query()
                 ->inRandomOrder()
                 ->first();
