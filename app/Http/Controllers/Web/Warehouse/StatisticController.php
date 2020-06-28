@@ -28,8 +28,8 @@ class StatisticController extends WebBaseController
         $countMonth = Carbon::today()->subMonths(12);
 
         for ($i = 1; $i<=13; $i++){
-            $receipts = Receipt::whereYear('created_at', '=', $countMonth->year)
-                             ->whereMonth('created_at', '=', $countMonth->month)
+            $receipts = Receipt::whereYear('billing_at', '=', $countMonth->year)
+                             ->whereMonth('billing_at', '=', $countMonth->month)
                              ->get();
             $sale_excluded_total = 0;
             $sale_included_total = 0;
@@ -52,7 +52,7 @@ class StatisticController extends WebBaseController
     public function dataDiagram2(){
         $data = [];
         $total = 0;
-        $receipts = Receipt::query()->whereMonth('created_at', '=', Carbon::now()->subMonth()->month)->get();
+        $receipts = Receipt::query()->whereMonth('billing_at', '=', Carbon::now()->subMonth()->month)->get();
         foreach ($receipts as $receipt){
             foreach ($receipt->products as $product){
                 if (array_key_exists($product->name, $data)){
