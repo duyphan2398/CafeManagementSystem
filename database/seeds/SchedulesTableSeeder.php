@@ -49,8 +49,8 @@ class SchedulesTableSeeder extends Seeder
             'user_id'           => $user->id,
             'start_time'        => $start_time,
             'end_time'          => $end_time,
-            'checkin_time'      =>($date < Carbon::today()) ? $checkin_time : null,
-            'checkout_time'     =>($date < Carbon::today()) ? $checkout_time : null,
+            'checkin_time'      =>(Carbon::parse($date) < Carbon::today()) ? $checkin_time : null,
+            'checkout_time'     =>(Carbon::parse($date) < Carbon::today()) ? $checkout_time : null,
             'date'              => $date,
             'total_time'        =>  $total_time
         ];
