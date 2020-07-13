@@ -15,6 +15,7 @@ class Receipt extends Model
     use AddUser;
     use ParseDateToRightFormat;
     use Exportable;
+    public $timestamps = false;
     /*Status is [
 
         giá trị 1 : Wait for pay -> chờ thanh toán (trường hợp order đang mở billing_at và receipt_at null)
@@ -32,7 +33,9 @@ class Receipt extends Model
         'table_id',
         'table_name',
         'user_id',
-        'user_name'
+        'user_name',
+        'created_at',
+        'updated_at'
     ];
     public function getBillingAtAttribute($billing_at){
         return ($billing_at) ? Carbon::parse($billing_at)->format('H:i d-m-Y') : $billing_at;

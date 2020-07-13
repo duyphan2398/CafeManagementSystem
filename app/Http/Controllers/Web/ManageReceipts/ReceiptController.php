@@ -108,6 +108,7 @@ class ReceiptController extends WebBaseController
             DB::beginTransaction();
             try {
                 $receipt->billing_at = Carbon::now();
+                $receipt->updated_at = Carbon::now();
                 $receipt->status = 2;
                 //in PDF kèm theo
                 $pdf = PDF2::loadView('PDF.bill', ['receipt'=>(new \App\Transformers\ReceiptTranformer)->transform($receipt)]);
@@ -143,6 +144,7 @@ class ReceiptController extends WebBaseController
             try {
                 if ($receipt->status == 2) {
                     $receipt->receipt_at = Carbon::now();
+                    $receipt->updated_at = Carbon::now();
                 }
                 $receipt->export_at = Carbon::now();
                 $receipt->status = 3;
@@ -264,6 +266,8 @@ class ReceiptController extends WebBaseController
         }
         $receipt->sale_excluded_price;
         $receipt->sale_included_price;
+        $receipt->updated_at = Carbon::now();
+        $receipt->save();
         $result =  $this->result($request, $receipt, $receipt->table);
         $result['message'] = 'success';
         //Realtime Event
