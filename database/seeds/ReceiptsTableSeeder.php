@@ -100,7 +100,7 @@ class ReceiptsTableSeeder extends Seeder
                 ->inRandomOrder()
                 ->first();
             /*Date format*/
-            $date =  $faker->dateTimeBetween(Carbon::now()->subMonth(3), Carbon::now());
+            $date =  $faker->dateTimeBetween(Carbon::now()->subMonth(3), Carbon::now()->subDay());
             $year = Carbon::parse($date)->year ;
             $month = Carbon::parse($date)->month;
             $date  = Carbon::parse($date)->day;
