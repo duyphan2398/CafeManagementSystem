@@ -24,7 +24,7 @@ class ReceiptController extends WebBaseController
         if ($request->ajax){
             $receipts = Receipt::query()
                 ->whereDate('created_at', '=', Carbon::today()->toDateString())
-                ->orderBy('status')
+                ->orderBy('updated_at', 'desc')
                 ->get();
             return response()->json([
                 'receipts' =>  $receipts
