@@ -15,6 +15,7 @@ class Receipt extends Model
     use AddUser;
     use ParseDateToRightFormat;
     use Exportable;
+    public $timestamps = false;
     /*Status is [
 
         giá trị 1 : Wait for pay -> chờ thanh toán (trường hợp order đang mở billing_at và receipt_at null)

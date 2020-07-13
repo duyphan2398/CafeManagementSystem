@@ -55,7 +55,8 @@ class ReceiptsTableSeeder extends Seeder
                 'table_name'            => $table_name,
                 'user_id'               => $user_id,
                 'user_name'             => $user_name,
-                'created_at'            => $billing_at
+                'created_at'            => $billing_at,
+                'updated_at'            => $receipt_at
             ]);
             $receipt->save();
             /*------------------------------*/
@@ -128,7 +129,8 @@ class ReceiptsTableSeeder extends Seeder
                 'table_name'            => $table_name,
                 'user_id'               => $user_id,
                 'user_name'             => $user_name,
-                'created_at'            => $billing_at
+                'created_at'            => $billing_at,
+                'updated_at'            => $receipt_at
             ]);
             $receipt->save();
             /*------------------------------*/
@@ -197,7 +199,9 @@ class ReceiptsTableSeeder extends Seeder
                 'table_id'              => $table_id,
                 'table_name'            => $table_name,
                 'user_id'               => $user_id,
-                'user_name'             => $user_name
+                'user_name'             => $user_name,
+                'created_at'            => Carbon::now(),
+                'updated_at'            => Carbon::now()
             ]);
             $receipt->save();
             /*------------------------------*/
@@ -263,7 +267,9 @@ class ReceiptsTableSeeder extends Seeder
                 'table_id'              => $table_id,
                 'table_name'            => $table_name,
                 'user_id'               => $user_id,
-                'user_name'             => $user_name
+                'user_name'             => $user_name,
+                'created_at'            => Carbon::now(),
+                'updated_at'            => Carbon::now()
             ]);
             $receipt->save();
             /*------------------------------*/
