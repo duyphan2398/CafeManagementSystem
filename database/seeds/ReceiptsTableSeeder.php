@@ -88,6 +88,9 @@ class ReceiptsTableSeeder extends Seeder
             $receipt->products()->attach($array_products);
             $receipt->sale_excluded_price = $sale_excluded_price;
             $receipt->sale_included_price = $sale_included_price;
+
+            $receipt->created_at = $billing_at;
+            $receipt->updated_at = $receipt_at;
             $receipt->save();
         }
 
@@ -158,6 +161,10 @@ class ReceiptsTableSeeder extends Seeder
             $receipt->sale_excluded_price;
             $receipt->sale_included_price;
             $receipt->status = 3;
+
+            $receipt->created_at = $billing_at;
+            $receipt->updated_at = $receipt_at;
+
             $receipt->save();
         }
 
